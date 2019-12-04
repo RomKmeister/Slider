@@ -1,0 +1,10 @@
+* text=auto
+*.html eol=crlf
+*.pug eol=crlf
+*.scss eol=crlf
+*.css eol=crlf
+*.ts eol=crlf
+*.js eol=crlf
+
+*.jpg -text
+*.png -text

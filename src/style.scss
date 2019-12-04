@@ -1,0 +1,47 @@
+.slider {
+    width: 90%;
+    position: relative;}
+
+.slider__scale {
+    margin: 10px 0;
+    height: 1px;
+    background: #ccc;
+}
+
+.slider__handler {
+    position: absolute;
+    top: -11px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    box-shadow:0 1px 6px 0 rgba(32, 33, 36, .28);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.slider__bubble {
+    padding: 10px;
+    box-shadow:0 1px 6px 0 rgba(32, 33, 36, .28);
+}
+
+.panel {
+    width: 200px;
+    margin: 15px;
+    box-shadow:0 1px 6px 0 rgba(32, 33, 36, .28);
+}
+
+.panel__input {
+    margin: 10px;
+    outline: 0;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4)
+
+}
+
+.panel__input:hover,
+.panel__input:focus,
+ {
+    outline: 1px solid rgba(0, 0, 0, 1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4)
+
+}
