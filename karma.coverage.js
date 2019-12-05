@@ -15,6 +15,11 @@ webpackConfig.module.rules = [{
   test: /\.ts$/,
   enforce: "post",
   loader: 'istanbul-instrumenter-loader',
+  query: {
+    debug: true,
+    preserveComments: true,
+    esModules: true
+  },
   exclude: [
     /node_modules/,
     /\.spec\.ts$/
@@ -34,7 +39,7 @@ module.exports = function (config) {
     },
     webpack: {
       mode: 'development',
-      devtool: 'inline-source-map',
+      devtool: 'source-map',
       module: webpackConfig.module,
       resolve: webpackConfig.resolve
     },
@@ -64,7 +69,7 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
     singleRun: true,
     concurrency: Infinity
   })

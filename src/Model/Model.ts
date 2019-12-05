@@ -34,6 +34,20 @@ class Model {
     this.verticalScale = verticalScale;
     this.showBubble = showBubble;
   }
+
+  checkScaleBorders(): void {
+    if (this.firstValue < this.minValueScale) {
+      this.firstValue = this.minValueScale;
+    }
+
+    if (this.firstValue > this.maxValueScale) {
+      this.firstValue = this.maxValueScale;
+    }
+
+    if (this.secondValue > this.maxValueScale) {
+      this.secondValue = this.maxValueScale;
+    }
+  }
 }
 
 export default Model;

@@ -1,7 +1,7 @@
 import Model from '../Model/Model';
 
 class Presenter {
-  model: object;
+  model: Model;
 
   constructor(options: object) {
     this.model = new Model(options);
