@@ -4,7 +4,7 @@ import Model from '../src/Model/Model';
 
 describe("Slider", function() {
 
-  it("Создает слайдер с кастомными параметрами", () => {
+  it("Creates slider with custom parameters", () => {
     const customSliderPresenter: Presenter = new Presenter({
       minValueScale: 10,
       maxValueScale: 150,
