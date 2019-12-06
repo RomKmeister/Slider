@@ -1,24 +1,48 @@
+import Model from '../Model/Model';
+
 class ViewSlider {
+  model: Model;
+
+  handles: any;
+
+  slider: HTMLElement;
+
+  firstHandle: HTMLElement;
+
+  secondHandle: HTMLElement;
+
+  constructor(model: Model) {
+    this.model = model;
+  }
+
   render(): void {
     const slider = document.createElement('div');
     const scale = document.createElement('div');
-    const firstHandler = document.createElement('div');
-    const secondHandler = document.createElement('div');
+    const firstHandle = document.createElement('div');
+    const secondHandle = document.createElement('div');
     const firstBubble = document.createElement('div');
     const secondBubble = document.createElement('div');
     slider.classList.add('slider');
     scale.classList.add('slider__scale');
-    firstHandler.classList.add('slider__handler');
-    secondHandler.classList.add('slider__handler');
+    firstHandle.classList.add('slider__handle');
+    secondHandle.classList.add('slider__handle');
     firstBubble.classList.add('slider__bubble');
     secondBubble.classList.add('slider__bubble');
-    firstHandler.append(firstBubble);
-    secondHandler.append(secondBubble);
+    firstHandle.append(firstBubble);
+    secondHandle.append(secondBubble);
     slider.append(scale);
-    slider.append(firstHandler);
-    slider.append(secondHandler);
+    slider.append(firstHandle);
+    slider.append(secondHandle);
     document.body.append(slider);
   }
+
+  setHandlesPosition(): void {
+    this.handles = document.querySelectorAll('.slider__handle');
+    [this.firstHandle, this.secondHandle] = this.handles;
+    this.firstHandle.style.left = this.model.firstValue * 100 / (this.model.maxValueScale - this.model.minValueScale) + "%";
+    this.secondHandle.style.left = this.model.secondValue * 100 / (this.model.maxValueScale - this.model.minValueScale) + "%";
+  }
+  
 }
 
 export default ViewSlider;
