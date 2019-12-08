@@ -2,6 +2,11 @@ import { expect } from 'chai';
 import ViewSlider from '../src/View/ViewSlider';
 import Model from '../src/Model/Model';
 
+afterEach(() => {
+  document.body.innerHTML = ''
+})
+
+
 describe("ViewSlider", function() {
 
   it('Creates slider', () => {
