@@ -12,16 +12,14 @@ describe("ViewSlider", function() {
   it('Creates slider', () => {
     const viewSlider = new ViewSlider(new Model({}));
 
-    viewSlider.render();
-
     expect(document.querySelectorAll('.slider').length).to.equal(1);
     expect(document.querySelectorAll('.slider__scale').length).to.equal(1);
     expect(document.querySelectorAll('.slider__handle').length).to.equal(2);
     expect(document.querySelectorAll('.slider__bubble').length).to.equal(2)
   })
 
-  it('Set slider\'s parameters', () => {
-    const viewSlider = new ViewSlider(new Model({
+  it('Should set slider\s parameters', () => {
+    const slider = new ViewSlider(new Model({
       minValueScale: 0,
       maxValueScale: 100,
       firstValue: 55,
@@ -30,15 +28,20 @@ describe("ViewSlider", function() {
       step: 1,
       verticalScale: true,
       showBubble: true,
-    }));
+    });
 
-    viewSlider.render();
-    viewSlider.setHandlesPosition();
-    const handles = document.body.querySelectorAll('.slider__handle');
-    const firstHandle = handles[0] as HTMLElement;
-    const secondHandle = handles[1] as HTMLElement;
+    slider.setSliderParameters();
 
-    expect(firstHandle.style.left).to.equal('55%');
-    expect(secondHandle.style.left).to.equal('70%');
+    const selectHandles = document.querySelectorAll('.slider__handle') as HTMLElement);
+    const selectBubbles = document.querySelectorAll('.slider__bubble') as HTMLElement;
+
+
+    expect(selectHandles[0].style.left).to.deep.equal("55%");
+    expect(selectHandles[1].style.left).to.deep.equal("70%");
+    expect(selectHandles[1].style.display).to.deep.equal("block");
+    expect(selectBubbles[0].style.display).to.deep.equal("block");
+    expect(selectBubbles[1].style.display).to.deep.equal("block");
+    expect(selectBubbles[0].textContent).to.deep.equal("55");
+    expect(selectBubbles[1].textContent).to.deep.equal("70");
   })
 });

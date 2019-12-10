@@ -8,7 +8,7 @@ afterEach(() => {
 
 describe("Presenter", function() {
 
-  it('Should update model', () => {
+  it('Should subscribe modules to mediator', () => {
     const slider = new Presenter({
       minValueScale: 10,
       maxValueScale: 150,
@@ -20,12 +20,7 @@ describe("Presenter", function() {
       showBubble: true,
     });
 
-    slider.viewSlider.render();
-
-    const selectSlider: HTMLElement = document.querySelector('.slider');
-    selectSlider.click();
-
-    expect(slider.model.firstValue).to.deep.equal(80)
+    expect(slider.model.mediator).to.deep.equal(slider.viewSlider.mediator);
   })
 
 });

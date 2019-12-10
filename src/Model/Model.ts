@@ -19,7 +19,7 @@ class Model {
     minValueScale = 0,
     maxValueScale = 100,
     firstValue = 40,
-    showSecondValue = false,
+    showSecondValue = true,
     secondValue = 70,
     step = 0,
     verticalScale = false,
@@ -47,6 +47,14 @@ class Model {
     if (this.secondValue > this.maxValueScale) {
       this.secondValue = this.maxValueScale;
     }
+  }
+
+  setMediator(mediator) {
+    this.mediator = mediator;
+  }
+
+  updateModel(property: string, value: number | boolean) {
+    this[property] = value;
   }
 }
 

@@ -9,15 +9,19 @@ class Presenter {
   constructor(options: object) {
     this.model = new Model(options);
     this.viewSlider = new ViewSlider(this.model);
-    document.addEventListener("click", () => this.model.firstValue = 80);
+    this.model.setMediator(this);
+    this.viewSlider.setMediator(this);
   }
 
+  notify(property, value) {
+    this.model.updateModel(property, value);
+    this.viewSlider.setSliderParameters();
+  }
 }
 
 
 const slider = new Presenter({});
-slider.viewSlider.render();
-slider.viewSlider.setHandlesPosition();
+slider.viewSlider.setSliderParameters();
 
 
 export default Presenter;
