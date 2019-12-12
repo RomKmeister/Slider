@@ -1,3 +1,5 @@
+import Presenter from '../Presenter/Presenter';
+
 class Model {
   minValueScale: number;
 
@@ -15,13 +17,15 @@ class Model {
 
   showBubble: boolean;
 
+  mediator: Presenter;
+
   constructor({
     minValueScale = 0,
     maxValueScale = 100,
     firstValue = 40,
     showSecondValue = true,
     secondValue = 70,
-    step = 0,
+    step = 5,
     verticalScale = false,
     showBubble = true,
   }) {
@@ -49,11 +53,11 @@ class Model {
     }
   }
 
-  setMediator(mediator) {
+  setMediator(mediator: Presenter): void {
     this.mediator = mediator;
   }
 
-  updateModel(property: string, value: number | boolean) {
+  updateModel(property: string, value: number | boolean): void {
     this[property] = value;
   }
 }

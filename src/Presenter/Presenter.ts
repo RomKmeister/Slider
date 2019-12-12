@@ -13,8 +13,9 @@ class Presenter {
     this.viewSlider.setMediator(this);
   }
 
-  notify(property, value) {
+  notify(property: string, value: number | boolean): void {
     this.model.updateModel(property, value);
+    this.model.checkScaleBorders();
     this.viewSlider.setSliderParameters();
   }
 }
