@@ -85,18 +85,17 @@ class ViewSlider {
   }
 
   private showSecondHandler(): void {
-    this.secondHandle.style.display = this.model.showSecondValue
-      ? 'block'
-      : 'none';
+    this.secondHandle.style.display = this.toggleElement(this.model.showSecondValue);
   }
 
   private showBubble(): void {
-    this.firstBubble.style.display = this.model.showBubble
-      ? 'block'
-      : 'none';
-    this.secondBubble.style.display = this.model.showBubble
-      ? 'block'
-      : 'none';
+    this.firstBubble.style.display = this.toggleElement(this.model.showBubble);
+    this.secondBubble.style.display = this.toggleElement(this.model.showBubble);
+  }
+
+  private toggleElement(statement: boolean): string {
+    if (statement) return 'block';
+    return 'none';
   }
 
   private changeDirection(): void {
