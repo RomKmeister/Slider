@@ -1,10 +1,17 @@
+.slider-block {
+    display: flex;
+    justify-content: space-between;
+}
+
 .slider {
     width: 90%;
     position: relative;
+    margin: 44px 10px;
 
     &__scale {
         margin: 10px 0;
-        height: 5px;
+        height: 1px;
+        border: 10px solid #fff;
         background: #ccc;
 
         &_vertical {
@@ -16,42 +23,55 @@
 
     &__handle {
         position: absolute;
-        top: -11px;
         width: 20px;
         height: 20px;
         background: #fff;
         box-shadow:0 1px 6px 0 rgba(32, 33, 36, .28);
         border-radius: 50%;
         cursor: pointer;
-
-        &_vertical {
-            left: 0;
-        }
     }
 
     &__bubble {
-        padding: 10px;
-        box-shadow:0 1px 6px 0 rgba(32, 33, 36, .28);
+        position: relative;
+        width: 40px;
+        padding: 6px;
+        transform: translate(-15px, -40px);
+        box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+        background: #fff;
+        text-align: center;
+        &_vertical {
+            position: relative;
+            width: 40px;
+            padding: 6px;
+            transform: translate(40px, -5px);
+            box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+            text-align: center;
+        }
     }
 }
 
 .panel {
-    width: 200px;
+    width: 300px;
+    padding: 20px 20px 30px;
     margin: 15px;
-    box-shadow:0 1px 6px 0 rgba(32, 33, 36, .28);
+    box-shadow:0 1px 6px 0 rgba(32, 33, 36, 0.28);
     
-
-    &__input {
-        margin: 10px;
-        outline: 0;
-        border: none;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.4)
+    &__label {
+        margin: 5px 0;
+        display: block;
     }
 
-    &__input:hover,
-    &__input:focus,
-    {
-        outline: 1px solid rgba(0, 0, 0, 1);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.4)
+    &__input {
+        margin: 5px;
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+        &[type="text"] {
+            outline: 0;
+            width: 50px;
+            &:hover,
+            &:focus {
+                border-bottom: 1px solid rgba(0, 0, 0, 1);
+            }
+        }
     }
 }
