@@ -12,6 +12,8 @@ class ViewSlider {
 
   scale: HTMLElement;
 
+  scaleModelLength: number;
+
   firstHandle: HTMLElement;
 
   secondHandle: HTMLElement;
@@ -29,6 +31,7 @@ class ViewSlider {
   constructor(model: Model) {
     this.model = model;
     this.slider = this.render();
+    this.setSliderParameters();
     this.onChange();
   }
 
@@ -66,9 +69,9 @@ class ViewSlider {
   }
 
   private setHandlesPosition(): void {
-    const scaleLength = this.model.maxValueScale - this.model.minValueScale;
-    const firstHandlerPosition = (this.model.firstValue * 100) / (scaleLength);
-    const secondHandlerPosition = (this.model.secondValue * 100) / (scaleLength);
+    this.scaleModelLength = this.model.maxValueScale - this.model.minValueScale;
+    const firstHandlerPosition = (this.model.firstValue * 100) / (this.scaleModelLength);
+    const secondHandlerPosition = (this.model.secondValue * 100) / (this.scaleModelLength);
 
     if (this.model.verticalScale) {
       this.firstHandle.style.top = `${firstHandlerPosition}%`;
@@ -99,15 +102,21 @@ class ViewSlider {
   }
 
   private changeDirection(): void {
-    const classDirection = 'slider__scale_vertical';
+    const scaleClassDirection = 'slider__scale_vertical';
+    const bubbleClassDirection = 'slider__bubble_vertical';
+
     if (this.model.verticalScale) {
-      this.scale.classList.add(classDirection);
-      this.firstHandle.style.left = '0';
-      this.secondHandle.style.left = '0';
+      this.scale.classList.add(scaleClassDirection);
+      this.firstBubble.classList.add(bubbleClassDirection);
+      this.secondBubble.classList.add(bubbleClassDirection);
+      this.firstHandle.style.left = '10px';
+      this.secondHandle.style.left = '10px';
     } else {
-      this.scale.classList.remove(classDirection);
-      this.firstHandle.style.top = '0';
-      this.secondHandle.style.top = '0';
+      this.scale.classList.remove(scaleClassDirection);
+      this.firstBubble.classList.remove(bubbleClassDirection);
+      this.secondBubble.classList.remove(bubbleClassDirection);
+      this.firstHandle.style.top = '10px';
+      this.secondHandle.style.top = '10px';
     }
   }
 
@@ -149,33 +158,30 @@ class ViewSlider {
   }
 
   private chooseHandlerForUpdate(target: HTMLElement, coordinate: number): string {
-    if (target === this.firstHandle) {
-      return 'firstValue';
-    }
-    if (target === this.secondHandle) {
-      return 'secondValue';
-    }
-    if (target === this.scale) {
-      const intervalBetweenHandles = this.secondHandle.offsetLeft- this.firstHandle.offsetLeft;
-      const handleArea = this.firstHandle.offsetLeft + intervalBetweenHandles / 2;
-      if (coordinate < handleArea) {
+    const intervalBetweenHandles = this.secondHandle.offsetLeft - this.firstHandle.offsetLeft;
+    const handleArea = this.firstHandle.offsetLeft + intervalBetweenHandles / 2;
+    switch (target) {
+      case this.firstHandle:
         return 'firstValue';
-      }
-      if (coordinate >= handleArea) {
+      case this.secondHandle:
         return 'secondValue';
-      }
+      case this.scale:
+        if (coordinate < handleArea) {
+          return 'firstValue';
+        }
+        return 'secondValue';
+      // no default
     }
   }
 
   private calculateValue(coordinate: number): number {
-    const scaleGrade = this.model.maxValueScale - this.model.minValueScale;
-    const scaleLength = this.model.verticalScale
+    const scaleDomLength = this.model.verticalScale
       ? this.scale.clientHeight
       : this.scale.clientWidth;
     const scalePosition = this.model.verticalScale
       ? this.scale.getBoundingClientRect().top
       : this.scale.getBoundingClientRect().left;
-    let value = Math.round(((coordinate - scalePosition) / this.model.step) / (scaleLength / scaleGrade)) * this.model.step;
+    let value = Math.round(((coordinate - scalePosition) / this.model.step) / (scaleDomLength / this.scaleModelLength)) * this.model.step;
     return value;
   }
 }
