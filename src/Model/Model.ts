@@ -53,12 +53,25 @@ class Model {
     }
   }
 
+  checkHandlePosition(property: string) {
+    if (this.showSecondValue && this.secondValue - this.firstValue <= 1) {
+      if (property === "firstValue") {
+      this.firstValue = this.secondValue - 1;
+    }
+      if (property === "secondValue") {
+        this.secondValue = this.firstValue + 1;
+      }
+   }
+  }
+
   setMediator(mediator: Presenter): void {
     this.mediator = mediator;
   }
 
   updateModel(property: string, value: number | boolean): void {
     this[property] = value;
+    this.checkScaleBorders();
+    this.checkHandlePosition(property);
   }
 }
 
