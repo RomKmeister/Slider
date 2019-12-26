@@ -20,15 +20,15 @@ class Model {
   mediator: Presenter;
 
   constructor({
-    minValueScale = 0,
-    maxValueScale = 100,
-    firstValue = 40,
-    showSecondValue = true,
-    secondValue = 70,
-    step = 5,
-    verticalScale = false,
-    showBubble = true,
-  }) {
+    minValueScale,
+    maxValueScale,
+    firstValue,
+    showSecondValue,
+    secondValue,
+    step,
+    verticalScale,
+    showBubble,
+  }: any) {
     this.minValueScale = minValueScale;
     this.maxValueScale = maxValueScale;
     this.firstValue = firstValue;
@@ -39,7 +39,19 @@ class Model {
     this.showBubble = showBubble;
   }
 
-  checkScaleBorders(): void {
+  setMediator(mediator: Presenter): void {
+    this.mediator = mediator;
+  }
+
+  updateModel(options: any): void {
+    const saveFirstValue = this.firstValue;
+    const saveSecondValue = this.secondValue;
+    Object.assign(this, options);
+    this.checkScaleBorders();
+    this.checkHandlePosition(saveFirstValue, saveSecondValue);
+  }
+
+  private checkScaleBorders(): void {
     if (this.firstValue < this.minValueScale) {
       this.firstValue = this.minValueScale;
     }
@@ -53,25 +65,15 @@ class Model {
     }
   }
 
-  checkHandlePosition(property: string) {
-    if (this.showSecondValue && this.secondValue - this.firstValue <= 1) {
-      if (property === "firstValue") {
-      this.firstValue = this.secondValue - 1;
-    }
-      if (property === "secondValue") {
-        this.secondValue = this.firstValue + 1;
+  private checkHandlePosition(saveFirstValue: number, saveSecondValue: number): void {
+    if (this.showSecondValue && this.secondValue - this.firstValue <= this.step) {
+      if (saveFirstValue - this.firstValue === 0) {
+        this.secondValue = this.firstValue + this.step;
       }
-   }
-  }
-
-  setMediator(mediator: Presenter): void {
-    this.mediator = mediator;
-  }
-
-  updateModel(property: string, value: number | boolean): void {
-    this[property] = value;
-    this.checkScaleBorders();
-    this.checkHandlePosition(property);
+      if (saveSecondValue - this.secondValue === 0) {
+        this.firstValue = this.secondValue - this.step;
+      }
+    }
   }
 }
 
