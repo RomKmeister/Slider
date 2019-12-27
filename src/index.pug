@@ -1,3 +1,5 @@
+include ./slider-block/slider
+
 doctype html
 html(lang="ru")
 	head
@@ -5,8 +7,8 @@ html(lang="ru")
 		link(rel="stylesheet", href="style.css")
 		title I'm a title
 	body
-		.slider-block
-		.slider-block
-		.slider-block
+		+slider-block
+		+slider-block
+		+slider-block
 		script(src="main.bundle.js")
 
