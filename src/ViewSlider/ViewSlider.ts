@@ -39,7 +39,7 @@ class ViewSlider {
     this.mediator = mediator;
   }
 
-  render(): HTMLElement {
+  private render(): HTMLElement {
     this.slider = document.createElement('div');
     this.scale = document.createElement('div');
     this.firstHandle = document.createElement('div');
@@ -70,8 +70,8 @@ class ViewSlider {
 
   private setHandlesPosition(): void {
     this.scaleModelLength = this.model.maxValueScale - this.model.minValueScale;
-    const firstHandlerPosition = (this.model.firstValue * 100) / (this.scaleModelLength);
-    const secondHandlerPosition = (this.model.secondValue * 100) / (this.scaleModelLength);
+    const firstHandlerPosition = (this.model.firstValue - this.model.minValueScale) * (100 / this.scaleModelLength);
+    const secondHandlerPosition = (this.model.secondValue - this.model.minValueScale) * (100 / this.scaleModelLength);
 
     if (this.model.verticalScale) {
       this.firstHandle.style.top = `${firstHandlerPosition}%`;
@@ -103,16 +103,21 @@ class ViewSlider {
 
   private changeDirection(): void {
     const scaleClassDirection = 'slider__scale_vertical';
+    const handleClassDirection = 'slider__handle_vertical';
     const bubbleClassDirection = 'slider__bubble_vertical';
 
     if (this.model.verticalScale) {
       this.scale.classList.add(scaleClassDirection);
+      this.firstHandle.classList.add(handleClassDirection);
+      this.secondHandle.classList.add(handleClassDirection);
       this.firstBubble.classList.add(bubbleClassDirection);
       this.secondBubble.classList.add(bubbleClassDirection);
       this.firstHandle.style.left = '10px';
       this.secondHandle.style.left = '10px';
     } else {
       this.scale.classList.remove(scaleClassDirection);
+      this.firstHandle.classList.remove(handleClassDirection);
+      this.secondHandle.classList.remove(handleClassDirection);
       this.firstBubble.classList.remove(bubbleClassDirection);
       this.secondBubble.classList.remove(bubbleClassDirection);
       this.firstHandle.style.top = '10px';
@@ -126,20 +131,21 @@ class ViewSlider {
   }
 
   private onMouseDown(event: MouseEvent): void {
-    this.target = event.target.closest('.slider__handle');
+    const findClosest = event.target as HTMLElement;
+    this.target = findClosest.closest('.slider__handle');
     this.mousemove = true;
     document.addEventListener('mousemove', this.onMouseMove.bind(this));
     document.addEventListener('mouseup', this.onMouseUp.bind(this));
   }
 
   private moveHandeltoScaleClick(event: MouseEvent): void {
-    this.target = event.target;
+    this.target = event.target as HTMLElement;
     const coordinate = this.model.verticalScale
       ? event.clientY
       : event.clientX;
     const value = this.calculateValue(coordinate);
     const property = this.chooseHandlerForUpdate(this.target, coordinate);
-    this.mediator.notify(property, value);
+    this.mediator.notify({ [property]: value });
   }
 
   private onMouseMove(event: MouseEvent): void {
@@ -149,7 +155,7 @@ class ViewSlider {
         : event.clientX;
       const value = this.calculateValue(coordinate);
       const property = this.chooseHandlerForUpdate(this.target, coordinate);
-      this.mediator.notify(property, value);
+      this.mediator.notify({ [property]: value });
     }
   }
 
@@ -170,7 +176,8 @@ class ViewSlider {
           return 'firstValue';
         }
         return 'secondValue';
-      // no default
+      default:
+        return 'firstValue';
     }
   }
 
@@ -181,7 +188,9 @@ class ViewSlider {
     const scalePosition = this.model.verticalScale
       ? this.scale.getBoundingClientRect().top
       : this.scale.getBoundingClientRect().left;
-    let value = Math.round(((coordinate - scalePosition) / this.model.step) / (scaleDomLength / this.scaleModelLength)) * this.model.step;
+    const step = this.model.step > 1 ? this.model.step : 0.01;
+    const value = this.model.minValueScale
+    + Math.round(((coordinate - scalePosition) / step) / (scaleDomLength / this.scaleModelLength)) * step;
     return value;
   }
 }
