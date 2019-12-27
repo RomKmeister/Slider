@@ -1,22 +1,22 @@
-var webpackConfig = require('./webpack.config');
+const webpackConfig = require('./webpack.config');
 
 module.exports = function (config) {
   config.set({
     basePath: '',
     frameworks: ['mocha', 'chai'],
     files: [
-      'test/**/*.ts'
+      'test/**/*.ts',
     ],
     exclude: [
     ],
     preprocessors: {
-      'test/**/*.ts': ['webpack']
+      'test/**/*.ts': ['webpack'],
     },
     webpack: {
       mode: 'development',
       devtool: 'inline-source-map',
       module: webpackConfig.module,
-      resolve: webpackConfig.resolve
+      resolve: webpackConfig.resolve,
     },
     reporters: ['progress'],
     port: 9876,
@@ -25,6 +25,6 @@ module.exports = function (config) {
     autoWatch: true,
     browsers: ['Chrome'],
     singleRun: true,
-    concurrency: Infinity
-  })
-}
+    concurrency: Infinity,
+  });
+};

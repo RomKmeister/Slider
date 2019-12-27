@@ -1,7 +1,9 @@
 module.exports =  {
   env: {
     "browser": true,
-    "node": true
+    "node": true,
+    "mocha": true,
+    "jquery": true,
     },
   parser:  '@typescript-eslint/parser',  // Specifies the ESLint parser
   extends:  [
@@ -15,7 +17,9 @@ module.exports =  {
   rules:  {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. '@typescript-eslint/explicit-function-return-type': 'off',
-    "linebreak-style": ["error", "windows"]
+    'linebreak-style': ["error", "windows"],
+    'max-len': ["error", { "code": 120 }],
+    "@typescript-eslint/no-explicit-any": false
   },
   settings: {
     'import/resolver': {
