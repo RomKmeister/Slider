@@ -14,20 +14,20 @@ html {
 }
 
 .slider {
-  width: 90%;
-  position: relative;
+	position: relative;
+	width: 90%;
   margin: 3.14rem 0;
 
   &__scale {
-    margin: 0.71rem 0;
-    height: 0.07rem;
+		height: 0.07rem;
+		margin: 0.71rem 0;
     border: 0.71rem solid $main-white;
     background: $scale;
 
     &_vertical {
-      margin: 0 0.71rem;
-      width: 0.07rem;
+			width: 0.07rem;
       height: 35.71rem;
+      margin: 0 0.71rem;
     }
   }
 
@@ -47,9 +47,9 @@ html {
   }
 
   &__bubble {
-    width: 1.34rem;
+    width: 2rem;
     padding: 0.43rem;
-    transform: translate(1.07rem, -1.34rem);
+    transform: translate(-25%, -120%);
     box-shadow: 0 0.07rem 0.43rem 0 $shadow;
     background: $main-white;
     text-align: center;
@@ -63,25 +63,27 @@ html {
 }
 
 .panel {
-  width: 21.42rem;
+	width: 21.42rem;
+	margin: 1rem;
   padding: 1.43rem 1.43rem 2.14rem;
-  margin: 1rem;
   box-shadow:0 0.07rem 0.43rem 0 $shadow;
   
   &__label {
+		display: block;
     margin: 0.36rem 0;
-    display: block;
   }
 
   &__input {
     margin: 0.36rem;
     border: none;
     border-bottom: 0.07rem solid $input;
-    &[type="text"] {
+	 
+		&[type='text'] {
       outline: 0;
       width: 3.6rem;
-      &:hover,
-      &:focus {
+			
+			&:hover,
+		 	&:focus {
         border-bottom: 0.07rem solid $input-hover;
       }
     }
