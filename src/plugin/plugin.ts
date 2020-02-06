@@ -19,8 +19,8 @@ declare global {
       showBubble: true,
     };
     console.log(options);
-    const finalOptions = $.extend({}, defaultOptions, options);
-    const presenter = new Presenter(finalOptions);
+    const $finalOptions = $.extend({}, defaultOptions, options);
+    const presenter = new Presenter($finalOptions);
 
     $(this).append(presenter.showSlider(), presenter.showPanel());
   };

@@ -52,6 +52,12 @@ class ViewSlider {
     this.secondHandle.classList.add('slider__handle');
     this.firstBubble.classList.add('slider__bubble');
     this.secondBubble.classList.add('slider__bubble');
+    this.slider.classList.add('js-slider');
+    this.scale.classList.add('js-slider__scale');
+    this.firstHandle.classList.add('js-slider__handle');
+    this.secondHandle.classList.add('js-slider__handle');
+    this.firstBubble.classList.add('js-slider__bubble');
+    this.secondBubble.classList.add('js-slider__bubble');
     this.firstHandle.append(this.firstBubble);
     this.secondHandle.append(this.secondBubble);
     this.slider.append(this.scale);
@@ -132,7 +138,7 @@ class ViewSlider {
 
   private onMouseDown(event: MouseEvent): void {
     const findClosest = event.target as HTMLElement;
-    this.target = findClosest.closest('.slider__handle');
+    this.target = findClosest.closest('.js-slider__handle');
     this.mousemove = true;
     document.addEventListener('mousemove', this.onMouseMove.bind(this));
     document.addEventListener('mouseup', this.onMouseUp.bind(this));
