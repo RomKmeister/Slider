@@ -18,7 +18,7 @@ declare global {
       verticalScale: false,
       showBubble: true,
     };
-
+    console.log(options);
     const finalOptions = $.extend({}, defaultOptions, options);
     const presenter = new Presenter(finalOptions);
 
