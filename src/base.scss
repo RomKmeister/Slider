@@ -1,3 +1,13 @@
+@import 'colors';
+
+html {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  color: $text;
+  background: $main-white;
+}
+
 body {
     margin: 0;
     height: 100%;

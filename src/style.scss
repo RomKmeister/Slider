@@ -1,13 +1,5 @@
 @import 'colors';
 
-html {
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  font-weight: normal;
-  color: $text;
-  background: $main-white;
-}
-
 .slider-block {
   display: flex;
   justify-content: space-between;
