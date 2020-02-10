@@ -25,6 +25,8 @@
 
   &__handle {
     position: absolute;
+    top: 0.71rem;
+    left: 0px;
     width: 1.43rem;
     height: 1.43rem;
     background: $main-white;
@@ -34,6 +36,8 @@
     cursor: pointer;
 		
 		&_vertical {
+      top: 0px;
+      left: 0.71rem;
       transform: translate(0, -0.71rem);
     }
   }

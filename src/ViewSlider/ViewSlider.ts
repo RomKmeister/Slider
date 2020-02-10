@@ -118,16 +118,16 @@ class ViewSlider {
       this.secondHandle.classList.add(handleClassDirection);
       this.firstBubble.classList.add(bubbleClassDirection);
       this.secondBubble.classList.add(bubbleClassDirection);
-      this.firstHandle.style.left = '10px';
-      this.secondHandle.style.left = '10px';
+      this.firstHandle.style.left = '';
+      this.secondHandle.style.left = '';
     } else {
       this.scale.classList.remove(scaleClassDirection);
       this.firstHandle.classList.remove(handleClassDirection);
       this.secondHandle.classList.remove(handleClassDirection);
       this.firstBubble.classList.remove(bubbleClassDirection);
       this.secondBubble.classList.remove(bubbleClassDirection);
-      this.firstHandle.style.top = '10px';
-      this.secondHandle.style.top = '10px';
+      this.firstHandle.style.top = '';
+      this.secondHandle.style.top = '';
     }
   }
 
