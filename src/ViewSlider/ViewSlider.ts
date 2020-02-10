@@ -132,7 +132,8 @@ class ViewSlider {
   }
 
   private onChange(): void {
-    this.slider.addEventListener('mousedown', this.onMouseDown.bind(this));
+    this.firstHandle.addEventListener('mousedown', this.onMouseDown.bind(this));
+    this.secondHandle.addEventListener('mousedown', this.onMouseDown.bind(this));
     this.scale.addEventListener('mousedown', this.moveHandeltoScaleClick.bind(this));
   }
 
