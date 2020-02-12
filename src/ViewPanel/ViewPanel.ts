@@ -15,7 +15,7 @@ class ViewPanel {
   constructor(model: Model) {
     this.model = model;
     this.panel = this.render();
-    this.inputs = this.panel.querySelectorAll('.js-panel__input');
+    this.inputs = this.panel.querySelectorAll('.js-slider-block__input');
     this.setPanelParameters();
     this.formChange();
   }
@@ -47,8 +47,8 @@ class ViewPanel {
 
   private render(): HTMLElement {
     this.panel = document.createElement('form');
-    this.panel.classList.add('panel');
-    this.panel.classList.add('js-panel');
+    this.panel.classList.add('slider-block__panel');
+    this.panel.classList.add('js-slider-block__panel');
     this.panel.insertAdjacentHTML('afterbegin', template);
     return this.panel;
   }

@@ -1,14 +1,15 @@
-@import 'colors';
+@import '../colors';
 
 .slider-block {
   display: flex;
   justify-content: space-between;
-}
+  align-items: flex-start;
 
-.slider {
-	position: relative;
-	width: 90%;
-  margin: 3.14rem 0;
+  &__slider {
+    position: relative;
+    width: 90%;
+    margin: 3.14rem 0;
+  }
 
   &__scale {
 		height: 0.07rem;
@@ -26,7 +27,7 @@
   &__handle {
     position: absolute;
     top: 0.71rem;
-    left: 0px;
+    left: 0;
     width: 1.43rem;
     height: 1.43rem;
     background: $main-white;
@@ -36,7 +37,7 @@
     cursor: pointer;
 		
 		&_vertical {
-      top: 0px;
+      top: 0;
       left: 0.71rem;
       transform: translate(0, -0.71rem);
     }
@@ -56,13 +57,13 @@
       text-align: center;
     }
   }
-}
 
-.panel {
-	width: 21.42rem;
-	margin: 1rem;
-  padding: 1.43rem 1.43rem 2.14rem;
-  box-shadow:0 0.07rem 0.43rem 0 $shadow;
+  &__panel {
+    width: 21.42rem;
+    margin: 1rem;
+    padding: 1.43rem 1.43rem 2.14rem;
+    box-shadow:0 0.07rem 0.43rem 0 $shadow;
+  }
   
   &__label {
 		display: block;

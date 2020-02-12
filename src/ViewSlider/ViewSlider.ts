@@ -46,18 +46,18 @@ class ViewSlider {
     this.secondHandle = document.createElement('div');
     this.firstBubble = document.createElement('div');
     this.secondBubble = document.createElement('div');
-    this.slider.classList.add('slider');
-    this.scale.classList.add('slider__scale');
-    this.firstHandle.classList.add('slider__handle');
-    this.secondHandle.classList.add('slider__handle');
-    this.firstBubble.classList.add('slider__bubble');
-    this.secondBubble.classList.add('slider__bubble');
+    this.slider.classList.add('slider-block__slider');
+    this.scale.classList.add('slider-block__scale');
+    this.firstHandle.classList.add('slider-block__handle');
+    this.secondHandle.classList.add('slider-block__handle');
+    this.firstBubble.classList.add('slider-block__bubble');
+    this.secondBubble.classList.add('slider-block__bubble');
     this.slider.classList.add('js-slider');
-    this.scale.classList.add('js-slider__scale');
-    this.firstHandle.classList.add('js-slider__handle');
-    this.secondHandle.classList.add('js-slider__handle');
-    this.firstBubble.classList.add('js-slider__bubble');
-    this.secondBubble.classList.add('js-slider__bubble');
+    this.scale.classList.add('js-slider-block__scale');
+    this.firstHandle.classList.add('js-slider-block__handle');
+    this.secondHandle.classList.add('js-slider-block__handle');
+    this.firstBubble.classList.add('js-slider-block__bubble');
+    this.secondBubble.classList.add('js-slider-block__bubble');
     this.firstHandle.append(this.firstBubble);
     this.secondHandle.append(this.secondBubble);
     this.slider.append(this.scale);
@@ -108,9 +108,9 @@ class ViewSlider {
   }
 
   private changeDirection(): void {
-    const scaleClassDirection = 'slider__scale_vertical';
-    const handleClassDirection = 'slider__handle_vertical';
-    const bubbleClassDirection = 'slider__bubble_vertical';
+    const scaleClassDirection = 'slider-block__scale_vertical';
+    const handleClassDirection = 'slider-block__handle_vertical';
+    const bubbleClassDirection = 'slider-block__bubble_vertical';
 
     if (this.model.verticalScale) {
       this.scale.classList.add(scaleClassDirection);
@@ -139,7 +139,7 @@ class ViewSlider {
 
   private onMouseDown(event: MouseEvent): void {
     const findClosest = event.target as HTMLElement;
-    this.target = findClosest.closest('.js-slider__handle');
+    this.target = findClosest.closest('.js-slider-block__handle');
     this.mousemove = true;
     document.addEventListener('mousemove', this.onMouseMove.bind(this));
     document.addEventListener('mouseup', this.onMouseUp.bind(this));
