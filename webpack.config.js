@@ -55,12 +55,12 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'style.css',
-      ignoreOrder: false
+      filename: 'style.css'
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'src/index.pug',
+      favicon: 'src/favicons/favicon.ico'
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',
