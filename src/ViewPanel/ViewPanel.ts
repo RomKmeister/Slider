@@ -55,13 +55,15 @@ class ViewPanel {
 
   private formChange(): void {
     this.inputs.forEach((item: HTMLFormElement) => {
-      item.addEventListener('change', (event: KeyboardEvent) => {
-        const target = event.target as HTMLFormElement;
-        const elementName = target.name;
-        const elementValue = target.type === 'text' ? Number(target.value) : target.checked;
-        this.mediator.notify({ [elementName]: elementValue });
-      });
+      item.addEventListener('change', this.handleInpitChange.bind(this));
     });
+  }
+
+  private handleInpitChange(event: KeyboardEvent): void {
+    const target = event.target as HTMLFormElement;
+    const elementName = target.name;
+    const elementValue = target.type === 'text' ? Number(target.value) : target.checked;
+    this.mediator.notify({ [elementName]: elementValue });
   }
 }
 

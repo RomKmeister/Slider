@@ -26,13 +26,17 @@ class ViewSlider {
 
   mousemove: boolean;
 
+  newhandleHandleMouseMove: any;
+
+  bindedHandleHandleMouseMove: any;
+
   target: HTMLElement;
 
   constructor(model: Model) {
     this.model = model;
     this.slider = this.render();
     this.setSliderParameters();
-    this.onChange();
+    this.bindEventListners();
   }
 
   setMediator(mediator: Presenter): void {
@@ -131,21 +135,26 @@ class ViewSlider {
     }
   }
 
-  private onChange(): void {
-    this.firstHandle.addEventListener('mousedown', this.onMouseDown.bind(this));
-    this.secondHandle.addEventListener('mousedown', this.onMouseDown.bind(this));
-    this.scale.addEventListener('mousedown', this.moveHandeltoScaleClick.bind(this));
+  private bindEventListners(): void {
+    this.firstHandle.addEventListener('mousedown', this.handleDocumentMouseMove.bind(this));
+    this.secondHandle.addEventListener('mousedown', this.handleDocumentMouseMove.bind(this));
+    this.scale.addEventListener('mousedown', this.handleScaleClick.bind(this));
+    document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
+    document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
+    this.bindedHandleHandleMouseMove = this.handleHandleMouseMove.bind(this);
   }
 
-  private onMouseDown(event: MouseEvent): void {
+  private handleDocumentMouseMove(event: MouseEvent): void {
     const findClosest = event.target as HTMLElement;
     this.target = findClosest.closest('.js-slider-block__handle');
-    this.mousemove = true;
-    document.addEventListener('mousemove', this.onMouseMove.bind(this));
-    document.addEventListener('mouseup', this.onMouseUp.bind(this));
+    document.addEventListener('mousemove', this.bindedHandleHandleMouseMove);
   }
 
-  private moveHandeltoScaleClick(event: MouseEvent): void {
+  private handleDocumentMouseUp(): void {
+    document.removeEventListener('mousemove', this.bindedHandleHandleMouseMove);
+  }
+
+  private handleScaleClick(event: MouseEvent): void {
     this.target = event.target as HTMLElement;
     const coordinate = this.model.verticalScale
       ? event.clientY
@@ -155,19 +164,13 @@ class ViewSlider {
     this.mediator.notify({ [property]: value });
   }
 
-  private onMouseMove(event: MouseEvent): void {
-    if (this.mousemove) {
-      const coordinate = this.model.verticalScale
-        ? event.clientY
-        : event.clientX;
-      const value = this.calculateValue(coordinate);
-      const property = this.chooseHandlerForUpdate(this.target, coordinate);
-      this.mediator.notify({ [property]: value });
-    }
-  }
-
-  private onMouseUp(): void {
-    this.mousemove = false;
+  private handleHandleMouseMove(event: MouseEvent): void {
+    const coordinate = this.model.verticalScale
+      ? event.clientY
+      : event.clientX;
+    const value = this.calculateValue(coordinate);
+    const property = this.chooseHandlerForUpdate(this.target, coordinate);
+    this.mediator.notify({ [property]: value });
   }
 
   private chooseHandlerForUpdate(target: HTMLElement, coordinate: number): string {
