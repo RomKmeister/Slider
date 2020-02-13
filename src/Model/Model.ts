@@ -44,36 +44,50 @@ class Model {
   }
 
   updateModel(options: any): void {
-    const saveFirstValue = this.firstValue;
-    const saveSecondValue = this.secondValue;
-    Object.assign(this, options);
-    this.checkScaleBorders();
-    this.checkHandlePosition(saveFirstValue, saveSecondValue);
+    Object.assign(this, this.validate(options));
   }
 
-  private checkScaleBorders(): void {
-    if (this.firstValue < this.minValueScale) {
-      this.firstValue = this.minValueScale;
+  private validate(newValue: any): any {
+    const isValueUnvalidate = Object.prototype.hasOwnProperty.call(newValue, 'firstValue')
+    || Object.prototype.hasOwnProperty.call(newValue, 'secondValue');
+    if (isValueUnvalidate) {
+      const validBorders = this.checkScaleBorders(newValue);
+      const validNewValue = this.showSecondValue ? this.checkHandlePosition(validBorders) : validBorders;
+      return validNewValue;
     }
-
-    if (this.firstValue > this.maxValueScale) {
-      this.firstValue = this.maxValueScale;
-    }
-
-    if (this.secondValue > this.maxValueScale) {
-      this.secondValue = this.maxValueScale;
-    }
+    return newValue;
   }
 
-  private checkHandlePosition(saveFirstValue: number, saveSecondValue: number): void {
-    if (this.showSecondValue && this.secondValue - this.firstValue <= this.step) {
-      if (saveFirstValue - this.firstValue === 0) {
-        this.secondValue = this.firstValue + this.step;
-      }
-      if (saveSecondValue - this.secondValue === 0) {
-        this.firstValue = this.secondValue - this.step;
-      }
+  private checkScaleBorders(newValue: any): any {
+    if (newValue.firstValue < this.minValueScale) {
+      return this.minValueScale;
     }
+    if (newValue.firstValue > this.maxValueScale) {
+      return this.maxValueScale;
+    }
+    if (newValue.secondValue > this.maxValueScale) {
+      return this.maxValueScale;
+    }
+    return newValue;
+  }
+
+  private checkHandlePosition(update: any): any {
+    const isFirstValueNearly = Object.prototype.hasOwnProperty.call(update, 'firstValue')
+    && this.secondValue - update.firstValue <= this.step;
+    const isSecondValueNearly = Object.prototype.hasOwnProperty.call(update, 'secondValue')
+    && update.secondValue - this.firstValue <= this.step;
+
+    if (isFirstValueNearly) {
+      const updatedValue = {} as any;
+      updatedValue.firstValue = this.secondValue - this.step;
+      return updatedValue;
+    }
+    if (isSecondValueNearly) {
+      const updatedValue = {} as any;
+      updatedValue.secondValue = this.firstValue + this.step;
+      return updatedValue;
+    }
+    return update;
   }
 }
 
