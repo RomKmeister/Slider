@@ -1,3 +1,6 @@
+/* eslint-disable func-names */
+/* eslint-disable no-param-reassign */
+
 import Presenter from '../Presenter/Presenter';
 
 declare global {
@@ -18,7 +21,6 @@ declare global {
       verticalScale: false,
       showBubble: true,
     };
-    console.log(options);
     const $finalOptions = $.extend({}, defaultOptions, options);
     const presenter = new Presenter($finalOptions);
 
