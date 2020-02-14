@@ -60,13 +60,16 @@ class Model {
 
   private checkScaleBorders(newValue: any): any {
     if (newValue.firstValue < this.minValueScale) {
-      return this.minValueScale;
+      const firstValue = { firstValue: this.minValueScale };
+      return firstValue;
     }
     if (newValue.firstValue > this.maxValueScale) {
-      return this.maxValueScale;
+      const firstValue = { firstValue: this.maxValueScale };
+      return firstValue;
     }
     if (newValue.secondValue > this.maxValueScale) {
-      return this.maxValueScale;
+      const secondValue = { secondValue: this.maxValueScale };
+      return secondValue;
     }
     return newValue;
   }
