@@ -21,8 +21,8 @@ describe('ViewPanel', function() {
 
   it('Creates panel', () => {
 
-    expect(panel.panel.className).to.equal('panel');
-    expect(panel.panel.querySelectorAll('.panel__input').length).to.equal(8);
+    expect(panel.panel.className).to.equal('slider-block__panel js-slider-block__panel');
+    expect(panel.panel.querySelectorAll('.slider-block__input').length).to.equal(8);
   })
 
   it('Should set values to text inputs', () => {

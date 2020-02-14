@@ -34,11 +34,10 @@ describe('ViewSlider', function() {
   })
 
   it('Creates slider', () => {
-    
-    expect(slider.slider.className).to.equal('slider');
-    expect(slider.slider.querySelectorAll('.slider__scale').length).to.equal(1);
-    expect(slider.slider.querySelectorAll('.slider__handle').length).to.equal(2);
-    expect(slider.slider.querySelectorAll('.slider__bubble').length).to.equal(2)
+    expect(slider.slider.className).to.equal('slider-block__slider js-slider');
+    expect(slider.slider.querySelectorAll('slider-block__scale js-slider-block__scale').length).to.equal(1);
+    expect(slider.slider.querySelectorAll('slider-block__handle').length).to.equal(2);
+    expect(slider.slider.querySelectorAll('slider-block__bubble').length).to.equal(2)
   })
 
   it('Should set horisontal handles position', () => {
@@ -83,12 +82,12 @@ describe('ViewSlider', function() {
 
   it('Should set horisontal scale', () => {
 
-    expect(sliderWithAllFalse.scale.className).to.deep.equal('slider__scale');
+    expect(sliderWithAllFalse.scale.className).to.deep.equal('slider-block__scale js-slider-block__scale');
   })
  
   it('Should set vertical scale', () => {
 
-    expect(slider.scale.className).to.deep.equal('slider__scale slider__scale_vertical');
+    expect(slider.scale.className).to.deep.equal('slider-block__scale js-slider-block__scale slider-block__scale_vertical');
   })
 
   it('Should set mediator', () => {

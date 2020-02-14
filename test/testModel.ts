@@ -15,7 +15,7 @@ describe('Slider', function() {
       verticalScale: true,
       showBubble: true,
     });
-    model.updateModel({'firstValue': 200});
+    model.updateModel({'firstValue': 150});
     expect(model.firstValue).to.deep.equal(100)
   });
 
