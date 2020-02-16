@@ -1,6 +1,6 @@
-import Presenter from '../Presenter/Presenter';
+import BaseComponent from '../BaseComponent/BaseComponent';
 
-class Model {
+class Model extends BaseComponent {
   minValueScale: number;
 
   maxValueScale: number;
@@ -17,8 +17,6 @@ class Model {
 
   showBubble: boolean;
 
-  mediator: Presenter;
-
   constructor({
     minValueScale,
     maxValueScale,
@@ -29,6 +27,7 @@ class Model {
     verticalScale,
     showBubble,
   }: any) {
+    super();
     this.minValueScale = minValueScale;
     this.maxValueScale = maxValueScale;
     this.firstValue = firstValue;
@@ -37,10 +36,6 @@ class Model {
     this.step = step;
     this.verticalScale = verticalScale;
     this.showBubble = showBubble;
-  }
-
-  setMediator(mediator: Presenter): void {
-    this.mediator = mediator;
   }
 
   updateModel(options: any): void {

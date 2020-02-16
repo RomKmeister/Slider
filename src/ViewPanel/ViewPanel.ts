@@ -1,27 +1,22 @@
+import BaseComponent from '../BaseComponent/BaseComponent';
 import Model from '../Model/Model';
-import Presenter from '../Presenter/Presenter';
 
 const template = require('./panelTemplate.pug');
 
-class ViewPanel {
+class ViewPanel extends BaseComponent {
   model: Model;
-
-  mediator: Presenter;
 
   panel: HTMLElement;
 
   inputs: NodeListOf<HTMLFormElement>;
 
   constructor(model: Model) {
+    super();
     this.model = model;
     this.panel = this.render();
     this.inputs = this.panel.querySelectorAll('.js-slider-block__input');
     this.setPanelParameters();
     this.formChange();
-  }
-
-  setMediator(mediator: Presenter): void {
-    this.mediator = mediator;
   }
 
   setPanelParameters(): void {

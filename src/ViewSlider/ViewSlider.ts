@@ -1,10 +1,8 @@
+import BaseComponent from '../BaseComponent/BaseComponent';
 import Model from '../Model/Model';
-import Presenter from '../Presenter/Presenter';
 
-class ViewSlider {
+class ViewSlider extends BaseComponent {
   model: Model;
-
-  mediator: Presenter;
 
   handles: any;
 
@@ -33,14 +31,11 @@ class ViewSlider {
   target: HTMLElement;
 
   constructor(model: Model) {
+    super();
     this.model = model;
     this.slider = this.render();
     this.setSliderParameters();
     this.bindEventListners();
-  }
-
-  setMediator(mediator: Presenter): void {
-    this.mediator = mediator;
   }
 
   private render(): HTMLElement {
