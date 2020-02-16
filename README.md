@@ -17,4 +17,4 @@ $ npm run build</pre>
 Model, ViewSlider и ViewPanel не взаимодействуют напрямую и являются параметрами Presenter. Presenter использует паттерн медиатор. Model и View* уведомляют Presenter об изменениях. Presenter знает как элементы должны взаимодействовать и при получении уведомления перенаправляет вызов соттветствующему элементу.
 
 <h2>UML-диаграмма</h2>
-<img src="https://github.com/RomKmeister/Slider/UML.jpg" alt="uml">
+<img src="https://github.com/RomKmeister/Slider/blob/master/UML.jpg" alt="uml">
