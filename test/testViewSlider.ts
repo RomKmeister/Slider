@@ -35,9 +35,9 @@ describe('ViewSlider', function() {
 
   it('Creates slider', () => {
     expect(slider.slider.className).to.equal('slider-block__slider js-slider');
-    expect(slider.slider.querySelectorAll('slider-block__scale js-slider-block__scale').length).to.equal(1);
-    expect(slider.slider.querySelectorAll('slider-block__handle').length).to.equal(2);
-    expect(slider.slider.querySelectorAll('slider-block__bubble').length).to.equal(2)
+    expect(slider.slider.querySelectorAll('.js-slider-block__scale').length).to.equal(1);
+    expect(slider.slider.querySelectorAll('.js-slider-block__handle').length).to.equal(2);
+    expect(slider.slider.querySelectorAll('.js-slider-block__bubble').length).to.equal(2)
   })
 
   it('Should set horisontal handles position', () => {
