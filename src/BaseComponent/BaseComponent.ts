@@ -7,7 +7,7 @@ class BaseComponent {
     this.mediator = mediator;
   }
 
-  public setMediator(mediator: Presenter): void {
+  setMediator(mediator: Presenter): void {
     this.mediator = mediator;
   }
 }
