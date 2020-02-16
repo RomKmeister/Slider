@@ -89,12 +89,4 @@ describe('ViewSlider', function() {
 
     expect(slider.scale.className).to.deep.equal('slider-block__scale js-slider-block__scale slider-block__scale_vertical');
   })
-
-  it('Should set mediator', () => {
-
-    const presenter = new Presenter({});
-    slider.setMediator(presenter);
-
-    expect(slider.mediator).to.deep.equal(presenter);
-  })
 });
