@@ -4,5 +4,6 @@ function importAll(r: any): any {
 
 importAll(require.context('../src/', false, /\.scss$/));
 importAll(require.context('../src/', true, /\.scss$/));
+importAll(require.context('../src/favicon', true, /\.*$/));
 importAll(require.context('../src/', true, /\.ts$/));
 importAll(require.context('../src/', true, /\.js$/));
