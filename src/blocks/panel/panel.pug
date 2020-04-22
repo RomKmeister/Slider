@@ -1,0 +1,46 @@
+include ../input/input
+
+mixin panel()
+  .panel.js-panel
+    +input({
+      name: "minValueScale",
+      type: "number",
+      label: "Минимальное значение"
+    })
+    +input({
+      name: "maxValueScale",
+      type: "number",
+      label: "Максимальное значение"
+    })
+    +input({
+      name: "firstValue",
+      type: "number",
+      label: "Первое значение"
+    })
+    +input({
+      name: "showSecondValue",
+      type: "checkbox",
+      label: "Показать второе значение"
+    })
+    +input({
+      name: "secondValue",
+      type: "number",
+      label: "Второе значение"
+    })
+    +input({
+      name: "step",
+      type: "number",
+      label: "Шаг"
+    })
+    +input({
+      name: "verticalScale",
+      type: "checkbox",
+      label: "Вертикальный вид"
+    })
+    +input({
+      name: "showBubble",
+      type: "checkbox",
+      label: "Подсказки"
+    })
+
+    

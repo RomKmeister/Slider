@@ -1,0 +1,19 @@
+include ../slider/slider
+include ../panel/panel
+
+mixin slider-block(options)
+  - const { minValueScale, maxValueScale, firstValue, showSecondValue, secondValue, step, verticalScale, showBubble } = options
+  .slider-block.js-slider-block(
+    data-minValueScale= minValueScale,
+    data-maxValueScale= maxValueScale,
+    data-firstValue= firstValue,
+    data-showSecondValue= showSecondValue,
+    data-secondValue= secondValue,
+    data-step= step,
+    data-verticalScale= verticalScale,
+    data-showBubble= showBubble
+  )
+    +slider()
+    +panel()
+
+    
