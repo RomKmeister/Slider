@@ -4,23 +4,25 @@ import Model from '../Model/Model';
 class ViewSlider extends BaseComponent {
   model: Model;
 
-  handles: any;
+  element: HTMLElement;
 
   slider: HTMLElement;
 
   scale: HTMLElement;
 
-  scaleModelLength: number;
+  handles: NodeListOf<HTMLElement>;
+
+  bubbles: NodeListOf<HTMLElement>;
 
   firstHandle: HTMLElement;
 
   secondHandle: HTMLElement;
 
-  bubbles: any;
-
   firstBubble: HTMLElement;
 
   secondBubble: HTMLElement;
+
+  scaleModelLength: number;
 
   mousemove: boolean;
 
@@ -30,39 +32,22 @@ class ViewSlider extends BaseComponent {
 
   target: HTMLElement;
 
-  constructor(model: Model) {
+  constructor(element: HTMLElement, model: Model) {
     super();
+    this.element = element;
     this.model = model;
-    this.slider = this.render();
+    this.findElements();
     this.setSliderParameters();
     this.bindEventListners();
   }
 
-  private render(): HTMLElement {
-    this.slider = document.createElement('div');
-    this.scale = document.createElement('div');
-    this.firstHandle = document.createElement('div');
-    this.secondHandle = document.createElement('div');
-    this.firstBubble = document.createElement('div');
-    this.secondBubble = document.createElement('div');
-    this.slider.classList.add('slider-block__slider');
-    this.scale.classList.add('slider-block__scale');
-    this.firstHandle.classList.add('slider-block__handle');
-    this.secondHandle.classList.add('slider-block__handle');
-    this.firstBubble.classList.add('slider-block__bubble');
-    this.secondBubble.classList.add('slider-block__bubble');
-    this.slider.classList.add('js-slider');
-    this.scale.classList.add('js-slider-block__scale');
-    this.firstHandle.classList.add('js-slider-block__handle');
-    this.secondHandle.classList.add('js-slider-block__handle');
-    this.firstBubble.classList.add('js-slider-block__bubble');
-    this.secondBubble.classList.add('js-slider-block__bubble');
-    this.firstHandle.append(this.firstBubble);
-    this.secondHandle.append(this.secondBubble);
-    this.slider.append(this.scale);
-    this.slider.append(this.firstHandle);
-    this.slider.append(this.secondHandle);
-    return this.slider;
+  private findElements(): void {
+    this.slider = this.element.querySelector('.js-slider');
+    this.scale = this.slider.querySelector('.js-slider__scale');
+    this.handles = this.slider.querySelectorAll('.js-slider__handle');
+    this.bubbles = this.slider.querySelectorAll('.js-slider__bubble');
+    [this.firstHandle, this.secondHandle] = Array.from(this.handles);
+    [this.firstBubble, this.secondBubble] = Array.from(this.bubbles);
   }
 
   setSliderParameters(): void {
@@ -141,7 +126,7 @@ class ViewSlider extends BaseComponent {
 
   private handleDocumentMouseMove(event: MouseEvent): void {
     const findClosest = event.target as HTMLElement;
-    this.target = findClosest.closest('.js-slider-block__handle');
+    this.target = findClosest.closest('.js-slider__handle');
     document.addEventListener('mousemove', this.bindedHandleHandleMouseMove);
   }
 

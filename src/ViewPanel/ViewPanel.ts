@@ -1,25 +1,30 @@
 import BaseComponent from '../BaseComponent/BaseComponent';
 import Model from '../Model/Model';
 
-const template = require('./panelTemplate.pug');
-
 class ViewPanel extends BaseComponent {
+  element: HTMLElement;
+
   model: Model;
 
   panel: HTMLElement;
 
   inputs: NodeListOf<HTMLFormElement>;
 
-  constructor(model: Model) {
+  constructor(element: HTMLElement, model: Model) {
     super();
+    this.element = element;
     this.model = model;
-    this.panel = this.render();
-    this.inputs = this.panel.querySelectorAll('.js-slider-block__input');
     this.setPanelParameters();
     this.formChange();
   }
 
+  findElements(): void {
+    this.panel = this.element.querySelector('.js-panel');
+    this.inputs = this.panel.querySelectorAll('.js-input__field');
+  }
+
   setPanelParameters(): void {
+    this.findElements();
     const [
       minValueScale,
       maxValueScale,
@@ -40,14 +45,6 @@ class ViewPanel extends BaseComponent {
     showBubble.checked = this.model.showBubble;
   }
 
-  private render(): HTMLElement {
-    this.panel = document.createElement('form');
-    this.panel.classList.add('slider-block__panel');
-    this.panel.classList.add('js-slider-block__panel');
-    this.panel.insertAdjacentHTML('afterbegin', template);
-    return this.panel;
-  }
-
   private formChange(): void {
     this.inputs.forEach((item: HTMLFormElement) => {
       item.addEventListener('change', this.handleInpitChange.bind(this));
@@ -57,7 +54,7 @@ class ViewPanel extends BaseComponent {
   private handleInpitChange(event: KeyboardEvent): void {
     const target = event.target as HTMLFormElement;
     const elementName = target.name;
-    const elementValue = target.type === 'text' ? Number(target.value) : target.checked;
+    const elementValue = target.type === 'number' ? Number(target.value) : target.checked;
     this.mediator.notify({ [elementName]: elementValue });
   }
 }

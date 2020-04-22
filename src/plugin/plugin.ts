@@ -5,12 +5,12 @@ import Presenter from '../Presenter/Presenter';
 
 declare global {
   interface JQuery {
-    sliderPlugin(options: any): void;
+    sliderPlugin(item: any, options: any): void;
   }
 }
 
 (function ($): void {
-  $.fn.sliderPlugin = function (options): void {
+  $.fn.sliderPlugin = function (item, options): void {
     const defaultOptions = {
       minValueScale: 0,
       maxValueScale: 100,
@@ -22,8 +22,7 @@ declare global {
       showBubble: true,
     };
     const $finalOptions = $.extend({}, defaultOptions, options);
-    const presenter = new Presenter($finalOptions);
-
-    $(this).append(presenter.showSlider(), presenter.showPanel());
+    const [elements] = item;
+    new Presenter(elements, $finalOptions);
   };
 }(jQuery));

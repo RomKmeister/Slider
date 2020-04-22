@@ -9,10 +9,10 @@ class Presenter {
 
   viewPanel: ViewPanel;
 
-  constructor(options: any) {
+  constructor(element: any, options: any) {
     this.model = new Model(options);
-    this.viewSlider = new ViewSlider(this.model);
-    this.viewPanel = new ViewPanel(this.model);
+    this.viewSlider = new ViewSlider(element, this.model);
+    this.viewPanel = new ViewPanel(element, this.model);
     this.model.setMediator(this);
     this.viewSlider.setMediator(this);
     this.viewPanel.setMediator(this);
