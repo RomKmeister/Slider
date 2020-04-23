@@ -11,6 +11,16 @@ declare global {
 
 (function ($): void {
   $.fn.sliderPlugin = function (item, options): void {
+    options = {
+      minValueScale: options.minvaluescale,
+      maxValueScale: options.maxvaluescale,
+      firstValue: options.firstvalue,
+      showSecondValue: options.showsecondvalue,
+      secondValue: options.secondvalue,
+      step: options.step,
+      verticalScale: options.verticalscale,
+      showBubble: options.showbubble,
+    };
     const defaultOptions = {
       minValueScale: 0,
       maxValueScale: 100,
