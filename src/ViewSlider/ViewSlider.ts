@@ -92,24 +92,20 @@ class ViewSlider extends BaseComponent {
   }
 
   private changeDirection(): void {
-    const scaleClassDirection = 'slider-block__scale_vertical';
-    const handleClassDirection = 'slider-block__handle_vertical';
-    const bubbleClassDirection = 'slider-block__bubble_vertical';
+    const scaleClassDirection = 'slider__scale_vertical';
+    const handleClassDirection = 'slider__handle_vertical';
+    const bubbleClassDirection = 'slider__bubble_vertical';
 
     if (this.model.verticalScale) {
       this.scale.classList.add(scaleClassDirection);
-      this.firstHandle.classList.add(handleClassDirection);
-      this.secondHandle.classList.add(handleClassDirection);
-      this.firstBubble.classList.add(bubbleClassDirection);
-      this.secondBubble.classList.add(bubbleClassDirection);
+      this.handles.forEach((item) => item.classList.add(handleClassDirection));
+      this.bubbles.forEach((item) => item.classList.add(bubbleClassDirection));
       this.firstHandle.style.left = '';
       this.secondHandle.style.left = '';
     } else {
       this.scale.classList.remove(scaleClassDirection);
-      this.firstHandle.classList.remove(handleClassDirection);
-      this.secondHandle.classList.remove(handleClassDirection);
-      this.firstBubble.classList.remove(bubbleClassDirection);
-      this.secondBubble.classList.remove(bubbleClassDirection);
+      this.handles.forEach((item) => item.classList.remove(handleClassDirection));
+      this.bubbles.forEach((item) => item.classList.remove(bubbleClassDirection));
       this.firstHandle.style.top = '';
       this.secondHandle.style.top = '';
     }
