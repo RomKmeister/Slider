@@ -2,10 +2,9 @@ import { expect } from 'chai';
 import Presenter from '../src/Presenter/Presenter';
 
 describe('Slider', function() {
-
-
   it('FirstValue should be less than maxValueScale', () => {
-    let presenter: Presenter = new Presenter({
+    const element = "123";
+    let presenter: Presenter = new Presenter(element, {
       minValueScale: 0,
       maxValueScale: 100,
       firstValue: 55,

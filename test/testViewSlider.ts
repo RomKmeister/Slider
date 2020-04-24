@@ -10,7 +10,8 @@ describe('ViewSlider', function() {
   let sliderWithAllFalse: ViewSlider;
 
   beforeEach(() => {
-    slider = new ViewSlider(new Model({
+    const element = document.querySelector('.js-slider-block');
+    slider = new ViewSlider(element, new Model({
       minValueScale: 0,
       maxValueScale: 100,
       firstValue: 55,
@@ -34,10 +35,10 @@ describe('ViewSlider', function() {
   })
 
   it('Creates slider', () => {
-    expect(slider.slider.className).to.equal('slider-block__slider js-slider');
-    expect(slider.slider.querySelectorAll('.js-slider-block__scale').length).to.equal(1);
-    expect(slider.slider.querySelectorAll('.js-slider-block__handle').length).to.equal(2);
-    expect(slider.slider.querySelectorAll('.js-slider-block__bubble').length).to.equal(2)
+    expect(slider.slider.className).to.equal('slider__slider js-slider');
+    expect(slider.slider.querySelectorAll('.js-slider__scale').length).to.equal(1);
+    expect(slider.slider.querySelectorAll('.js-slider__handle').length).to.equal(2);
+    expect(slider.slider.querySelectorAll('.js-slider__bubble').length).to.equal(2)
   })
 
   it('Should set horisontal handles position', () => {
@@ -82,11 +83,11 @@ describe('ViewSlider', function() {
 
   it('Should set horisontal scale', () => {
 
-    expect(sliderWithAllFalse.scale.className).to.deep.equal('slider-block__scale js-slider-block__scale');
+    expect(sliderWithAllFalse.scale.className).to.deep.equal('slider__scale js-slider__scale');
   })
  
   it('Should set vertical scale', () => {
 
-    expect(slider.scale.className).to.deep.equal('slider-block__scale js-slider-block__scale slider-block__scale_vertical');
+    expect(slider.scale.className).to.deep.equal('slider__scale js-slider__scale slider__scale_vertical');
   })
 });
