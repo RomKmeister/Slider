@@ -5,22 +5,34 @@ import Presenter from '../Presenter/Presenter';
 
 declare global {
   interface JQuery {
-    sliderPlugin(item: any, options: any): void;
+    sliderPlugin(): void;
   }
 }
 
 (function ($): void {
-  $.fn.sliderPlugin = function (item, options): void {
-    options = {
-      minValueScale: options.minvaluescale,
-      maxValueScale: options.maxvaluescale,
-      firstValue: options.firstvalue,
-      showSecondValue: options.showsecondvalue,
-      secondValue: options.secondvalue,
-      step: options.step,
-      verticalScale: options.verticalscale,
-      showBubble: options.showbubble,
+  $.fn.sliderPlugin = function (): void {
+    const {
+      minvaluescale: minValueScale,
+      maxvaluescale: maxValueScale,
+      firstvalue: firstValue,
+      showsecondvalue: showSecondValue,
+      secondvalue: secondValue,
+      step,
+      verticalscale: verticalScale,
+      showbubble: showBubble,
+    } = this.data();
+
+    const options = {
+      minValueScale,
+      maxValueScale,
+      firstValue,
+      showSecondValue,
+      secondValue,
+      step,
+      verticalScale,
+      showBubble,
     };
+
     const defaultOptions = {
       minValueScale: 0,
       maxValueScale: 100,
@@ -32,7 +44,7 @@ declare global {
       showBubble: true,
     };
     const $finalOptions = $.extend({}, defaultOptions, options);
-    const [elements] = item;
+    const [elements] = this;
     new Presenter(elements, $finalOptions);
   };
 }(jQuery));

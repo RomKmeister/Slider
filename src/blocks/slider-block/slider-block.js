@@ -7,7 +7,7 @@ class Slider {
   }
 
   init() {
-    this.element.sliderPlugin(this.element, this.element.data());
+    this.element.sliderPlugin();
   }
 }
 

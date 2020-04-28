@@ -9,7 +9,7 @@ class Presenter {
 
   viewPanel: ViewPanel;
 
-  constructor(element: any, options: any) {
+  constructor(element: HTMLElement, options: any) {
     this.model = new Model(options);
     this.viewSlider = new ViewSlider(element, this.model);
     this.viewPanel = new ViewPanel(element, this.model);
@@ -22,14 +22,6 @@ class Presenter {
     this.model.updateModel(property);
     this.viewSlider.setSliderParameters();
     this.viewPanel.setPanelParameters();
-  }
-
-  showPanel(): HTMLElement {
-    return this.viewPanel.panel;
-  }
-
-  showSlider(): HTMLElement {
-    return this.viewSlider.slider;
   }
 }
 
