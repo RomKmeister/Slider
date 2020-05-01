@@ -35,9 +35,14 @@
       left: 0.71rem;
       transform: translate(0, -0.71rem);
     }
+
+    &_hidden {
+      display: none;
+    }
   }
 
   &__bubble {
+    display: none;
     width: 2rem;
     padding: 0.43rem;
     transform: translate(-25%, -120%);
@@ -49,6 +54,10 @@
       transform: translate(2.85rem, -0.36rem);
 			box-shadow:0 0.07rem 0.43rem 0 $shadow;
       text-align: center;
+    }
+
+    &_visible {
+      display: block;
     }
   }
 }
