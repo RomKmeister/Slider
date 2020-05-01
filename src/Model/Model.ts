@@ -17,6 +17,16 @@ class Model extends BaseComponent {
 
   showBubble: boolean;
 
+  modelScaleLength: number;
+
+  firstHandlerPosition: number;
+
+  secondHandlerPosition: number;
+
+  interval: number;
+
+  firstValueArea: number;
+
   constructor({
     minValueScale,
     maxValueScale,
@@ -36,10 +46,20 @@ class Model extends BaseComponent {
     this.step = step;
     this.verticalScale = verticalScale;
     this.showBubble = showBubble;
+    this.setPosition();
+  }
+
+  setPosition(): void {
+    this.modelScaleLength = this.maxValueScale - this.minValueScale;
+    this.firstHandlerPosition = (this.firstValue - this.minValueScale) * (100 / this.modelScaleLength);
+    this.secondHandlerPosition = (this.secondValue - this.minValueScale) * (100 / this.modelScaleLength);
+    this.interval = (this.secondValue - this.firstValue) / 2;
+    this.firstValueArea = this.firstValue + this.interval;
   }
 
   updateModel(options: any): void {
     Object.assign(this, this.validate(options));
+    this.setPosition();
   }
 
   private validate(newValue: any): any {
@@ -55,16 +75,13 @@ class Model extends BaseComponent {
 
   private checkScaleBorders(newValue: any): any {
     if (newValue.firstValue < this.minValueScale) {
-      const firstValue = { firstValue: this.minValueScale };
-      return firstValue;
+      return { firstValue: this.minValueScale };
     }
     if (newValue.firstValue > this.maxValueScale) {
-      const firstValue = { firstValue: this.maxValueScale };
-      return firstValue;
+      return { firstValue: this.maxValueScale };
     }
     if (newValue.secondValue > this.maxValueScale) {
-      const secondValue = { secondValue: this.maxValueScale };
-      return secondValue;
+      return { secondValue: this.maxValueScale };
     }
     return newValue;
   }
