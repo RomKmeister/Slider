@@ -33,10 +33,6 @@ class ViewHandles extends ViewSlider {
     [this.firstHandle, this.secondHandle] = Array.from(this.handles);
   }
 
-  setCalc(view: ViewSlider): void {
-    this.view = view;
-  }
-
   setSliderParameters(): void {
     this.findElements();
     this.setHandlesPosition();
@@ -68,21 +64,22 @@ class ViewHandles extends ViewSlider {
     const handleClassDirection = 'slider__handle_vertical';
 
     if (this.model.verticalScale) {
-      this.handles.forEach((item) => item.classList.add(handleClassDirection));
-      this.firstHandle.style.left = '';
-      this.secondHandle.style.left = '';
+      this.handles.forEach((item) => {
+        item.classList.add(handleClassDirection);
+        item.style.left = '';
+      });
     } else {
-      this.handles.forEach((item) => item.classList.remove(handleClassDirection));
-      this.firstHandle.style.top = '';
-      this.secondHandle.style.top = '';
+      this.handles.forEach((item) => {
+        item.classList.remove(handleClassDirection);
+        item.style.top = '';
+      });
     }
   }
 
   private bindEventListners(): void {
-    this.firstHandle.addEventListener('mousedown', this.handleDocumentMouseMove.bind(this));
-    this.secondHandle.addEventListener('mousedown', this.handleDocumentMouseMove.bind(this));
-    document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
+    this.handles.forEach((item) => item.addEventListener('mousedown', this.handleDocumentMouseMove.bind(this)));
     this.bindedHandleHandleMouseMove = this.handleHandleMouseMove.bind(this);
+    document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
   }
 
   private handleDocumentMouseMove(event: MouseEvent): void {
