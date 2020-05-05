@@ -1,9 +1,9 @@
 import Model from '../Model/Model';
-import ViewSlider from '../ViewSlider/ViewSlider';
-import ViewPanel from '../ViewPanel/ViewPanel';
-import ViewScale from '../ViewSlider/ViewScale';
-import ViewBubbles from '../ViewSlider/ViewBubbles';
-import ViewHandles from '../ViewSlider/ViewHandles';
+import ViewSlider from '../View/ViewSlider';
+import ViewPanel from '../View/ViewPanel';
+import ViewScale from '../View/ViewScale';
+import ViewBubbles from '../View/ViewBubbles';
+import ViewHandles from '../View/ViewHandles';
 
 class Presenter {
   model: Model;

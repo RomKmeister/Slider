@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 /* eslint-disable no-param-reassign */
 
-import Presenter from '../Presenter/Presenter';
+import Presenter from './Presenter/Presenter';
 
 declare global {
   interface JQuery {
