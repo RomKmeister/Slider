@@ -2,11 +2,9 @@ import Model from '../Model/Model';
 import ViewSlider from './ViewSlider';
 
 class ViewHandles extends ViewSlider {
-  model: Model;
-
-  view: ViewSlider;
-
   element: HTMLElement;
+
+  model: Model;
 
   handles: NodeListOf<HTMLElement>;
 
@@ -16,15 +14,24 @@ class ViewHandles extends ViewSlider {
 
   mousemove: boolean;
 
-  newhandleHandleMouseMove: any;
-
   bindedHandleHandleMouseMove: any;
 
   target: HTMLElement;
 
   constructor(element: HTMLElement, model: Model) {
     super(element, model);
-    this.setSliderParameters();
+    this.initHandlers();
+  }
+
+  setHandlersParameters(): void {
+    this.setHandlesPosition();
+    this.changeVisibility();
+    this.changeDirection();
+  }
+
+  private initHandlers(): void {
+    this.findElements();
+    this.setHandlersParameters();
     this.bindEventListners();
   }
 
@@ -33,20 +40,13 @@ class ViewHandles extends ViewSlider {
     [this.firstHandle, this.secondHandle] = Array.from(this.handles);
   }
 
-  setSliderParameters(): void {
-    this.findElements();
-    this.setHandlesPosition();
-    this.changeVisibility();
-    this.changeDirection();
-  }
-
-  setHandlesPosition(): void {
+  private setHandlesPosition(): void {
     if (this.model.verticalScale) {
-      this.firstHandle.style.top = `${this.model.firstHandlerPosition}%`;
-      this.secondHandle.style.top = `${this.model.secondHandlerPosition}%`;
+      this.firstHandle.style.top = `${this.model.firstValueRatio}%`;
+      this.secondHandle.style.top = `${this.model.secondValueRatio}%`;
     } else {
-      this.firstHandle.style.left = `${this.model.firstHandlerPosition}%`;
-      this.secondHandle.style.left = `${this.model.secondHandlerPosition}%`;
+      this.firstHandle.style.left = `${this.model.firstValueRatio}%`;
+      this.secondHandle.style.left = `${this.model.secondValueRatio}%`;
     }
   }
 
@@ -98,9 +98,7 @@ class ViewHandles extends ViewSlider {
   }
 
   private handleHandleMouseMove(event: MouseEvent): void {
-    const coordinate = this.model.verticalScale
-      ? event.clientY
-      : event.clientX;
+    const coordinate = this.model.verticalScale ? event.clientY : event.clientX;
     const value = this.calculateValue(coordinate);
     const property = this.chooseHandlerForUpdate(this.target);
     this.mediator.notify({ [property]: value });

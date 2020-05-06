@@ -4,21 +4,22 @@ import ViewPanel from '../View/ViewPanel';
 import ViewScale from '../View/ViewScale';
 import ViewBubbles from '../View/ViewBubbles';
 import ViewHandles from '../View/ViewHandles';
+import { Slider, NewValue } from '../interfaces';
 
 class Presenter {
   model: Model;
 
   viewSlider: ViewSlider;
 
-  viewPanel: ViewPanel;
+  viewScale: ViewScale;
 
   viewHandles: ViewHandles;
 
   viewBubbles: ViewBubbles;
 
-  viewScale: ViewScale;
+  viewPanel: ViewPanel;
 
-  constructor(element: HTMLElement, options: any) {
+  constructor(element: HTMLElement, options: Slider) {
     this.model = new Model(options);
     this.viewSlider = new ViewSlider(element, this.model);
     this.viewScale = new ViewScale(element, this.model);
@@ -32,10 +33,10 @@ class Presenter {
     this.viewPanel.setMediator(this);
   }
 
-  notify(property: any): void {
+  notify(property: NewValue): void {
     this.model.updateModel(property);
-    this.viewHandles.setSliderParameters();
-    this.viewScale.setScaleParameters();
+    this.viewScale.changeDirection();
+    this.viewHandles.setHandlersParameters();
     this.viewBubbles.setBubbleParameters();
     this.viewPanel.setPanelParameters();
   }

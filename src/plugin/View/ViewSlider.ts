@@ -33,7 +33,7 @@ class ViewSlider extends BaseComponent {
     const step = this.model.step > 1 ? this.model.step : 0.01;
     const value = this.model.minValueScale
     + Math.round(((coordinate - this.scalePosition) / step)
-    / (this.scaleLength / this.model.modelScaleLength)) * step;
+    / (this.scaleLength / this.model.scaleLength)) * step;
     return value;
   }
 }

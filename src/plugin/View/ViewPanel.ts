@@ -1,7 +1,7 @@
-import BaseComponent from '../BaseComponent/BaseComponent';
 import Model from '../Model/Model';
+import ViewSlider from './ViewSlider';
 
-class ViewPanel extends BaseComponent {
+class ViewPanel extends ViewSlider {
   element: HTMLElement;
 
   model: Model;
@@ -11,20 +11,11 @@ class ViewPanel extends BaseComponent {
   inputs: NodeListOf<HTMLFormElement>;
 
   constructor(element: HTMLElement, model: Model) {
-    super();
-    this.element = element;
-    this.model = model;
-    this.setPanelParameters();
-    this.formChange();
-  }
-
-  findElements(): void {
-    this.panel = this.element.querySelector('.js-panel');
-    this.inputs = this.panel.querySelectorAll('.js-input__field');
+    super(element, model);
+    this.initPanel();
   }
 
   setPanelParameters(): void {
-    this.findElements();
     const [
       minValueScale,
       maxValueScale,
@@ -43,6 +34,17 @@ class ViewPanel extends BaseComponent {
     step.value = Math.round(this.model.step);
     verticalScale.checked = this.model.verticalScale;
     showBubble.checked = this.model.showBubble;
+  }
+
+  private initPanel(): void {
+    this.findElements();
+    this.setPanelParameters();
+    this.formChange();
+  }
+
+  private findElements(): void {
+    this.panel = this.element.querySelector('.js-panel');
+    this.inputs = this.panel.querySelectorAll('.js-input__field');
   }
 
   private formChange(): void {

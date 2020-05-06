@@ -1,9 +1,10 @@
 import ViewSlider from './ViewSlider';
+import Model from '../Model/Model';
 
 class ViewBubbles extends ViewSlider {
-  model: any;
-
   element: HTMLElement;
+
+  model: Model;
 
   bubbles: NodeListOf<HTMLElement>;
 
@@ -11,16 +12,20 @@ class ViewBubbles extends ViewSlider {
 
   secondBubble: HTMLElement;
 
-  constructor(element: HTMLElement, model: any) {
+  constructor(element: HTMLElement, model: Model) {
     super(element, model);
-    this.setBubbleParameters();
+    this.initBubbles();
   }
 
   setBubbleParameters(): void {
-    this.findElements();
     this.setBubbleValue();
     this.changeDirection();
     this.changeVisibility();
+  }
+
+  private initBubbles(): void {
+    this.findElements();
+    this.setBubbleParameters();
   }
 
   private findElements(): void {
