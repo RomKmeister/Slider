@@ -1,5 +1,5 @@
 import BaseComponent from '../BaseComponent/BaseComponent';
-import { Slider, NewValue } from '../interfaces';
+import { Slider } from '../interfaces';
 
 class Model extends BaseComponent {
   minValueScale: number;
@@ -48,9 +48,16 @@ class Model extends BaseComponent {
     this.verticalScale = verticalScale;
     this.showBubble = showBubble;
     this.calculateRatios();
+    this.validate(this);
   }
 
-  calculateRatios(): void {
+  updateModel(options: Slider): void {
+    const newOpt = this.validate(options);
+    Object.assign(this, newOpt);
+    this.calculateRatios();
+  }
+
+  private calculateRatios(): void {
     this.scaleLength = this.maxValueScale - this.minValueScale;
     this.firstValueRatio = (this.firstValue - this.minValueScale) * (100 / this.scaleLength);
     this.secondValueRatio = (this.secondValue - this.minValueScale) * (100 / this.scaleLength);
@@ -58,52 +65,28 @@ class Model extends BaseComponent {
     this.firstValueArea = this.firstValue + this.interval;
   }
 
-  updateModel(options: NewValue): void {
-    Object.assign(this, this.validate(options));
-    this.calculateRatios();
-  }
+  private validate(options: Slider): Slider {
+    const isFirstValueNearly = options.firstValue !== this.firstValue
+    && this.secondValue - options.firstValue <= this.step;
+    const isSecondValueNearly = options.secondValue !== this.secondValue
+    && options.secondValue - this.firstValue <= this.step;
 
-  private validate(newValue: NewValue): NewValue {
-    const isValueUnvalidate = Object.prototype.hasOwnProperty.call(newValue, 'firstValue')
-    || Object.prototype.hasOwnProperty.call(newValue, 'secondValue');
-    if (isValueUnvalidate) {
-      const validBorders = this.checkScaleBorders(newValue);
-      const validNewValue = this.showSecondValue ? this.checkHandlePosition(validBorders) : validBorders;
-      return validNewValue;
+    if (options.firstValue < this.minValueScale) {
+      options.firstValue = this.minValueScale;
     }
-    return newValue;
-  }
-
-  private checkScaleBorders(newValue: NewValue): NewValue {
-    if (newValue.firstValue < this.minValueScale) {
-      return { firstValue: this.minValueScale };
+    if (options.firstValue > this.maxValueScale) {
+      options.firstValue = this.maxValueScale;
     }
-    if (newValue.firstValue > this.maxValueScale) {
-      return { firstValue: this.maxValueScale };
+    if (options.secondValue > this.maxValueScale) {
+      options.secondValue = this.maxValueScale;
     }
-    if (newValue.secondValue > this.maxValueScale) {
-      return { secondValue: this.maxValueScale };
-    }
-    return newValue;
-  }
-
-  private checkHandlePosition(update: NewValue): NewValue {
-    const isFirstValueNearly = Object.prototype.hasOwnProperty.call(update, 'firstValue')
-    && this.secondValue - update.firstValue <= this.step;
-    const isSecondValueNearly = Object.prototype.hasOwnProperty.call(update, 'secondValue')
-    && update.secondValue - this.firstValue <= this.step;
-
     if (isFirstValueNearly) {
-      const updatedValue: NewValue = {};
-      updatedValue.firstValue = this.secondValue - this.step;
-      return updatedValue;
+      options.firstValue = this.secondValue - this.step;
     }
     if (isSecondValueNearly) {
-      const updatedValue: NewValue = {};
-      updatedValue.secondValue = this.firstValue + this.step;
-      return updatedValue;
+      options.secondValue = this.firstValue + this.step;
     }
-    return update;
+    return options;
   }
 }
 
