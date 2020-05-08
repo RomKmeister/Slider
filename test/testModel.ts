@@ -1,9 +1,7 @@
 import { expect } from 'chai';
-import Model from '../src/Model/Model';
+import Model from '../src/plugin/Model/Model';
 
-describe('Slider', function() {
-
-
+describe('Slider', () => {
   it('FirstValue should be less than maxValueScale', () => {
     let model: Model = new Model({
       minValueScale: 0,
@@ -48,7 +46,7 @@ describe('Slider', function() {
     model.updateModel({'firstValue': 200});
     expect(model.firstValue).to.deep.equal(69)
   });
-  
+
   it('SecondValue should be less than maxValueScale', () => {
     let model: Model = new Model({
       minValueScale: 0,
