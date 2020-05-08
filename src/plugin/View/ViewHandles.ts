@@ -1,11 +1,9 @@
-import Model from '../Model/Model';
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
+
 import ViewSlider from './ViewSlider';
 
 class ViewHandles extends ViewSlider {
-  element: HTMLElement;
-
-  model: Model;
-
   handles: NodeListOf<HTMLElement>;
 
   firstHandle: HTMLElement;
@@ -18,26 +16,21 @@ class ViewHandles extends ViewSlider {
 
   target: HTMLElement;
 
-  constructor(element: HTMLElement, model: Model) {
-    super(element, model);
-    this.initHandlers();
+  findElements(): void {
+    this.handles = this.element.querySelectorAll('.js-slider__handle');
+    [this.firstHandle, this.secondHandle] = Array.from(this.handles);
   }
 
   setHandlersParameters(): void {
     this.setHandlesPosition();
-    this.changeVisibility();
-    this.changeDirection();
+    this.setVisibility();
+    this.setDirection();
   }
 
-  private initHandlers(): void {
-    this.findElements();
-    this.setHandlersParameters();
-    this.bindEventListners();
-  }
-
-  private findElements(): void {
-    this.handles = this.element.querySelectorAll('.js-slider__handle');
-    [this.firstHandle, this.secondHandle] = Array.from(this.handles);
+  bindEventListners(): void {
+    this.handles.forEach((item) => item.addEventListener('mousedown', this.handleDocumentMouseMove.bind(this)));
+    this.bindedHandleHandleMouseMove = this.handleHandleMouseMove.bind(this);
+    document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
   }
 
   private setHandlesPosition(): void {
@@ -50,7 +43,7 @@ class ViewHandles extends ViewSlider {
     }
   }
 
-  private changeVisibility(): void {
+  private setVisibility(): void {
     const handleClassVisibility = 'slider__handle_hidden';
 
     if (this.model.showSecondValue) {
@@ -60,7 +53,7 @@ class ViewHandles extends ViewSlider {
     }
   }
 
-  private changeDirection(): void {
+  private setDirection(): void {
     const handleClassDirection = 'slider__handle_vertical';
 
     if (this.model.verticalScale) {
@@ -74,12 +67,6 @@ class ViewHandles extends ViewSlider {
         item.style.top = '';
       });
     }
-  }
-
-  private bindEventListners(): void {
-    this.handles.forEach((item) => item.addEventListener('mousedown', this.handleDocumentMouseMove.bind(this)));
-    this.bindedHandleHandleMouseMove = this.handleHandleMouseMove.bind(this);
-    document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
   }
 
   private handleDocumentMouseMove(event: MouseEvent): void {
@@ -101,7 +88,8 @@ class ViewHandles extends ViewSlider {
     const coordinate = this.model.verticalScale ? event.clientY : event.clientX;
     const value = this.calculateValue(coordinate);
     const property = this.chooseHandlerForUpdate(this.target);
-    this.mediator.notify({ [property]: value });
+    const newOptions = { ...this.model, [property]: value };
+    this.mediator.notify(newOptions);
   }
 }
 

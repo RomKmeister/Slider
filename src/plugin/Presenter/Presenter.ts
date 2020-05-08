@@ -26,6 +26,30 @@ class Presenter {
     this.viewHandles = new ViewHandles(element, this.model);
     this.viewBubbles = new ViewBubbles(element, this.model);
     this.viewPanel = new ViewPanel(element, this.model);
+    this.init();
+  }
+
+  init(): void {
+    this.viewScale.findElements();
+    this.viewHandles.findElements();
+    this.viewBubbles.findElements();
+    this.viewPanel.findElements();
+    this.setMediator();
+    this.viewHandles.bindEventListners();
+    this.viewScale.bindEventListners();
+    this.viewPanel.formChange();
+    this.setViewParameters();
+  }
+
+  notify(property: NewValue): void {
+    this.model.updateModel(property);
+    this.viewScale.setDirection();
+    this.viewHandles.setHandlersParameters();
+    this.viewBubbles.setBubbleParameters();
+    this.viewPanel.setPanelParameters();
+  }
+
+  private setMediator(): void {
     this.model.setMediator(this);
     this.viewSlider.setMediator(this);
     this.viewScale.setMediator(this);
@@ -33,9 +57,8 @@ class Presenter {
     this.viewPanel.setMediator(this);
   }
 
-  notify(property: NewValue): void {
-    this.model.updateModel(property);
-    this.viewScale.changeDirection();
+  private setViewParameters(): void {
+    this.viewScale.setDirection();
     this.viewHandles.setHandlersParameters();
     this.viewBubbles.setBubbleParameters();
     this.viewPanel.setPanelParameters();

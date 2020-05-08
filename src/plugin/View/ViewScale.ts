@@ -1,29 +1,17 @@
-import Model from '../Model/Model';
 import ViewSlider from './ViewSlider';
 
 class ViewScale extends ViewSlider {
-  element: HTMLElement;
-
-  model: Model;
-
   scale: HTMLElement;
-
-  scaleLength: number;
-
-  scalePosition: number;
 
   mousemove: boolean;
 
-  bindedHandleHandleMouseMove: any;
-
   target: HTMLElement;
 
-  constructor(element: HTMLElement, model: Model) {
-    super(element, model);
-    this.initScale();
+  findElements(): void {
+    this.scale = this.element.querySelector('.js-slider__scale');
   }
 
-  changeDirection(): void {
+  setDirection(): void {
     const scaleClassDirection = 'slider__scale_vertical';
 
     if (this.model.verticalScale) {
@@ -33,17 +21,7 @@ class ViewScale extends ViewSlider {
     }
   }
 
-  private initScale(): void {
-    this.findElements();
-    this.changeDirection();
-    this.bindEventListners();
-  }
-
-  private findElements(): void {
-    this.scale = this.element.querySelector('.js-slider__scale');
-  }
-
-  private bindEventListners(): void {
+  bindEventListners(): void {
     this.scale.addEventListener('mousedown', this.handleScaleClick.bind(this));
   }
 
@@ -51,7 +29,8 @@ class ViewScale extends ViewSlider {
     const coordinate = this.model.verticalScale ? event.clientY : event.clientX;
     const value = this.calculateValue(coordinate);
     const property = this.chooseHandlerForUpdate(value);
-    this.mediator.notify({ [property]: value });
+    const newOptions = { ...this.model, [property]: value };
+    this.mediator.notify(newOptions);
   }
 
   private chooseHandlerForUpdate(value: number): string {
