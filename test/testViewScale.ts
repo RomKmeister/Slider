@@ -5,8 +5,7 @@ import { Slider } from '../src/plugin/interfaces';
 
 describe('ViewScale', () => {
   let viewScale: ViewScale;
-  let options: Slider;
-  let model: Model;
+  let options: Model;
 
   beforeEach(() => {
     const element = document.createElement('div');
@@ -21,10 +20,15 @@ describe('ViewScale', () => {
       step: 1,
       verticalScale: false,
       showBubble: true,
+      scaleLength: 100,
+      firstValueRatio: 55,
+      secondValueRatio: 70,
+      interval: 7.5,
+      firstValueArea: 62.5,
     };
-    model = new Model(options);
 
-    viewScale = new ViewScale(element, model);
+    viewScale = new ViewScale(element);
+    viewScale.model = options;
     viewScale.findElements();
   });
 
@@ -37,7 +41,7 @@ describe('ViewScale', () => {
     expect(viewScale.scale.className).to.equal('js-slider__scale');
   });
   it('Should set vertical scale', () => {
-    model.verticalScale = true;
+    viewScale.model.verticalScale = true;
     viewScale.setDirection();
     expect(viewScale.scale.className).to.equal('js-slider__scale slider__scale_vertical');
   });

@@ -6,7 +6,6 @@ import { Slider } from '../src/plugin/interfaces';
 describe('ViewPanel', () => {
   let viewPanel: ViewPanel;
   let options: Slider;
-  let model: Model;
   beforeEach(() => {
     const element = document.createElement('div');
     element.insertAdjacentHTML('afterbegin', `
@@ -29,9 +28,9 @@ describe('ViewPanel', () => {
       verticalScale: false,
       showBubble: true,
     };
-    model = new Model(options);
 
-    viewPanel = new ViewPanel(element, model);
+    viewPanel = new ViewPanel(element);
+    viewPanel.model = options;
     viewPanel.findElements();
     viewPanel.setPanelParameters();
   });

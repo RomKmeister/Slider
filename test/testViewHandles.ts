@@ -2,11 +2,12 @@ import { expect } from 'chai';
 import ViewHandles from '../src/plugin/View/ViewHandles';
 import Model from '../src/plugin/Model/Model';
 import { Slider } from '../src/plugin/interfaces';
+import Presenter from '../src/plugin/Presenter/Presenter';
 
 describe('ViewHandles', () => {
   let viewHandles: ViewHandles;
   let options: Slider;
-  let model: Model;
+  let presenter: Presenter;
   beforeEach(() => {
     const element = document.createElement('div');
     element.insertAdjacentHTML('afterbegin',
@@ -21,10 +22,15 @@ describe('ViewHandles', () => {
       step: 1,
       verticalScale: false,
       showBubble: true,
+      scaleLength: 100,
+      firstValueRatio: 55,
+      secondValueRatio: 70,
+      interval: 7.5,
+      firstValueArea: 62.5,
     };
-    model = new Model(options);
 
-    viewHandles = new ViewHandles(element, model);
+    viewHandles = new ViewHandles(element);
+    viewHandles.model = options;
     viewHandles.findElements();
     viewHandles.setHandlersParameters();
   });
@@ -41,7 +47,7 @@ describe('ViewHandles', () => {
   });
 
   it('Should set vertical handles position', () => {
-    model.verticalScale = true;
+    viewHandles.model.verticalScale = true;
     viewHandles.setHandlersParameters();
     expect(viewHandles.firstHandle.style.top).to.deep.equal('55%');
     expect(viewHandles.secondHandle.style.top).to.deep.equal('70%');
@@ -54,7 +60,7 @@ describe('ViewHandles', () => {
   });
 
   it('Should set hide second handle', () => {
-    model.showSecondValue = false;
+    viewHandles.model.showSecondValue = false;
     viewHandles.setHandlersParameters();
     expect(viewHandles.secondHandle.className).to.deep.equal('js-slider__handle slider__handle_hidden');
   });
