@@ -27,7 +27,7 @@ class ViewPanel extends ViewSlider {
     });
   }
 
-  formChange(): void {
+  bindEventListners(): void {
     this.inputs.forEach((item) => {
       item.addEventListener('change', this.handleInputChange.bind(this));
     });

@@ -4,9 +4,11 @@ import ViewPanel from '../View/ViewPanel';
 import ViewScale from '../View/ViewScale';
 import ViewBubbles from '../View/ViewBubbles';
 import ViewHandles from '../View/ViewHandles';
-import { Slider, NewValue } from '../interfaces';
+import { Slider } from '../interfaces';
 
 class Presenter {
+  options: Slider
+
   model: Model;
 
   viewSlider: ViewSlider;
@@ -20,44 +22,48 @@ class Presenter {
   viewPanel: ViewPanel;
 
   constructor(element: HTMLElement, options: Slider) {
-    this.model = new Model(options);
-    this.viewSlider = new ViewSlider(element, this.model);
-    this.viewScale = new ViewScale(element, this.model);
-    this.viewHandles = new ViewHandles(element, this.model);
-    this.viewBubbles = new ViewBubbles(element, this.model);
-    this.viewPanel = new ViewPanel(element, this.model);
+    this.options = options;
+    this.model = new Model();
+    this.viewSlider = new ViewSlider(element);
+    this.viewScale = new ViewScale(element);
+    this.viewHandles = new ViewHandles(element);
+    this.viewBubbles = new ViewBubbles(element);
+    this.viewPanel = new ViewPanel(element);
     this.init();
   }
 
-  init(): void {
+  private init(): void {
+    this.setMediator();
     this.viewScale.findElements();
     this.viewHandles.findElements();
     this.viewBubbles.findElements();
     this.viewPanel.findElements();
-    this.setMediator();
     this.viewHandles.bindEventListners();
     this.viewScale.bindEventListners();
-    this.viewPanel.formChange();
-    this.setViewParameters();
+    this.viewPanel.bindEventListners();
+    this.model.setModelParameters(this.options);
   }
 
-  notify(property: NewValue): void {
-    this.model.updateModel(property);
-    this.viewScale.setDirection();
-    this.viewHandles.setHandlersParameters();
-    this.viewBubbles.setBubbleParameters();
-    this.viewPanel.setPanelParameters();
+  updateView(model: Model): void {
+    this.setViewParameters(model);
+  }
+
+  notify(property: Model): void {
+    this.model.setModelParameters(property);
   }
 
   private setMediator(): void {
     this.model.setMediator(this);
-    this.viewSlider.setMediator(this);
     this.viewScale.setMediator(this);
     this.viewHandles.setMediator(this);
     this.viewPanel.setMediator(this);
   }
 
-  private setViewParameters(): void {
+  private setViewParameters(model: Model): void {
+    this.viewScale.model = model;
+    this.viewHandles.model = model;
+    this.viewBubbles.model = model;
+    this.viewPanel.model = model;
     this.viewScale.setDirection();
     this.viewHandles.setHandlersParameters();
     this.viewBubbles.setBubbleParameters();

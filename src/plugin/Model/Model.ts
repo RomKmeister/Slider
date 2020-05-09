@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 import BaseComponent from '../BaseComponent/BaseComponent';
 import { Slider } from '../interfaces';
 
@@ -28,33 +30,11 @@ class Model extends BaseComponent {
 
   firstValueArea: number;
 
-  constructor({
-    minValueScale,
-    maxValueScale,
-    firstValue,
-    showSecondValue,
-    secondValue,
-    step,
-    verticalScale,
-    showBubble,
-  }: Slider) {
-    super();
-    this.minValueScale = minValueScale;
-    this.maxValueScale = maxValueScale;
-    this.firstValue = firstValue;
-    this.showSecondValue = showSecondValue;
-    this.secondValue = secondValue;
-    this.step = step;
-    this.verticalScale = verticalScale;
-    this.showBubble = showBubble;
-    this.calculateRatios();
-    this.validate(this);
-  }
-
-  updateModel(options: Slider): void {
+  setModelParameters(options: Slider): void {
     const newOpt = this.validate(options);
     Object.assign(this, newOpt);
     this.calculateRatios();
+    this.mediator.updateView(this);
   }
 
   private calculateRatios(): void {
@@ -66,11 +46,17 @@ class Model extends BaseComponent {
   }
 
   private validate(options: Slider): Slider {
-    const isFirstValueNearly = options.firstValue !== this.firstValue
+    const isFirstValueNearly = this.showSecondValue && options.firstValue !== this.firstValue
     && this.secondValue - options.firstValue <= this.step;
     const isSecondValueNearly = options.secondValue !== this.secondValue
     && options.secondValue - this.firstValue <= this.step;
 
+    if (isFirstValueNearly) {
+      options.firstValue = this.secondValue - this.step;
+    }
+    if (isSecondValueNearly) {
+      options.secondValue = this.firstValue + this.step;
+    }
     if (options.firstValue < this.minValueScale) {
       options.firstValue = this.minValueScale;
     }
@@ -79,12 +65,6 @@ class Model extends BaseComponent {
     }
     if (options.secondValue > this.maxValueScale) {
       options.secondValue = this.maxValueScale;
-    }
-    if (isFirstValueNearly) {
-      options.firstValue = this.secondValue - this.step;
-    }
-    if (isSecondValueNearly) {
-      options.secondValue = this.firstValue + this.step;
     }
     return options;
   }

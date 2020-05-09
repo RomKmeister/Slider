@@ -10,10 +10,9 @@ class ViewSlider extends BaseComponent {
 
   scalePosition: number;
 
-  constructor(element: HTMLElement, model: Model) {
+  constructor(element: HTMLElement) {
     super();
     this.element = element;
-    this.model = model;
   }
 
   calculateValue(coordinate: number): number {
