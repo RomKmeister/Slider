@@ -1,7 +1,6 @@
-import BaseComponent from '../BaseComponent/BaseComponent';
 import Model from '../Model/Model';
 
-class ViewSlider extends BaseComponent {
+class ViewSlider {
   element: HTMLElement;
 
   model: Model;
@@ -11,7 +10,6 @@ class ViewSlider extends BaseComponent {
   scalePosition: number;
 
   constructor(element: HTMLElement) {
-    super();
     this.element = element;
   }
 

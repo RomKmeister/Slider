@@ -1,4 +1,5 @@
 import ViewSlider from './ViewSlider';
+import EventEmitter from '../EventEmitter/EventEmitter';
 
 class ViewScale extends ViewSlider {
   scale: HTMLElement;
@@ -6,6 +7,8 @@ class ViewScale extends ViewSlider {
   mousemove: boolean;
 
   target: HTMLElement;
+
+  eventEmitter = new EventEmitter();
 
   findElements(): void {
     this.scale = this.element.querySelector('.js-slider__scale');
@@ -25,12 +28,12 @@ class ViewScale extends ViewSlider {
     this.scale.addEventListener('mousedown', this.handleScaleClick.bind(this));
   }
 
-  private handleScaleClick(event: MouseEvent): void {
+  handleScaleClick(event: MouseEvent): void {
     const coordinate = this.model.verticalScale ? event.clientY : event.clientX;
     const value = this.calculateValue(coordinate);
     const property = this.chooseHandlerForUpdate(value);
     const newOptions = { ...this.model, [property]: value };
-    this.mediator.notify(newOptions);
+    this.eventEmitter.notify(newOptions, 'viewUpdated');
   }
 
   private chooseHandlerForUpdate(value: number): string {

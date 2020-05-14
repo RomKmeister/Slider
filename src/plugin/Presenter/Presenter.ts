@@ -33,7 +33,7 @@ class Presenter {
   }
 
   private init(): void {
-    this.setMediator();
+    this.setEventEmitter();
     this.viewScale.findElements();
     this.viewHandles.findElements();
     this.viewBubbles.findElements();
@@ -44,19 +44,16 @@ class Presenter {
     this.model.setModelParameters(this.options);
   }
 
-  updateView(model: Model): void {
-    this.setViewParameters(model);
+  update(data, event: string): void {
+    if (event === 'modelUpdated') this.setViewParameters(data);
+    if (event === 'viewUpdated') this.model.setModelParameters(data);
   }
 
-  notify(property: Model): void {
-    this.model.setModelParameters(property);
-  }
-
-  private setMediator(): void {
-    this.model.setMediator(this);
-    this.viewScale.setMediator(this);
-    this.viewHandles.setMediator(this);
-    this.viewPanel.setMediator(this);
+  private setEventEmitter(): void {
+    this.model.eventEmitter.attach(this);
+    this.viewScale.eventEmitter.attach(this);
+    this.viewHandles.eventEmitter.attach(this);
+    this.viewPanel.eventEmitter.attach(this);
   }
 
   private setViewParameters(model: Model): void {

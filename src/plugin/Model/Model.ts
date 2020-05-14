@@ -2,6 +2,7 @@
 
 import BaseComponent from '../BaseComponent/BaseComponent';
 import { Slider } from '../interfaces';
+import EventEmitter from '../EventEmitter/EventEmitter';
 
 class Model extends BaseComponent {
   minValueScale: number;
@@ -30,11 +31,13 @@ class Model extends BaseComponent {
 
   firstValueArea: number;
 
+  eventEmitter = new EventEmitter();
+
   setModelParameters(options: Slider): void {
     const newOpt = this.validate(options);
     Object.assign(this, newOpt);
     this.calculateRatios();
-    this.mediator.updateView(this);
+    this.eventEmitter.notify(this, 'modelUpdated');
   }
 
   private calculateRatios(): void {

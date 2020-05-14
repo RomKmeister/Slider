@@ -2,6 +2,7 @@
 
 import Model from '../Model/Model';
 import ViewSlider from './ViewSlider';
+import EventEmitter from '../EventEmitter/EventEmitter';
 
 class ViewPanel extends ViewSlider {
   element: HTMLElement;
@@ -11,6 +12,8 @@ class ViewPanel extends ViewSlider {
   panel: HTMLElement;
 
   inputs: NodeListOf<HTMLInputElement>;
+
+  eventEmitter = new EventEmitter();
 
   findElements(): void {
     this.inputs = this.element.querySelectorAll('.js-input__field');
@@ -29,7 +32,7 @@ class ViewPanel extends ViewSlider {
 
   bindEventListners(): void {
     this.inputs.forEach((item) => {
-      item.addEventListener('change', this.handleInputChange.bind(this));
+      item.addEventListener('click', this.handleInputChange.bind(this));
     });
   }
 
@@ -38,7 +41,7 @@ class ViewPanel extends ViewSlider {
     const elementName = target.name;
     const elementValue = target.type === 'number' ? Number(target.value) : target.checked;
     const newOptions = { ...this.model, [elementName]: elementValue };
-    this.mediator.notify(newOptions);
+    this.eventEmitter.notify(newOptions, 'viewUpdated');
   }
 }
 

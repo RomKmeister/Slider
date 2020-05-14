@@ -2,6 +2,7 @@
 /* eslint-disable no-return-assign */
 
 import ViewSlider from './ViewSlider';
+import EventEmitter from '../EventEmitter/EventEmitter';
 
 class ViewHandles extends ViewSlider {
   handles: NodeListOf<HTMLElement>;
@@ -15,6 +16,8 @@ class ViewHandles extends ViewSlider {
   bindedHandleHandleMouseMove: any;
 
   target: HTMLElement;
+
+  eventEmitter = new EventEmitter();
 
   findElements(): void {
     this.handles = this.element.querySelectorAll('.js-slider__handle');
@@ -89,7 +92,7 @@ class ViewHandles extends ViewSlider {
     const value = this.calculateValue(coordinate);
     const property = this.chooseHandlerForUpdate(this.target);
     const newOptions = { ...this.model, [property]: value };
-    this.mediator.notify(newOptions);
+    this.eventEmitter.notify(newOptions, 'viewUpdated');
   }
 }
 
