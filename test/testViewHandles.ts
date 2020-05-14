@@ -33,6 +33,7 @@ describe('ViewHandles', () => {
     viewHandles.model = options;
     viewHandles.findElements();
     viewHandles.setHandlersParameters();
+    viewHandles.bindEventListners();
   });
 
   it('Should find handles', () => {
@@ -63,5 +64,17 @@ describe('ViewHandles', () => {
     viewHandles.model.showSecondValue = false;
     viewHandles.setHandlersParameters();
     expect(viewHandles.secondHandle.className).to.deep.equal('js-slider__handle slider__handle_hidden');
+  });
+
+  it('Should call functions on event', () => {
+    const sandbox = sinon.createSandbox();
+    sandbox.spy(viewHandles, 'calculateValue');
+    sandbox.spy(viewHandles, 'chooseHandlerForUpdate');
+    sandbox.spy(viewHandles.eventEmitter, 'notify');
+    viewHandles.firstHandle.dispatchEvent(new Event('mousedown'));
+    viewHandles.firstHandle.dispatchEvent(new Event('mousemove'));
+    expect(viewHandles.calculateValue.called).to.deep.equal(true);
+    expect(viewHandles.chooseHandlerForUpdate.called).to.deep.equal(true);
+    expect(viewHandles.eventEmitter.notify.called).to.deep.equal(true);
   });
 });

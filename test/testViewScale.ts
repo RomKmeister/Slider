@@ -30,6 +30,7 @@ describe('ViewScale', () => {
     viewScale = new ViewScale(element);
     viewScale.model = options;
     viewScale.findElements();
+    viewScale.bindEventListners();
   });
 
   it('Should find scale', () => {
@@ -40,9 +41,21 @@ describe('ViewScale', () => {
     viewScale.setDirection();
     expect(viewScale.scale.className).to.equal('js-slider__scale');
   });
+
   it('Should set vertical scale', () => {
     viewScale.model.verticalScale = true;
     viewScale.setDirection();
     expect(viewScale.scale.className).to.equal('js-slider__scale slider__scale_vertical');
+  });
+
+  it('Should call functions on event', () => {
+    const sandbox = sinon.createSandbox();
+    sandbox.spy(viewScale, 'calculateValue');
+    sandbox.spy(viewScale, 'chooseHandlerForUpdate');
+    sandbox.spy(viewScale.eventEmitter, 'notify');
+    viewScale.scale.dispatchEvent(new Event('mousedown'));
+    expect(viewScale.calculateValue.called).to.deep.equal(true);
+    expect(viewScale.chooseHandlerForUpdate.called).to.deep.equal(true);
+    expect(viewScale.eventEmitter.notify.called).to.deep.equal(true);
   });
 });

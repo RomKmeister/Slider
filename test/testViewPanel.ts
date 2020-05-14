@@ -2,11 +2,13 @@ import { expect } from 'chai';
 import ViewPanel from '../src/plugin/View/ViewPanel';
 import Model from '../src/plugin/Model/Model';
 import { Slider } from '../src/plugin/interfaces';
+import sinon = require('sinon');
 
 describe('ViewPanel', () => {
   let viewPanel: ViewPanel;
   let options: Slider;
   beforeEach(() => {
+    const sandbox = sinon.createSandbox();
     const element = document.createElement('div');
     element.insertAdjacentHTML('afterbegin', `
       <input class="input__field js-input__field" type="number" name="minValueScale">
@@ -33,6 +35,10 @@ describe('ViewPanel', () => {
     viewPanel.model = options;
     viewPanel.findElements();
     viewPanel.setPanelParameters();
+    viewPanel.bindEventListners();
+    sandbox.spy(viewPanel, 'calculateValue');
+    viewPanel.inputs[0].dispatchEvent(new MouseEvent('click'));
+
   });
 
   it('Should find inputs', () => {
@@ -49,4 +55,11 @@ describe('ViewPanel', () => {
     expect(viewPanel.inputs[6].checked).to.deep.equal(false);
     expect(viewPanel.inputs[7].checked).to.deep.equal(true);
   });
+
+  it('Set spy', () => {
+    expect(viewPanel.calculateValue.getCall(0)).to.deep.equal(true);
+  });
+
+
+  
 });
