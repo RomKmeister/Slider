@@ -1,13 +1,15 @@
 import { expect } from 'chai';
+import * as sinon from 'sinon';
 import ViewScale from '../src/plugin/View/ViewScale';
 import Model from '../src/plugin/Model/Model';
 import { Slider } from '../src/plugin/interfaces';
 
 describe('ViewScale', () => {
-  let viewScale: ViewScale;
-  let options: Model;
-
+  let options: Slider;
+  let viewScale: any;
+  let model: Model;
   beforeEach(() => {
+    const sandbox = sinon.createSandbox();
     const element = document.createElement('div');
     element.insertAdjacentHTML('afterbegin', '<div class="js-slider__scale"></div>');
 
@@ -20,21 +22,11 @@ describe('ViewScale', () => {
       step: 1,
       verticalScale: false,
       showBubble: true,
-      scaleLength: 100,
-      firstValueRatio: 55,
-      secondValueRatio: 70,
-      interval: 7.5,
-      firstValueArea: 62.5,
     };
 
-    viewScale = new ViewScale(element);
-    viewScale.model = options;
-    viewScale.findElements();
-    viewScale.bindEventListners();
-  });
-
-  it('Should find scale', () => {
-    expect(viewScale.scale).to.exist;
+    model = new Model(options);
+    viewScale = new ViewScale(element, model);
+    sandbox.spy(viewScale.eventEmitter, 'notify');
   });
 
   it('Should set horizontal scale', () => {
@@ -49,13 +41,9 @@ describe('ViewScale', () => {
   });
 
   it('Should call functions on event', () => {
-    const sandbox = sinon.createSandbox();
-    sandbox.spy(viewScale, 'calculateValue');
-    sandbox.spy(viewScale, 'chooseHandlerForUpdate');
-    sandbox.spy(viewScale.eventEmitter, 'notify');
-    viewScale.scale.dispatchEvent(new Event('mousedown'));
-    expect(viewScale.calculateValue.called).to.deep.equal(true);
-    expect(viewScale.chooseHandlerForUpdate.called).to.deep.equal(true);
-    expect(viewScale.eventEmitter.notify.called).to.deep.equal(true);
+    viewScale.scale.dispatchEvent(new MouseEvent('mousedown', { clientX: 100 }));
+    const newOptions = { target: 'scale', newCoordinate: 100 };
+    expect(viewScale.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOptions);
+    expect(viewScale.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('scaleClicked');
   });
 });

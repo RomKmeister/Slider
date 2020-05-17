@@ -1,12 +1,13 @@
 import { expect } from 'chai';
+import * as sinon from 'sinon';
 import ViewPanel from '../src/plugin/View/ViewPanel';
 import Model from '../src/plugin/Model/Model';
 import { Slider } from '../src/plugin/interfaces';
-import sinon = require('sinon');
 
 describe('ViewPanel', () => {
-  let viewPanel: ViewPanel;
+  let viewPanel: any;
   let options: Slider;
+  let model: Model;
   beforeEach(() => {
     const sandbox = sinon.createSandbox();
     const element = document.createElement('div');
@@ -31,18 +32,11 @@ describe('ViewPanel', () => {
       showBubble: true,
     };
 
-    viewPanel = new ViewPanel(element);
-    viewPanel.model = options;
-    viewPanel.findElements();
+    model = new Model(options);
+    viewPanel = new ViewPanel(element, model);
+    sandbox.spy(viewPanel.eventEmitter, 'notify');
     viewPanel.setPanelParameters();
-    viewPanel.bindEventListners();
-    sandbox.spy(viewPanel, 'calculateValue');
-    viewPanel.inputs[0].dispatchEvent(new MouseEvent('click'));
 
-  });
-
-  it('Should find inputs', () => {
-    expect(viewPanel.inputs).to.exist;
   });
 
   it('Should set values to inputs', () => {
@@ -57,9 +51,10 @@ describe('ViewPanel', () => {
   });
 
   it('Set spy', () => {
-    expect(viewPanel.calculateValue.getCall(0)).to.deep.equal(true);
+    viewPanel.inputs[0].value = '20';
+    viewPanel.inputs[0].dispatchEvent(new Event('change'));
+    const newOptions = { ...viewPanel.model, minValueScale: 20 };
+    expect(viewPanel.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOptions);
+    expect(viewPanel.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('viewPanelUpdated');
   });
-
-
-  
 });

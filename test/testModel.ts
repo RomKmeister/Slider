@@ -1,13 +1,11 @@
 import { expect } from 'chai';
-import EventEmitter from '../EventEmitter/EventEmitter';
+import * as sinon from 'sinon';
 import Model from '../src/plugin/Model/Model';
 import { Slider } from '../src/plugin/interfaces';
-import sinon = require('sinon');
-
 
 describe('Model', () => {
-  let model: Model;
-  let options: any;
+  let model: any;
+  let options: Slider;
   beforeEach(() => {
     const sandbox = sinon.createSandbox();
     options = {
@@ -21,44 +19,40 @@ describe('Model', () => {
       showBubble: true,
     };
 
-    model = new Model();
+    model = new Model(options);
     sandbox.spy(model.eventEmitter, 'notify');
-    model.setModelParameters(options);
+    model.update(options);
   });
 
   it('FirstValue should be less than maxValueScale', () => {
-    options = {firstValue: 150};
-    model.setModelParameters(options);
+    options = { ...options, firstValue: 150 };
+    model.update(options);
     expect(model.firstValue).to.deep.equal(100);
   });
 
   it('FirstValue should be more than minValueScale', () => {
-    options = {firstValue: -15};
-    model.setModelParameters(options);
+    options = { ...options, firstValue: -15 };
+    model.update(options);
     expect(model.firstValue).to.deep.equal(0);
   });
 
   it('FirstValue should be less than secondValue if that visible', () => {
-    options = {
-      showSecondValue: true,
-    };
-    model.setModelParameters(options);
-    options = {
-      firstValue: 85,
-    };
-    model.setModelParameters(options);
+    options = { ...options, showSecondValue: true };
+    model.update(options);
+    options = { ...options, firstValue: 85 };
+    model.update(options);
     expect(model.firstValue).to.deep.equal(69);
   });
 
   it('SecondValue should be less than maxValueScale', () => {
-    options = {secondValue: 200};
-    model.setModelParameters(options);
+    options = { ...options, secondValue: 200 };
+    model.update(options);
     expect(model.secondValue).to.deep.equal(100);
   });
 
   it('SecondValue should be more than firstValue', () => {
-    options = {secondValue: 50};
-    model.setModelParameters(options);
+    options = { ...options, secondValue: 50 };
+    model.update(options);
     expect(model.secondValue).to.deep.equal(56);
   });
 

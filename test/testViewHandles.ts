@@ -1,14 +1,15 @@
 import { expect } from 'chai';
+import * as sinon from 'sinon';
 import ViewHandles from '../src/plugin/View/ViewHandles';
 import Model from '../src/plugin/Model/Model';
 import { Slider } from '../src/plugin/interfaces';
-import Presenter from '../src/plugin/Presenter/Presenter';
 
 describe('ViewHandles', () => {
-  let viewHandles: ViewHandles;
   let options: Slider;
-  let presenter: Presenter;
+  let model: Model;
+  let viewHandles: any;
   beforeEach(() => {
+    const sandbox = sinon.createSandbox();
     const element = document.createElement('div');
     element.insertAdjacentHTML('afterbegin',
       '<div class="js-slider__handle"></div><div class="js-slider__handle"></div>');
@@ -22,22 +23,12 @@ describe('ViewHandles', () => {
       step: 1,
       verticalScale: false,
       showBubble: true,
-      scaleLength: 100,
-      firstValueRatio: 55,
-      secondValueRatio: 70,
-      interval: 7.5,
-      firstValueArea: 62.5,
     };
 
-    viewHandles = new ViewHandles(element);
-    viewHandles.model = options;
-    viewHandles.findElements();
+    model = new Model(options);
+    viewHandles = new ViewHandles(element, model);
     viewHandles.setHandlersParameters();
-    viewHandles.bindEventListners();
-  });
-
-  it('Should find handles', () => {
-    expect(viewHandles.handles).to.exist;
+    sandbox.spy(viewHandles.eventEmitter, 'notify');
   });
 
   it('Should set horisontal handles position', () => {
@@ -66,15 +57,19 @@ describe('ViewHandles', () => {
     expect(viewHandles.secondHandle.className).to.deep.equal('js-slider__handle slider__handle_hidden');
   });
 
-  it('Should call functions on event', () => {
-    const sandbox = sinon.createSandbox();
-    sandbox.spy(viewHandles, 'calculateValue');
-    sandbox.spy(viewHandles, 'chooseHandlerForUpdate');
-    sandbox.spy(viewHandles.eventEmitter, 'notify');
+  it('Should send new options from first handler to observers', () => {
     viewHandles.firstHandle.dispatchEvent(new Event('mousedown'));
-    viewHandles.firstHandle.dispatchEvent(new Event('mousemove'));
-    expect(viewHandles.calculateValue.called).to.deep.equal(true);
-    expect(viewHandles.chooseHandlerForUpdate.called).to.deep.equal(true);
-    expect(viewHandles.eventEmitter.notify.called).to.deep.equal(true);
+    document.dispatchEvent(new MouseEvent('mousemove', { clientX: 100 }));
+    const newOptions = { target: 'firstValue', newCoordinate: 100 };
+    expect(viewHandles.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOptions);
+    expect(viewHandles.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('handlerPositionChanged');
+  });
+
+  it('Should send new options from second handler to observers', () => {
+    viewHandles.secondHandle.dispatchEvent(new Event('mousedown'));
+    document.dispatchEvent(new MouseEvent('mousemove', { clientX: 100 }));
+    const newOptions = { target: 'secondValue', newCoordinate: 100 };
+    expect(viewHandles.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOptions);
+    expect(viewHandles.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('handlerPositionChanged');
   });
 });

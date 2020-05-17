@@ -1,14 +1,24 @@
+/* eslint-disable max-len */
 import { expect } from 'chai';
+import * as sinon from 'sinon';
 import Presenter from '../src/plugin/Presenter/Presenter';
-import sinon = require('sinon');
+import ViewSlider from '../src/plugin/View/ViewSlider';
+import Model from '../src/plugin/Model/Model';
+import ViewPanel from '../src/plugin/View/ViewPanel';
+import { Slider } from '../src/plugin/interfaces';
 
 describe('Presenter', () => {
-  let presenter: Presenter;
-  let options: Model;
+  let presenter: any;
+  let model: Model;
+  let options: Slider;
+  let viewSlider: ViewSlider;
+  let viewPanel: ViewPanel;
 
   beforeEach(() => {
+    const sandbox = sinon.createSandbox();
     const element = document.createElement('div');
-    element.insertAdjacentHTML('afterbegin', '<div class="js-slider__scale"></div>');
+    element.classList.add('js-slider-block');
+    element.insertAdjacentHTML('afterbegin', '<div class="js-slider"><div class="js-slider__scale" style="width:1200px"></div><div class="js-slider__handle"><div class="js-slider__bubble"></div></div><div class="js-slider__handle"><div class="js-slider__bubble"></div></div>');
 
     options = {
       minValueScale: 0,
@@ -19,27 +29,27 @@ describe('Presenter', () => {
       step: 1,
       verticalScale: false,
       showBubble: true,
-      scaleLength: 100,
-      firstValueRatio: 55,
-      secondValueRatio: 70,
-      interval: 7.5,
-      firstValueArea: 62.5,
     };
 
-    presenter = new Presenter(element, options);
+    model = new Model(options);
+    viewSlider = new ViewSlider(element, model);
+    viewPanel = new ViewPanel(element, model);
+    presenter = new Presenter(model, viewSlider, viewPanel);
+    sandbox.spy(model, 'update');
+    sandbox.spy(viewSlider, 'setViewParameters');
+    sandbox.spy(viewPanel, 'setPanelParameters');
   });
 
-  it('Should call functions on event', () => {
-    const sandbox = sinon.createSandbox();
-    sandbox.spy(presenter, 'setViewParameters');
-    presenter.update(options, 'modelUpdated')
-    expect(presenter.setViewParameters.called).to.deep.equal(true);
+  it('Should update model', () => {
+    presenter.update(presenter.model, 'viewSliderUpdated');
+    expect(presenter.model.update.called).to.deep.equal(true);
+    presenter.update(presenter.model, 'viewPanelUpdated');
+    expect(presenter.model.update.called).to.deep.equal(true);
   });
 
-  it('Should call functions on event', () => {
-    const sandbox = sinon.createSandbox();
-    sandbox.spy(presenter.model, 'setModelParameters');
-    presenter.update(options, 'viewUpdated')
-    expect(presenter.model.setModelParameters.called).to.deep.equal(true);
+  it('Should update views', () => {
+    presenter.update(presenter.model, 'modelUpdated');
+    expect(presenter.viewSlider.setViewParameters.called).to.deep.equal(true);
+    expect(presenter.viewPanel.setPanelParameters.called).to.deep.equal(true);
   });
 });

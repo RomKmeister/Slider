@@ -1,12 +1,12 @@
 import { expect } from 'chai';
-import ViewBubbles from '../src/plugin/View/ViewBubbles';
 import Model from '../src/plugin/Model/Model';
 import { Slider } from '../src/plugin/interfaces';
+import ViewBubbles from '../src/plugin/View/ViewBubbles';
 
 describe('ViewBubbles', () => {
-  let viewBubbles: ViewBubbles;
   let options: Slider;
   let model: Model;
+  let viewBubbles: ViewBubbles;
   beforeEach(() => {
     const element = document.createElement('div');
     element.insertAdjacentHTML('afterbegin',
@@ -23,14 +23,9 @@ describe('ViewBubbles', () => {
       showBubble: false,
     };
 
-    viewBubbles = new ViewBubbles(element);
-    viewBubbles.model = options;
-    viewBubbles.findElements();
+    model = new Model(options);
+    viewBubbles = new ViewBubbles(element, model);
     viewBubbles.setBubbleParameters();
-  });
-
-  it('Should find bubbles', () => {
-    expect(viewBubbles.bubbles).to.exist;
   });
 
   it('Should set bubble value', () => {
