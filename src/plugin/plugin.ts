@@ -15,36 +15,36 @@ declare global {
 (function ($): void {
   $.fn.sliderPlugin = function (): void {
     const {
-      minvaluescale: minValueScale,
-      maxvaluescale: maxValueScale,
+      minvalue: minValue,
+      maxvalue: maxValue,
       firstvalue: firstValue,
-      showsecondvalue: showSecondValue,
+      issecondvaluevisible: isSecondValueVisible,
       secondvalue: secondValue,
       step,
-      verticalscale: verticalScale,
-      showbubble: showBubble,
+      isvertical: isVertical,
+      isbubblevisible: isBubbleVisible,
     } = this.data();
 
     const options = {
-      minValueScale,
-      maxValueScale,
+      minValue,
+      maxValue,
       firstValue,
-      showSecondValue,
+      isSecondValueVisible,
       secondValue,
       step,
-      verticalScale,
-      showBubble,
+      isVertical,
+      isBubbleVisible,
     };
 
     const defaultOptions = {
-      minValueScale: 0,
-      maxValueScale: 100,
+      minValue: 0,
+      maxValue: 100,
       firstValue: 55,
-      showSecondValue: true,
+      isSecondValueVisible: true,
       secondValue: 70,
       step: 1,
-      verticalScale: false,
-      showBubble: true,
+      isVertical: false,
+      isBubbleVisible: true,
     };
     const $finalOptions = $.extend({}, defaultOptions, options);
     const [elements] = this;

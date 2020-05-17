@@ -2,16 +2,16 @@ include ../slider/slider
 include ../panel/panel
 
 mixin slider-block(options)
-  - const { minValueScale, maxValueScale, firstValue, showSecondValue, secondValue, step, verticalScale, showBubble } = options
+  - const { minValue, maxValue, firstValue, isSecondValueVisible, secondValue, step, isVertical, isBubbleVisible } = options
   .slider-block.js-slider-block(
-    data-minValueScale= minValueScale,
-    data-maxValueScale= maxValueScale,
+    data-minValue= minValue,
+    data-maxValue= maxValue,
     data-firstValue= firstValue,
-    data-showSecondValue= showSecondValue,
+    data-isSecondValueVisible= isSecondValueVisible,
     data-secondValue= secondValue,
     data-step= step,
-    data-verticalScale= verticalScale,
-    data-showBubble= showBubble
+    data-isVertical= isVertical,
+    data-isBubbleVisible= isBubbleVisible
   )
     .slider-block__slider
       +slider()

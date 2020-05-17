@@ -9,14 +9,14 @@ describe('Model', () => {
   beforeEach(() => {
     const sandbox = sinon.createSandbox();
     options = {
-      minValueScale: 0,
-      maxValueScale: 100,
+      minValue: 0,
+      maxValue: 100,
       firstValue: 55,
-      showSecondValue: false,
+      isSecondValueVisible: false,
       secondValue: 70,
       step: 1,
-      verticalScale: true,
-      showBubble: true,
+      isVertical: true,
+      isBubbleVisible: true,
     };
 
     model = new Model(options);
@@ -24,26 +24,26 @@ describe('Model', () => {
     model.update(options);
   });
 
-  it('FirstValue should be less than maxValueScale', () => {
+  it('FirstValue should be less than maxValue', () => {
     options = { ...options, firstValue: 150 };
     model.update(options);
     expect(model.modelOptions.firstValue).to.deep.equal(100);
   });
 
-  it('FirstValue should be more than minValueScale', () => {
+  it('FirstValue should be more than minValue', () => {
     options = { ...options, firstValue: -15 };
     model.update(options);
     expect(model.modelOptions.firstValue).to.deep.equal(0);
   });
 
   it('FirstValue should be less than secondValue if that visible', () => {
-    options = { ...options, ...{ firstValue: 85, showSecondValue: true } };
+    options = { ...options, ...{ firstValue: 85, isSecondValueVisible: true } };
     model.update(options);
     expect(model.modelOptions.firstValue).to.deep.equal(69);
   });
 
-  it('SecondValue should be less than maxValueScale', () => {
-    options = { ...options, ...{ secondValue: 200, showSecondValue: true } };
+  it('SecondValue should be less than maxValue', () => {
+    options = { ...options, ...{ secondValue: 200, isSecondValueVisible: true } };
     model.update(options);
     expect(model.modelOptions.secondValue).to.deep.equal(100);
   });
@@ -62,7 +62,7 @@ describe('Model', () => {
   });
 
   it('Set spy', () => {
-    expect(model.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(model);
+    expect(model.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(model.modelOptions);
     expect(model.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('modelUpdated');
   });
 });

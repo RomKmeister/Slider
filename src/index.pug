@@ -19,33 +19,33 @@ html(lang="ru")
     link(rel="shortcut icon" href="favicon/favicon.ico")
   body
     +slider-block({
-      minValueScale: 0,
-      maxValueScale: 100,
+      minValue: 0,
+      maxValue: 100,
       firstValue: 55,
-      showSecondValue: 'true',
+      isSecondValueVisible: 'true',
       secondValue: 70,
       step: 1,
-      verticalScale: 'false',
-      showBubble: 'true'
+      isVertical: 'false',
+      isBubbleVisible: 'true'
     })
     +slider-block({
-      minValueScale: -20,
-      maxValueScale: 150,
+      minValue: -20,
+      maxValue: 150,
       firstValue: -5,
-      showSecondValue: 'true',
+      isSecondValueVisible: 'true',
       secondValue: 100,
       step: 5,
-      verticalScale: 'true',
-      showBubble: 'true'
+      isVertical: 'true',
+      isBubbleVisible: 'true'
     })
     +slider-block({
-      minValueScale: 0,
-      maxValueScale: 100,
+      minValue: 0,
+      maxValue: 100,
       firstValue: 55,
-      showSecondValue: 'false',
+      isSecondValueVisible: 'false',
       secondValue: 70,
       step: 1,
-      verticalScale: 'false',
-      showBubble: 'false'
+      isVertical: 'false',
+      isBubbleVisible: 'false'
     })
 

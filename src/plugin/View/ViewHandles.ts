@@ -62,14 +62,14 @@ class ViewHandles {
   }
 
   private handleHandleMouseMove(event: MouseEvent): void {
-    const coordinate = this.model.modelOptions.verticalScale ? event.clientY : event.clientX;
+    const coordinate = this.model.modelOptions.isVertical ? event.clientY : event.clientX;
     const name = (this.target === this.firstHandle) ? 'firstValue' : 'secondValue';
     const newOptions = { target: name, newCoordinate: coordinate };
     this.eventEmitter.notify(newOptions, 'handlerPositionChanged');
   }
 
   private setHandlesPosition(): void {
-    if (this.model.modelOptions.verticalScale) {
+    if (this.model.modelOptions.isVertical) {
       this.firstHandle.style.top = `${this.model.modelOptions.firstValueRatio}%`;
       this.secondHandle.style.top = `${this.model.modelOptions.secondValueRatio}%`;
     } else {
@@ -81,7 +81,7 @@ class ViewHandles {
   private setVisibility(): void {
     const handleClassVisibility = 'slider__handle_hidden';
 
-    if (this.model.modelOptions.showSecondValue) {
+    if (this.model.modelOptions.isSecondValueVisible) {
       this.secondHandle.classList.remove(handleClassVisibility);
     } else {
       this.secondHandle.classList.add(handleClassVisibility);
@@ -91,7 +91,7 @@ class ViewHandles {
   private setDirection(): void {
     const handleClassDirection = 'slider__handle_vertical';
 
-    if (this.model.modelOptions.verticalScale) {
+    if (this.model.modelOptions.isVertical) {
       this.handles.forEach((item) => {
         item.classList.add(handleClassDirection);
         item.style.left = '';

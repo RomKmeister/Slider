@@ -9,14 +9,14 @@ export interface Observer {
 }
 
 export interface Slider {
-  minValueScale: number;
-  maxValueScale: number;
+  minValue: number;
+  maxValue: number;
   firstValue: number;
-  showSecondValue: boolean;
+  isSecondValueVisible: boolean;
   secondValue: number;
   step: number;
-  verticalScale: boolean;
-  showBubble: boolean;
+  isVertical: boolean;
+  isBubbleVisible: boolean;
 }
 
 export interface ModelOptions extends Slider {

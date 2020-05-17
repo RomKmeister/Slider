@@ -15,14 +15,14 @@ describe('ViewHandles', () => {
       '<div class="js-slider__handle"></div><div class="js-slider__handle"></div>');
 
     options = {
-      minValueScale: 0,
-      maxValueScale: 100,
+      minValue: 0,
+      maxValue: 100,
       firstValue: 55,
-      showSecondValue: true,
+      isSecondValueVisible: true,
       secondValue: 70,
       step: 1,
-      verticalScale: false,
-      showBubble: true,
+      isVertical: false,
+      isBubbleVisible: true,
     };
 
     model = new Model(options);
@@ -39,7 +39,7 @@ describe('ViewHandles', () => {
   });
 
   it('Should set vertical handles position', () => {
-    viewHandles.model.modelOptions.verticalScale = true;
+    viewHandles.model.modelOptions.isVertical = true;
     viewHandles.setHandlersParameters();
     expect(viewHandles.firstHandle.style.top).to.deep.equal('55%');
     expect(viewHandles.secondHandle.style.top).to.deep.equal('70%');
@@ -52,7 +52,7 @@ describe('ViewHandles', () => {
   });
 
   it('Should set hide second handle', () => {
-    viewHandles.model.modelOptions.showSecondValue = false;
+    viewHandles.model.modelOptions.isSecondValueVisible = false;
     viewHandles.setHandlersParameters();
     expect(viewHandles.secondHandle.className).to.deep.equal('js-slider__handle slider__handle_hidden');
   });

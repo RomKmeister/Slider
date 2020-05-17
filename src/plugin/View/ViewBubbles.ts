@@ -36,7 +36,7 @@ class ViewBubbles {
   private setDirection(): void {
     const bubbleClassDirection = 'slider__bubble_vertical';
 
-    if (this.model.modelOptions.verticalScale) {
+    if (this.model.modelOptions.isVertical) {
       this.bubbles.forEach((item) => item.classList.add(bubbleClassDirection));
     } else {
       this.bubbles.forEach((item) => item.classList.remove(bubbleClassDirection));
@@ -46,7 +46,7 @@ class ViewBubbles {
   private setVisibility(): void {
     const bubbleClassVisibility = 'slider__bubble_visible';
 
-    if (this.model.modelOptions.showBubble) {
+    if (this.model.modelOptions.isBubbleVisible) {
       this.bubbles.forEach((item) => item.classList.add(bubbleClassVisibility));
     } else {
       this.bubbles.forEach((item) => item.classList.remove(bubbleClassVisibility));

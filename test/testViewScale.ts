@@ -14,14 +14,14 @@ describe('ViewScale', () => {
     element.insertAdjacentHTML('afterbegin', '<div class="js-slider__scale"></div>');
 
     options = {
-      minValueScale: 0,
-      maxValueScale: 100,
+      minValue: 0,
+      maxValue: 100,
       firstValue: 55,
-      showSecondValue: true,
+      isSecondValueVisible: true,
       secondValue: 70,
       step: 1,
-      verticalScale: false,
-      showBubble: true,
+      isVertical: false,
+      isBubbleVisible: true,
     };
 
     model = new Model(options);
@@ -35,7 +35,7 @@ describe('ViewScale', () => {
   });
 
   it('Should set vertical scale', () => {
-    viewScale.model.modelOptions.verticalScale = true;
+    viewScale.model.modelOptions.isVertical = true;
     viewScale.setDirection();
     expect(viewScale.scale.className).to.equal('js-slider__scale slider__scale_vertical');
   });

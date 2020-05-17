@@ -60,7 +60,7 @@ class ViewSlider {
     this.getScaleSizes();
     const LIQUID_MOVE = 0.01;
     const step = this.model.modelOptions.step > 1 ? this.model.modelOptions.step : LIQUID_MOVE;
-    const value = this.model.modelOptions.minValueScale
+    const value = this.model.modelOptions.minValue
     + Math.round(((coordinate - this.scalePosition) / step)
     / (this.scaleLength / this.model.modelOptions.scaleLength)) * step;
     return value;
@@ -68,10 +68,10 @@ class ViewSlider {
 
   private getScaleSizes(): void {
     const scale = this.element.querySelector('.js-slider__scale');
-    this.scaleLength = this.model.modelOptions.verticalScale
+    this.scaleLength = this.model.modelOptions.isVertical
       ? scale.clientHeight
       : scale.clientWidth;
-    this.scalePosition = this.model.modelOptions.verticalScale
+    this.scalePosition = this.model.modelOptions.isVertical
       ? scale.getBoundingClientRect().top
       : scale.getBoundingClientRect().left;
   }

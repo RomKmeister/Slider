@@ -12,24 +12,24 @@ describe('ViewPanel', () => {
     const sandbox = sinon.createSandbox();
     const element = document.createElement('div');
     element.insertAdjacentHTML('afterbegin', `
-      <input class="input__field js-input__field" type="number" name="minValueScale">
-      <input class="input__field js-input__field" type="number" name="maxValueScale">
+      <input class="input__field js-input__field" type="number" name="minValue">
+      <input class="input__field js-input__field" type="number" name="maxValue">
       <input class="input__field js-input__field" type="number" name="firstValue">
-      <input class="input__field js-input__field" type="checkbox" name="showSecondValue">
+      <input class="input__field js-input__field" type="checkbox" name="isSecondValueVisible">
       <input class="input__field js-input__field" type="number" name="secondValue">
       <input class="input__field js-input__field" type="number" name="step">
-      <input class="input__field js-input__field" type="checkbox" name="verticalScale">
-      <input class="input__field js-input__field" type="checkbox" name="showBubble">`);
+      <input class="input__field js-input__field" type="checkbox" name="isVertical">
+      <input class="input__field js-input__field" type="checkbox" name="isBubbleVisible">`);
 
     options = {
-      minValueScale: 0,
-      maxValueScale: 100,
+      minValue: 0,
+      maxValue: 100,
       firstValue: 55,
-      showSecondValue: true,
+      isSecondValueVisible: true,
       secondValue: 70,
       step: 1,
-      verticalScale: false,
-      showBubble: true,
+      isVertical: false,
+      isBubbleVisible: true,
     };
 
     model = new Model(options);
@@ -52,7 +52,7 @@ describe('ViewPanel', () => {
   it('Set spy', () => {
     viewPanel.inputs[0].value = '20';
     viewPanel.inputs[0].dispatchEvent(new Event('change'));
-    const newOptions = { ...viewPanel.model.modelOptions, minValueScale: 20 };
+    const newOptions = { ...viewPanel.model.modelOptions, minValue: 20 };
     expect(viewPanel.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOptions);
     expect(viewPanel.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('viewPanelUpdated');
   });

@@ -25,11 +25,11 @@ class Model {
 
   private calculateRatios(options: Slider): ModelOptions {
     const {
-      minValueScale, maxValueScale, firstValue, secondValue,
+      minValue, maxValue, firstValue, secondValue,
     } = options;
-    const scaleLength = maxValueScale - minValueScale;
-    const firstValueRatio = (firstValue - minValueScale) * (100 / scaleLength);
-    const secondValueRatio = (secondValue - minValueScale) * (100 / scaleLength);
+    const scaleLength = maxValue - minValue;
+    const firstValueRatio = (firstValue - minValue) * (100 / scaleLength);
+    const secondValueRatio = (secondValue - minValue) * (100 / scaleLength);
     const interval = (secondValue - firstValue) / 2;
     const firstValueArea = firstValue + interval;
     return {
@@ -42,39 +42,39 @@ class Model {
 
   private validate(options: Slider): Slider {
     const {
-      minValueScale, maxValueScale, showSecondValue, step,
+      minValue, maxValue, isSecondValueVisible, step,
     } = options;
     let {
       firstValue, secondValue,
     } = options;
-    const isValuesLowerMin = showSecondValue && firstValue <= minValueScale && secondValue <= minValueScale;
-    const isValuesHigherMax = showSecondValue && firstValue >= maxValueScale && secondValue >= maxValueScale;
-    const isSecondValueHigherMax = showSecondValue && secondValue > maxValueScale;
-    const isFirstValueLowerMin = firstValue <= minValueScale;
-    const isFirstValueHigherMax = firstValue >= maxValueScale;
-    const isValuesConfused = showSecondValue && firstValue >= secondValue;
-    const isFirstValueNearly = this.modelOptions && this.modelOptions.showSecondValue
+    const isValuesLowerMin = isSecondValueVisible && firstValue <= minValue && secondValue <= minValue;
+    const isValuesHigherMax = isSecondValueVisible && firstValue >= maxValue && secondValue >= maxValue;
+    const isSecondValueHigherMax = isSecondValueVisible && secondValue > maxValue;
+    const isFirstValueLowerMin = firstValue <= minValue;
+    const isFirstValueHigherMax = firstValue >= maxValue;
+    const isValuesConfused = isSecondValueVisible && firstValue >= secondValue;
+    const isFirstValueNearly = this.modelOptions && this.modelOptions.isSecondValueVisible
     && options.firstValue !== this.modelOptions.firstValue
     && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step;
     const isSecondValueNearly = this.modelOptions && options.secondValue !== this.modelOptions.secondValue
     && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step;
 
     if (isValuesLowerMin) {
-      firstValue = minValueScale;
+      firstValue = minValue;
       secondValue = firstValue + step;
     }
     if (isValuesHigherMax) {
-      secondValue = maxValueScale;
+      secondValue = maxValue;
       firstValue = secondValue - step;
     }
     if (isFirstValueLowerMin) {
-      firstValue = minValueScale;
+      firstValue = minValue;
     }
     if (isFirstValueHigherMax) {
-      firstValue = maxValueScale;
+      firstValue = maxValue;
     }
     if (isSecondValueHigherMax) {
-      secondValue = maxValueScale;
+      secondValue = maxValue;
     }
     if (isFirstValueNearly) {
       firstValue = secondValue - step;

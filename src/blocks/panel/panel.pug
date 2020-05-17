@@ -3,29 +3,29 @@ include ../input/input
 mixin panel()
   .panel.js-panel
     +input({
-      name: "minValueScale",
+      name: "minValue",
       type: "number",
       label: "Минимальное значение"
     })
     +input({
-      name: "maxValueScale",
+      name: "maxValue",
       type: "number",
       label: "Максимальное значение"
     })
     +input({
       name: "firstValue",
       type: "number",
-      label: "Первое значение"
+      label: "Первый ползунок"
     })
     +input({
-      name: "showSecondValue",
+      name: "isSecondValueVisible",
       type: "checkbox",
-      label: "Показать второе значение"
+      label: "Показать второй ползунок"
     })
     +input({
       name: "secondValue",
       type: "number",
-      label: "Второе значение"
+      label: "Второй ползунок"
     })
     +input({
       name: "step",
@@ -33,12 +33,12 @@ mixin panel()
       label: "Шаг"
     })
     +input({
-      name: "verticalScale",
+      name: "isVertical",
       type: "checkbox",
       label: "Вертикальный вид"
     })
     +input({
-      name: "showBubble",
+      name: "isBubbleVisible",
       type: "checkbox",
       label: "Подсказки"
     })

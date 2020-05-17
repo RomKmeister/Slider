@@ -19,7 +19,7 @@ class ViewScale {
   setDirection(): void {
     const scaleClassDirection = 'slider__scale_vertical';
 
-    if (this.model.modelOptions.verticalScale) {
+    if (this.model.modelOptions.isVertical) {
       this.scale.classList.add(scaleClassDirection);
     } else {
       this.scale.classList.remove(scaleClassDirection);
@@ -40,7 +40,7 @@ class ViewScale {
   }
 
   private handleScaleClick(event: MouseEvent): void {
-    const coordinate = this.model.modelOptions.verticalScale ? event.clientY : event.clientX;
+    const coordinate = this.model.modelOptions.isVertical ? event.clientY : event.clientX;
     const newOptions = { target: 'scale', newCoordinate: coordinate };
     this.eventEmitter.notify(newOptions, 'scaleClicked');
   }
