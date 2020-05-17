@@ -1,75 +1,100 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-param-reassign */
 
-import BaseComponent from '../BaseComponent/BaseComponent';
-import { Slider } from '../interfaces';
+import { Slider, ModelOptions } from '../interfaces';
 import EventEmitter from '../EventEmitter/EventEmitter';
 
-class Model extends BaseComponent {
-  minValueScale: number;
+class Model {
+  options: Slider;
 
-  maxValueScale: number;
-
-  firstValue: number;
-
-  showSecondValue: boolean;
-
-  secondValue: number;
-
-  step: number;
-
-  verticalScale: boolean;
-
-  showBubble: boolean;
-
-  scaleLength: number;
-
-  firstValueRatio: number;
-
-  secondValueRatio: number;
-
-  interval: number;
-
-  firstValueArea: number;
+  modelOptions: ModelOptions;
 
   eventEmitter = new EventEmitter();
 
-  setModelParameters(options: Slider): void {
-    const newOpt = this.validate(options);
-    Object.assign(this, newOpt);
-    this.calculateRatios();
+  constructor(options: Slider) {
+    this.setModelParameters(options);
+  }
+
+  update(options: ModelOptions): void {
+    this.setModelParameters(options);
     this.eventEmitter.notify(this, 'modelUpdated');
   }
 
-  private calculateRatios(): void {
-    this.scaleLength = this.maxValueScale - this.minValueScale;
-    this.firstValueRatio = (this.firstValue - this.minValueScale) * (100 / this.scaleLength);
-    this.secondValueRatio = (this.secondValue - this.minValueScale) * (100 / this.scaleLength);
-    this.interval = (this.secondValue - this.firstValue) / 2;
-    this.firstValueArea = this.firstValue + this.interval;
+  private setModelParameters(options: Slider | ModelOptions): void {
+    const validOptions = this.validate(options);
+    this.modelOptions = this.calculateRatios(validOptions);
+  }
+
+  private calculateRatios(options: Slider): ModelOptions {
+    const {
+      minValueScale, maxValueScale, firstValue, secondValue,
+    } = options;
+    const scaleLength = maxValueScale - minValueScale;
+    const firstValueRatio = (firstValue - minValueScale) * (100 / scaleLength);
+    const secondValueRatio = (secondValue - minValueScale) * (100 / scaleLength);
+    const interval = (secondValue - firstValue) / 2;
+    const firstValueArea = firstValue + interval;
+    return {
+      ...options,
+      ...{
+        scaleLength, firstValueRatio, secondValueRatio, firstValueArea,
+      },
+    };
   }
 
   private validate(options: Slider): Slider {
-    const isFirstValueNearly = this.showSecondValue && options.firstValue !== this.firstValue
-    && this.secondValue - options.firstValue <= this.step;
-    const isSecondValueNearly = options.secondValue !== this.secondValue
-    && options.secondValue - this.firstValue <= this.step;
+    const {
+      minValueScale, maxValueScale, showSecondValue, step,
+    } = options;
+    let {
+      firstValue, secondValue,
+    } = options;
+    const isValuesLowerMin = showSecondValue && firstValue <= minValueScale && secondValue <= minValueScale;
+    const isValuesHigherMax = showSecondValue && firstValue >= maxValueScale && secondValue >= maxValueScale;
+    const isSecondValueHigherMax = showSecondValue && secondValue > maxValueScale;
+    const isFirstValueLowerMin = firstValue <= minValueScale;
+    const isFirstValueHigherMax = firstValue >= maxValueScale;
+    const isValuesConfused = showSecondValue && firstValue >= secondValue;
+    const isFirstValueNearly = this.modelOptions && this.modelOptions.showSecondValue
+    && options.firstValue !== this.modelOptions.firstValue
+    && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step;
+    const isSecondValueNearly = this.modelOptions && options.secondValue !== this.modelOptions.secondValue
+    && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step;
 
+    if (isValuesLowerMin) {
+      firstValue = minValueScale;
+      secondValue = firstValue + step;
+    }
+    if (isValuesHigherMax) {
+      secondValue = maxValueScale;
+      firstValue = secondValue - step;
+    }
+    if (isFirstValueLowerMin) {
+      firstValue = minValueScale;
+    }
+    if (isFirstValueHigherMax) {
+      firstValue = maxValueScale;
+    }
+    if (isSecondValueHigherMax) {
+      secondValue = maxValueScale;
+    }
     if (isFirstValueNearly) {
-      options.firstValue = this.secondValue - this.step;
+      firstValue = secondValue - step;
     }
     if (isSecondValueNearly) {
-      options.secondValue = this.firstValue + this.step;
+      secondValue = firstValue + step;
     }
-    if (options.firstValue < this.minValueScale) {
-      options.firstValue = this.minValueScale;
+    if (isValuesConfused) {
+      const changeValue = secondValue;
+      firstValue = secondValue - step;
+      secondValue = changeValue;
     }
-    if (options.firstValue > this.maxValueScale) {
-      options.firstValue = this.maxValueScale;
-    }
-    if (options.secondValue > this.maxValueScale) {
-      options.secondValue = this.maxValueScale;
-    }
-    return options;
+    return {
+      ...options,
+      ...{
+        firstValue, secondValue,
+      },
+    };
   }
 }
 
