@@ -5,8 +5,6 @@ import { Slider, ModelOptions } from '../interfaces';
 import EventEmitter from '../EventEmitter/EventEmitter';
 
 class Model {
-  options: Slider;
-
   modelOptions: ModelOptions;
 
   eventEmitter = new EventEmitter();
@@ -17,7 +15,7 @@ class Model {
 
   update(options: ModelOptions): void {
     this.setModelParameters(options);
-    this.eventEmitter.notify(this, 'modelUpdated');
+    this.eventEmitter.notify(this.modelOptions, 'modelUpdated');
   }
 
   private setModelParameters(options: Slider | ModelOptions): void {
