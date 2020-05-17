@@ -1,4 +1,4 @@
-function importAll(r: any): any {
+function importAll(r: any): void {
   r.keys().forEach(r);
 }
 

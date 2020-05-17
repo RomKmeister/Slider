@@ -2,6 +2,9 @@
 /* eslint-disable no-param-reassign */
 
 import Presenter from './Presenter/Presenter';
+import Model from './Model/Model';
+import ViewSlider from './View/ViewSlider';
+import ViewPanel from './View/ViewPanel';
 
 declare global {
   interface JQuery {
@@ -45,6 +48,9 @@ declare global {
     };
     const $finalOptions = $.extend({}, defaultOptions, options);
     const [elements] = this;
-    new Presenter(elements, $finalOptions);
+    const model = new Model($finalOptions);
+    const viewSlider = new ViewSlider(elements, model);
+    const viewPanel = new ViewPanel(elements, model);
+    new Presenter(model, viewSlider, viewPanel);
   };
 }(jQuery));
