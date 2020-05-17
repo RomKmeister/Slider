@@ -34,7 +34,7 @@ describe('ViewBubbles', () => {
   });
 
   it('Should show bubbles', () => {
-    viewBubbles.model.showBubble = true;
+    viewBubbles.model.modelOptions.showBubble = true;
     viewBubbles.setBubbleParameters();
     expect(viewBubbles.firstBubble.className).to.deep.equal('js-slider__bubble slider__bubble_visible');
     expect(viewBubbles.secondBubble.className).to.deep.equal('js-slider__bubble slider__bubble_visible');
@@ -51,7 +51,7 @@ describe('ViewBubbles', () => {
   });
 
   it('Should set vertical direction', () => {
-    viewBubbles.model.verticalScale = true;
+    viewBubbles.model.modelOptions.verticalScale = true;
     viewBubbles.setBubbleParameters();
     expect(viewBubbles.firstBubble.className).to.deep.equal('js-slider__bubble slider__bubble_vertical');
     expect(viewBubbles.secondBubble.className).to.deep.equal('js-slider__bubble slider__bubble_vertical');

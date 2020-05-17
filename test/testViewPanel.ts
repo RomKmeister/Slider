@@ -36,7 +36,6 @@ describe('ViewPanel', () => {
     viewPanel = new ViewPanel(element, model);
     sandbox.spy(viewPanel.eventEmitter, 'notify');
     viewPanel.setPanelParameters();
-
   });
 
   it('Should set values to inputs', () => {
@@ -53,7 +52,7 @@ describe('ViewPanel', () => {
   it('Set spy', () => {
     viewPanel.inputs[0].value = '20';
     viewPanel.inputs[0].dispatchEvent(new Event('change'));
-    const newOptions = { ...viewPanel.model, minValueScale: 20 };
+    const newOptions = { ...viewPanel.model.modelOptions, minValueScale: 20 };
     expect(viewPanel.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOptions);
     expect(viewPanel.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('viewPanelUpdated');
   });

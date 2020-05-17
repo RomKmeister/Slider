@@ -47,23 +47,23 @@ describe('ViewSlider', () => {
 
   it('Should set firstValue as name and 10 as value', () => {
     viewSlider.update({ target: 'firstValue', newCoordinate: 120 }, 'handlerPositionChanged');
-    let newOption = { ...viewSlider.model, firstValue: 10 };
+    let newOption = { ...viewSlider.model.modelOptions, firstValue: 10 };
     expect(viewSlider.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOption);
     expect(viewSlider.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('viewSliderUpdated');
 
     viewSlider.update({ target: 'scale', newCoordinate: 120 }, 'scaleClicked');
-    newOption = { ...viewSlider.model, firstValue: 10 };
+    newOption = { ...viewSlider.model.modelOptions, firstValue: 10 };
     expect(viewSlider.eventEmitter.notify.getCall(1).args[0]).to.deep.equal(newOption);
   });
 
   it('Should set secondValue as name and 80 as value', () => {
     viewSlider.update({ target: 'secondValue', newCoordinate: 960 }, 'handlerPositionChanged');
-    let newOption = { ...viewSlider.model, secondValue: 80 };
+    let newOption = { ...viewSlider.model.modelOptions, secondValue: 80 };
     expect(viewSlider.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOption);
     expect(viewSlider.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('viewSliderUpdated');
 
     viewSlider.update({ target: 'scale', newCoordinate: 960 }, 'scaleClicked');
-    newOption = { ...viewSlider.model, secondValue: 80 };
+    newOption = { ...viewSlider.model.modelOptions, secondValue: 80 };
     expect(viewSlider.eventEmitter.notify.getCall(1).args[0]).to.deep.equal(newOption);
   });
 });

@@ -35,7 +35,7 @@ describe('ViewScale', () => {
   });
 
   it('Should set vertical scale', () => {
-    viewScale.model.verticalScale = true;
+    viewScale.model.modelOptions.verticalScale = true;
     viewScale.setDirection();
     expect(viewScale.scale.className).to.equal('js-slider__scale slider__scale_vertical');
   });
