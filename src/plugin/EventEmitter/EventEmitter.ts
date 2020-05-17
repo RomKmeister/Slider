@@ -1,4 +1,6 @@
-class EventEmitter {
+import { Observer, NewOption, ModelOptions } from '../interfaces';
+
+class EventEmitter implements EventEmitter {
   private observers: Observer[] = [];
 
   public attach(observer: Observer): void {
@@ -9,8 +11,8 @@ class EventEmitter {
     this.observers = this.observers.filter((item) => item !== observer);
   }
 
-  public notify(data, event): void {
-    this.observers.forEach((item) => item.update(data, event))
+  public notify(data: ModelOptions | NewOption, event: string): void {
+    this.observers.forEach((item) => item.update(data, event));
   }
 }
 
