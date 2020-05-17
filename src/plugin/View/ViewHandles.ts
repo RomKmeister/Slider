@@ -1,10 +1,14 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-return-assign */
 
-import ViewSlider from './ViewSlider';
+import Model from '../Model/Model';
 import EventEmitter from '../EventEmitter/EventEmitter';
 
-class ViewHandles extends ViewSlider {
+class ViewHandles {
+  element: HTMLElement;
+
+  model: Model;
+
   handles: NodeListOf<HTMLElement>;
 
   firstHandle: HTMLElement;
@@ -19,9 +23,10 @@ class ViewHandles extends ViewSlider {
 
   eventEmitter = new EventEmitter();
 
-  findElements(): void {
-    this.handles = this.element.querySelectorAll('.js-slider__handle');
-    [this.firstHandle, this.secondHandle] = Array.from(this.handles);
+  constructor(element: HTMLElement, model: Model) {
+    this.element = element;
+    this.model = model;
+    this.init();
   }
 
   setHandlersParameters(): void {
@@ -30,46 +35,20 @@ class ViewHandles extends ViewSlider {
     this.setDirection();
   }
 
-  bindEventListners(): void {
+  private init(): void {
+    this.findElements();
+    this.bindEventListners();
+  }
+
+  private findElements(): void {
+    this.handles = this.element.querySelectorAll('.js-slider__handle');
+    [this.firstHandle, this.secondHandle] = Array.from(this.handles);
+  }
+
+  private bindEventListners(): void {
     this.handles.forEach((item) => item.addEventListener('mousedown', this.handleDocumentMouseMove.bind(this)));
     this.bindedHandleHandleMouseMove = this.handleHandleMouseMove.bind(this);
     document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
-  }
-
-  private setHandlesPosition(): void {
-    if (this.model.verticalScale) {
-      this.firstHandle.style.top = `${this.model.firstValueRatio}%`;
-      this.secondHandle.style.top = `${this.model.secondValueRatio}%`;
-    } else {
-      this.firstHandle.style.left = `${this.model.firstValueRatio}%`;
-      this.secondHandle.style.left = `${this.model.secondValueRatio}%`;
-    }
-  }
-
-  private setVisibility(): void {
-    const handleClassVisibility = 'slider__handle_hidden';
-
-    if (this.model.showSecondValue) {
-      this.secondHandle.classList.remove(handleClassVisibility);
-    } else {
-      this.secondHandle.classList.add(handleClassVisibility);
-    }
-  }
-
-  private setDirection(): void {
-    const handleClassDirection = 'slider__handle_vertical';
-
-    if (this.model.verticalScale) {
-      this.handles.forEach((item) => {
-        item.classList.add(handleClassDirection);
-        item.style.left = '';
-      });
-    } else {
-      this.handles.forEach((item) => {
-        item.classList.remove(handleClassDirection);
-        item.style.top = '';
-      });
-    }
   }
 
   private handleDocumentMouseMove(event: MouseEvent): void {
@@ -82,17 +61,47 @@ class ViewHandles extends ViewSlider {
     document.removeEventListener('mousemove', this.bindedHandleHandleMouseMove);
   }
 
-  private chooseHandlerForUpdate(target: HTMLElement): string {
-    const name = target === this.firstHandle ? 'firstValue' : 'secondValue';
-    return name;
+  private handleHandleMouseMove(event: MouseEvent): void {
+    const coordinate = this.model.modelOptions.verticalScale ? event.clientY : event.clientX;
+    const name = (this.target === this.firstHandle) ? 'firstValue' : 'secondValue';
+    const newOptions = { target: name, newCoordinate: coordinate };
+    this.eventEmitter.notify(newOptions, 'handlerPositionChanged');
   }
 
-  private handleHandleMouseMove(event: MouseEvent): void {
-    const coordinate = this.model.verticalScale ? event.clientY : event.clientX;
-    const value = this.calculateValue(coordinate);
-    const property = this.chooseHandlerForUpdate(this.target);
-    const newOptions = { ...this.model, [property]: value };
-    this.eventEmitter.notify(newOptions, 'viewUpdated');
+  private setHandlesPosition(): void {
+    if (this.model.modelOptions.verticalScale) {
+      this.firstHandle.style.top = `${this.model.modelOptions.firstValueRatio}%`;
+      this.secondHandle.style.top = `${this.model.modelOptions.secondValueRatio}%`;
+    } else {
+      this.firstHandle.style.left = `${this.model.modelOptions.firstValueRatio}%`;
+      this.secondHandle.style.left = `${this.model.modelOptions.secondValueRatio}%`;
+    }
+  }
+
+  private setVisibility(): void {
+    const handleClassVisibility = 'slider__handle_hidden';
+
+    if (this.model.modelOptions.showSecondValue) {
+      this.secondHandle.classList.remove(handleClassVisibility);
+    } else {
+      this.secondHandle.classList.add(handleClassVisibility);
+    }
+  }
+
+  private setDirection(): void {
+    const handleClassDirection = 'slider__handle_vertical';
+
+    if (this.model.modelOptions.verticalScale) {
+      this.handles.forEach((item) => {
+        item.classList.add(handleClassDirection);
+        item.style.left = '';
+      });
+    } else {
+      this.handles.forEach((item) => {
+        item.classList.remove(handleClassDirection);
+        item.style.top = '';
+      });
+    }
   }
 }
 

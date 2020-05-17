@@ -1,38 +1,48 @@
 /* eslint-disable no-param-reassign */
 
 import Model from '../Model/Model';
-import ViewSlider from './ViewSlider';
 import EventEmitter from '../EventEmitter/EventEmitter';
+import { ModelOptions } from '../interfaces';
 
-class ViewPanel extends ViewSlider {
+class ViewPanel {
   element: HTMLElement;
 
   model: Model;
-
-  panel: HTMLElement;
 
   inputs: NodeListOf<HTMLInputElement>;
 
   eventEmitter = new EventEmitter();
 
-  findElements(): void {
-    this.inputs = this.element.querySelectorAll('.js-input__field');
+  constructor(element: HTMLElement, model: Model) {
+    this.element = element;
+    this.model = model;
+    this.init();
   }
 
   setPanelParameters(): void {
     this.inputs.forEach((item) => {
-      const newValue = item.name as keyof Model;
+      const newValue = item.name as keyof ModelOptions;
       if (item.type === 'checkbox') {
-        item.checked = Boolean(this.model[newValue]);
+        item.checked = Boolean(this.model.modelOptions[newValue]);
       } else {
-        item.value = String(Math.round(Number(this.model[newValue])));
+        item.value = String(Math.round(Number(this.model.modelOptions[newValue])));
       }
     });
   }
 
-  bindEventListners(): void {
+  private init(): void {
+    this.findElements();
+    this.setPanelParameters();
+    this.bindEventListners();
+  }
+
+  private findElements(): void {
+    this.inputs = this.element.querySelectorAll('.js-input__field');
+  }
+
+  private bindEventListners(): void {
     this.inputs.forEach((item) => {
-      item.addEventListener('click', this.handleInputChange.bind(this));
+      item.addEventListener('change', this.handleInputChange.bind(this));
     });
   }
 
@@ -40,8 +50,8 @@ class ViewPanel extends ViewSlider {
     const target = event.currentTarget as HTMLInputElement;
     const elementName = target.name;
     const elementValue = target.type === 'number' ? Number(target.value) : target.checked;
-    const newOptions = { ...this.model, [elementName]: elementValue };
-    this.eventEmitter.notify(newOptions, 'viewUpdated');
+    const newOptions = { ...this.model.modelOptions, [elementName]: elementValue };
+    this.eventEmitter.notify(newOptions, 'viewPanelUpdated');
   }
 }
 
