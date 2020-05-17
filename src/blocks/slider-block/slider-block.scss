@@ -4,4 +4,13 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  padding: 1rem;
+
+  &__slider {
+    flex-grow: 1;
+  }
+
+  &__panel {
+    margin: 1rem;
+  }
 }

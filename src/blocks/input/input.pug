@@ -2,10 +2,10 @@ mixin input(options)
   - const { name, type, label } = options;
   .input
     if type === "checkbox"
-      label.checkbox__label.js-checkbox__label
+      label.input__label
         input.input__field.js-input__field(type="checkbox", name=name)
         = label
     else 
-      label.checkbox__label.js-checkbox__label= label
-        input.input__field.js-input__field(type="number", name=name)
+      label.input__label= label
+        input.input__field.js-input__field.input__field_type_text(type="number", name=name)
     

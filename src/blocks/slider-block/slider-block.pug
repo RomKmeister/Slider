@@ -13,7 +13,7 @@ mixin slider-block(options)
     data-verticalScale= verticalScale,
     data-showBubble= showBubble
   )
-    +slider()
-    +panel()
-
-    
+    .slider-block__slider
+      +slider()
+    .slider-block__panel
+      +panel()
