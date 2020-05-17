@@ -14,12 +14,17 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/chai": "^4.2.5",
+    "@types/chai-dom": "0.0.8",
     "@types/jquery": "^3.3.31",
     "@types/jsdom": "^12.2.4",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^14.0.1",
+    "@types/sinon": "^9.0.0",
+    "@types/webpack-env": "^1.15.2",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",
     "chai": "^4.2.0",
-    "chai-dom": "^1.8.1",
     "css-loader": "^2.1.0",
     "eslint": "^6.6.0",
     "eslint-config-airbnb": "^18.0.1",
@@ -54,7 +59,6 @@
     "sass-loader": "^7.3.1",
     "sinon": "^9.0.2",
     "sinon-chai": "^3.5.0",
-    "style-loader": "^0.23.1",
     "ts-loader": "^6.2.0",
     "ts-sinon": "^1.2.0",
     "tsd": "^0.11.0",
@@ -62,14 +66,10 @@
     "typings": "^2.1.1",
     "webpack": "^4.41.0",
     "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "webpack-env": "^0.8.0"
   },
   "dependencies": {
-    "@types/chai": "^4.2.5",
-    "@types/chai-dom": "0.0.8",
-    "@types/mocha": "^5.2.7",
-    "@types/sinon": "^9.0.0",
-    "@types/webpack-env": "^1.14.1",
-    "jquery": "^3.4.1"
+    "jquery": "^3.5.1"
   }
 }

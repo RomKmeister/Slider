@@ -5,23 +5,21 @@ module.exports =  {
     "mocha": true,
     "jquery": true,
     },
-  parser:  '@typescript-eslint/parser',  // Specifies the ESLint parser
+  parser:  '@typescript-eslint/parser',
   extends:  [
     'airbnb/base',
-    'plugin:@typescript-eslint/recommended',  // Uses the recommended rules from @typescript-eslint/eslint-plugin
+    'plugin:@typescript-eslint/recommended',
   ],
   parserOptions:  {
-    ecmaVersion:  6,  // Allows for the parsing of modern ECMAScript features
-    sourceType:  'module',  // Allows for the use of imports
+    ecmaVersion:  6,
+    sourceType:  'module',
   },
   rules:  {
-    // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
-    // e.g. '@typescript-eslint/explicit-function-return-type': 'off',
     'linebreak-style': ["error", "windows"],
-    'max-len': ["error", { "code": 120 }],
+    'max-len': ["error", { "code": 125 }],
     "@typescript-eslint/no-explicit-any": 0,
-    "class-methods-use-this": ["error", { "exceptMethods": ["toggleElement"] }],
-    "no-var-requires": 0
+    "class-methods-use-this": 0,
+    "no-new": 0
   },
   settings: {
     'import/resolver': {
