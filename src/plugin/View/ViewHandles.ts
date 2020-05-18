@@ -46,22 +46,22 @@ class ViewHandles {
   }
 
   private bindEventListners(): void {
-    this.handles.forEach((item) => item.addEventListener('mousedown', this.handleDocumentMouseMove.bind(this)));
-    this.bindedHandleHandleMouseMove = this.handleHandleMouseMove.bind(this);
+    this.handles.forEach((item) => item.addEventListener('mousedown', this.handleHandleMouseDown.bind(this)));
+    this.handleDocumentMouseMove = this.handleHandleMouseDown.bind(this);
     document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
   }
 
-  private handleDocumentMouseMove(event: MouseEvent): void {
+  private handleHandleMouseDown(event: MouseEvent): void {
     const findClosest = event.target as HTMLElement;
     this.target = findClosest.closest('.js-slider__handle');
-    document.addEventListener('mousemove', this.bindedHandleHandleMouseMove);
+    document.addEventListener('mousemove', this.handleDocumentMouseMove);
   }
 
   private handleDocumentMouseUp(): void {
-    document.removeEventListener('mousemove', this.bindedHandleHandleMouseMove);
+    document.removeEventListener('mousemove', this.handleDocumentMouseMove);
   }
 
-  private handleHandleMouseMove(event: MouseEvent): void {
+  private handleDocumentMouseMove(event: MouseEvent): void {
     const coordinate = this.model.modelOptions.isVertical ? event.clientY : event.clientX;
     const name = (this.target === this.firstHandle) ? 'firstValue' : 'secondValue';
     const newOptions = { target: name, newCoordinate: coordinate };

@@ -19,7 +19,7 @@ class Model {
   }
 
   private setModelParameters(options: Slider | ModelOptions): void {
-    const validOptions = this.validate(options);
+    const validOptions = this.correct(options);
     this.modelOptions = this.calculateRatios(validOptions);
   }
 
@@ -40,7 +40,7 @@ class Model {
     };
   }
 
-  private validate(options: Slider): Slider {
+  private correct(options: Slider): Slider {
     const {
       minValue, maxValue, isSecondValueVisible, step,
     } = options;

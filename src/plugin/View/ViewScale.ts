@@ -36,10 +36,10 @@ class ViewScale {
   }
 
   private bindEventListners(): void {
-    this.scale.addEventListener('mousedown', this.handleScaleClick.bind(this));
+    this.scale.addEventListener('mousedown', this.handleScaleMouseDown.bind(this));
   }
 
-  private handleScaleClick(event: MouseEvent): void {
+  private handleScaleMouseDown(event: MouseEvent): void {
     const coordinate = this.model.modelOptions.isVertical ? event.clientY : event.clientX;
     const newOptions = { target: 'scale', newCoordinate: coordinate };
     this.eventEmitter.notify(newOptions, 'scaleClicked');
