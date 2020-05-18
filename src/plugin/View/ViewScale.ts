@@ -8,7 +8,7 @@ class ViewScale {
 
   scale: HTMLElement;
 
-  eventEmitter = new EventEmitter();
+  eventEmitter: EventEmitter;
 
   constructor(element: HTMLElement, model: Model) {
     this.element = element;
@@ -27,6 +27,7 @@ class ViewScale {
   }
 
   private init(): void {
+    this.eventEmitter = new EventEmitter();
     this.findElements();
     this.bindEventListners();
   }

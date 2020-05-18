@@ -11,7 +11,7 @@ class ViewPanel {
 
   inputs: NodeListOf<HTMLInputElement>;
 
-  eventEmitter = new EventEmitter();
+  eventEmitter: EventEmitter;
 
   constructor(element: HTMLElement, model: Model) {
     this.element = element;
@@ -31,6 +31,7 @@ class ViewPanel {
   }
 
   private init(): void {
+    this.eventEmitter = new EventEmitter();
     this.findElements();
     this.setPanelParameters();
     this.bindEventListners();

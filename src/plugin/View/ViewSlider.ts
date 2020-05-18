@@ -20,7 +20,7 @@ class ViewSlider {
 
   scalePosition: number;
 
-  eventEmitter = new EventEmitter();
+  eventEmitter: EventEmitter;
 
   constructor(element: HTMLElement, model: Model) {
     this.element = element;
@@ -48,6 +48,7 @@ class ViewSlider {
   }
 
   private init(): void {
+    this.eventEmitter = new EventEmitter();
     this.viewScale = new ViewScale(this.element, this.model);
     this.viewHandles = new ViewHandles(this.element, this.model);
     this.viewBubbles = new ViewBubbles(this.element, this.model);

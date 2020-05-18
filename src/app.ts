@@ -1,8 +1,8 @@
-function importAll(r: any): void {
+function requireAll(r: any): void {
   r.keys().forEach(r);
 }
 
-importAll(require.context('../src/', true, /\.scss$/));
-importAll(require.context('../src/favicon', true, /\.*$/));
-importAll(require.context('../src/', true, /\.ts$/));
-importAll(require.context('../src/', true, /\.js$/));
+requireAll(require.context('../src/', true, /\.scss$/));
+requireAll(require.context('../src/favicon', true, /\.*$/));
+requireAll(require.context('../src/', true, /\.ts$/));
+requireAll(require.context('../src/', true, /\.js$/));
