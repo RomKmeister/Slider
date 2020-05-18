@@ -9,6 +9,7 @@
     "start": "webpack --watch",
     "server": "webpack-dev-server --open",
     "postinstall": "typings install --overwrite --save",
+    "eslint": "eslint  src/**/*.ts",
     "test": "karma start karma.unit.js"
   },
   "author": "",
