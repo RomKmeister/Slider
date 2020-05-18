@@ -31,14 +31,14 @@ describe('ViewHandles', () => {
     sandbox.spy(viewHandles.eventEmitter, 'notify');
   });
 
-  it('Should set horisontal handles position', () => {
+  it('Should set the horisontal position of handles', () => {
     expect(viewHandles.firstHandle.style.left).to.deep.equal('55%');
     expect(viewHandles.secondHandle.style.left).to.deep.equal('70%');
     expect(viewHandles.firstHandle.className).to.deep.equal('js-slider__handle');
     expect(viewHandles.firstHandle.className).to.deep.equal('js-slider__handle');
   });
 
-  it('Should set vertical handles position', () => {
+  it('Should set the vertical position of handles', () => {
     viewHandles.model.modelOptions.isVertical = true;
     viewHandles.setHandlersParameters();
     expect(viewHandles.firstHandle.style.top).to.deep.equal('55%');
@@ -47,17 +47,17 @@ describe('ViewHandles', () => {
     expect(viewHandles.firstHandle.className).to.deep.equal('js-slider__handle slider__handle_vertical');
   });
 
-  it('Should set show second handle', () => {
+  it('Should show the second handle', () => {
     expect(viewHandles.secondHandle.className).to.deep.equal('js-slider__handle');
   });
 
-  it('Should set hide second handle', () => {
+  it('Should hide the second handle', () => {
     viewHandles.model.modelOptions.isSecondValueVisible = false;
     viewHandles.setHandlersParameters();
     expect(viewHandles.secondHandle.className).to.deep.equal('js-slider__handle slider__handle_hidden');
   });
 
-  it('Should send new options from first handler to observers', () => {
+  it('Should send new options from the first handler to the observers', () => {
     viewHandles.firstHandle.dispatchEvent(new Event('mousedown'));
     document.dispatchEvent(new MouseEvent('mousemove', { clientX: 100 }));
     const newOptions = { target: 'firstValue', newCoordinate: 100 };
@@ -65,7 +65,7 @@ describe('ViewHandles', () => {
     expect(viewHandles.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('handlerPositionChanged');
   });
 
-  it('Should send new options from second handler to observers', () => {
+  it('Should send new options from the second handler to the observers', () => {
     viewHandles.secondHandle.dispatchEvent(new Event('mousedown'));
     document.dispatchEvent(new MouseEvent('mousemove', { clientX: 100 }));
     const newOptions = { target: 'secondValue', newCoordinate: 100 };

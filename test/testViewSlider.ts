@@ -38,14 +38,14 @@ describe('ViewSlider', () => {
     });
   });
 
-  it('Should set parameters at slider elements', () => {
+  it('Should set the parameters at the slider elements', () => {
     viewSlider.setViewParameters();
     expect(viewSlider.viewScale.setDirection.called).to.deep.equal(true);
     expect(viewSlider.viewHandles.setHandlersParameters.called).to.deep.equal(true);
     expect(viewSlider.viewBubbles.setBubbleParameters.called).to.deep.equal(true);
   });
 
-  it('Should set firstValue as name and 10 as value', () => {
+  it('Should set the first value as name and 10 as value', () => {
     viewSlider.update({ target: 'firstValue', newCoordinate: 120 }, 'handlerPositionChanged');
     let newOption = { ...viewSlider.model.modelOptions, firstValue: 10 };
     expect(viewSlider.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOption);
@@ -56,7 +56,7 @@ describe('ViewSlider', () => {
     expect(viewSlider.eventEmitter.notify.getCall(1).args[0]).to.deep.equal(newOption);
   });
 
-  it('Should set secondValue as name and 80 as value', () => {
+  it('Should set the second value as name and 80 as value', () => {
     viewSlider.update({ target: 'secondValue', newCoordinate: 960 }, 'handlerPositionChanged');
     let newOption = { ...viewSlider.model.modelOptions, secondValue: 80 };
     expect(viewSlider.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOption);

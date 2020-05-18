@@ -29,18 +29,18 @@ describe('ViewScale', () => {
     sandbox.spy(viewScale.eventEmitter, 'notify');
   });
 
-  it('Should set horizontal scale', () => {
+  it('Should set the horizontal direction of scale', () => {
     viewScale.setDirection();
     expect(viewScale.scale.className).to.equal('js-slider__scale');
   });
 
-  it('Should set vertical scale', () => {
+  it('Should set the vertical direction of scale', () => {
     viewScale.model.modelOptions.isVertical = true;
     viewScale.setDirection();
     expect(viewScale.scale.className).to.equal('js-slider__scale slider__scale_vertical');
   });
 
-  it('Should call functions on event', () => {
+  it('Should send new options from the scale to the observers', () => {
     viewScale.scale.dispatchEvent(new MouseEvent('mousedown', { clientX: 100 }));
     const newOptions = { target: 'scale', newCoordinate: 100 };
     expect(viewScale.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOptions);

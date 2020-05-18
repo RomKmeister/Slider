@@ -28,29 +28,29 @@ describe('ViewBubbles', () => {
     viewBubbles.setBubbleParameters();
   });
 
-  it('Should set bubble value', () => {
+  it('Should set the bubble value', () => {
     expect(viewBubbles.firstBubble.textContent).to.deep.equal('55');
     expect(viewBubbles.secondBubble.textContent).to.deep.equal('70');
   });
 
-  it('Should show bubbles', () => {
+  it('Should show the bubbles', () => {
     viewBubbles.model.modelOptions.isBubbleVisible = true;
     viewBubbles.setBubbleParameters();
     expect(viewBubbles.firstBubble.className).to.deep.equal('js-slider__bubble slider__bubble_visible');
     expect(viewBubbles.secondBubble.className).to.deep.equal('js-slider__bubble slider__bubble_visible');
   });
 
-  it('Should hide bubbles', () => {
+  it('Should hide the bubbles', () => {
     expect(viewBubbles.firstBubble.className).to.deep.equal('js-slider__bubble');
     expect(viewBubbles.secondBubble.className).to.deep.equal('js-slider__bubble');
   });
 
-  it('Should set horizontal direction', () => {
+  it('Should set the horizontal direction', () => {
     expect(viewBubbles.firstBubble.className).to.deep.equal('js-slider__bubble');
     expect(viewBubbles.secondBubble.className).to.deep.equal('js-slider__bubble');
   });
 
-  it('Should set vertical direction', () => {
+  it('Should set the vertical direction', () => {
     viewBubbles.model.modelOptions.isVertical = true;
     viewBubbles.setBubbleParameters();
     expect(viewBubbles.firstBubble.className).to.deep.equal('js-slider__bubble slider__bubble_vertical');

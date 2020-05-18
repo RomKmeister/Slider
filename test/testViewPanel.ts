@@ -38,7 +38,7 @@ describe('ViewPanel', () => {
     viewPanel.setPanelParameters();
   });
 
-  it('Should set values to inputs', () => {
+  it('Should set the values to the inputs', () => {
     expect(viewPanel.inputs[0].value).to.deep.equal('0');
     expect(viewPanel.inputs[1].value).to.deep.equal('100');
     expect(viewPanel.inputs[2].value).to.deep.equal('55');
@@ -49,7 +49,7 @@ describe('ViewPanel', () => {
     expect(viewPanel.inputs[7].checked).to.deep.equal(true);
   });
 
-  it('Set spy', () => {
+  it('Should send the data to the observers', () => {
     viewPanel.inputs[0].value = '20';
     viewPanel.inputs[0].dispatchEvent(new Event('change'));
     const newOptions = { ...viewPanel.model.modelOptions, minValue: 20 };
