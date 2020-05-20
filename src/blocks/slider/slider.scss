@@ -21,6 +21,13 @@
     }
   }
 
+  &__values {
+    display: flex;
+    justify-content: space-between;
+    &_vertical {
+    }
+  }
+
   &__handle {
     position: absolute;
     top: 0;
