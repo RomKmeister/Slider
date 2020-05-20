@@ -41,6 +41,7 @@ class ViewScale {
   }
 
   private handleScaleMouseDown(event: MouseEvent): void {
+    event.preventDefault();
     const coordinate = this.model.modelOptions.isVertical ? event.clientY : event.clientX;
     const newOptions = { target: 'scale', newCoordinate: coordinate };
     this.eventEmitter.notify(newOptions, 'scaleClicked');

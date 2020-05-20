@@ -53,6 +53,7 @@ class ViewHandles {
   }
 
   private handleHandleMouseDown(event: MouseEvent): void {
+    event.preventDefault();
     const findClosest = event.target as HTMLElement;
     this.target = findClosest.closest('.js-slider__handle');
     document.addEventListener('mousemove', this.handleDocumentMouseMove);
