@@ -23,8 +23,27 @@
 
   &__values {
     display: flex;
-    justify-content: space-between;
+    
     &_vertical {
+      min-height: 35rem;
+      flex-direction: column;
+      order: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  &__step {
+    position: absolute;
+    margin: 0;
+    font-size: 0.86rem;
+    transform: translateX(-50%);
+    cursor: pointer;
+
+    &_vertical {
+      padding: 5px 0;
+      transform: translateY(-50%);
     }
   }
 

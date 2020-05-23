@@ -36,12 +36,16 @@ class ViewSlider {
 
   update(data: NewOption, event: string): void {
     let name = '';
-    const newValue = this.calculateValue(data.newCoordinate);
+    let newValue = this.calculateValue(data.newCoordinate);
     if (event === 'handlerPositionChanged') {
       name = data.target;
     }
     if (event === 'scaleClicked') {
       name = this.model.modelOptions.firstValueArea >= newValue ? 'firstValue' : 'secondValue';
+    }
+    if (event === 'valueClicked') {
+      name = this.model.modelOptions.firstValueArea >= data.newCoordinate ? 'firstValue' : 'secondValue';
+      newValue = data.newCoordinate;
     }
     const newOption = { ...this.model.modelOptions, [name]: newValue };
     this.eventEmitter.notify(newOption, 'viewSliderUpdated');
