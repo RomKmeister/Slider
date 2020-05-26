@@ -23,12 +23,17 @@
 
   &__steps {
     position: relative;
+    display: none;
     
     &_vertical {
       min-height: 35rem;
       position: absolute;
       top: 0;
       left: 2.7rem;
+    }
+
+    &_visible {
+      display: block;
     }
   }
 

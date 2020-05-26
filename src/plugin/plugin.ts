@@ -23,6 +23,7 @@ declare global {
       step,
       isvertical: isVertical,
       isbubblevisible: isBubbleVisible,
+      isscalestepsvisible: isScaleStepsVisible,
     } = this.data();
 
     const options = {
@@ -34,6 +35,7 @@ declare global {
       step,
       isVertical,
       isBubbleVisible,
+      isScaleStepsVisible,
     };
 
     const defaultOptions = {
@@ -45,6 +47,7 @@ declare global {
       step: 1,
       isVertical: false,
       isBubbleVisible: true,
+      isScaleStepsVisible: true,
     };
     const $finalOptions = $.extend({}, defaultOptions, options);
     const [elements] = this;

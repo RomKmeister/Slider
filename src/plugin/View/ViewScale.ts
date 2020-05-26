@@ -35,8 +35,19 @@ class ViewScale {
 
   setScaleParameters(): void {
     this.setDirection();
+    this.setVisibility();
     this.setBorders();
     this.createStepItems();
+  }
+
+  private setVisibility(): void {
+    const stepClassVisibility = 'slider__steps_visible';
+
+    if (this.model.modelOptions.isScaleStepsVisible) {
+      this.steps.classList.add(stepClassVisibility);
+    } else {
+      this.steps.classList.remove(stepClassVisibility);
+    }
   }
 
   private init(): void {
