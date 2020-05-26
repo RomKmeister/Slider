@@ -20,34 +20,11 @@ class ViewScale {
     this.init();
   }
 
-  setDirection(): void {
-    const scaleClassDirection = 'slider__scale_vertical';
-    const stepsClassDirection = 'slider__steps_vertical';
-
-    if (this.model.modelOptions.isVertical) {
-      this.scale.classList.add(scaleClassDirection);
-      this.steps.classList.add(stepsClassDirection);
-    } else {
-      this.scale.classList.remove(scaleClassDirection);
-      this.steps.classList.remove(stepsClassDirection);
-    }
-  }
-
   setScaleParameters(): void {
     this.setDirection();
     this.setVisibility();
     this.setBorders();
     this.createStepItems();
-  }
-
-  private setVisibility(): void {
-    const stepClassVisibility = 'slider__steps_visible';
-
-    if (this.model.modelOptions.isScaleStepsVisible) {
-      this.steps.classList.add(stepClassVisibility);
-    } else {
-      this.steps.classList.remove(stepClassVisibility);
-    }
   }
 
   private init(): void {
@@ -84,7 +61,30 @@ class ViewScale {
     this.eventEmitter.notify(newOptions, 'valueClicked');
   }
 
-  setBorders(): void {
+  private setDirection(): void {
+    const scaleClassDirection = 'slider__scale_vertical';
+    const stepsClassDirection = 'slider__steps_vertical';
+
+    if (this.model.modelOptions.isVertical) {
+      this.scale.classList.add(scaleClassDirection);
+      this.steps.classList.add(stepsClassDirection);
+    } else {
+      this.scale.classList.remove(scaleClassDirection);
+      this.steps.classList.remove(stepsClassDirection);
+    }
+  }
+
+  private setVisibility(): void {
+    const stepClassVisibility = 'slider__steps_visible';
+
+    if (this.model.modelOptions.isScaleStepsVisible) {
+      this.steps.classList.add(stepClassVisibility);
+    } else {
+      this.steps.classList.remove(stepClassVisibility);
+    }
+  }
+
+  private setBorders(): void {
     this.minBorder.textContent = String(this.model.modelOptions.minValue);
   }
 
