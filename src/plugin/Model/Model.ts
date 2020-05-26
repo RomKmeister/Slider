@@ -49,15 +49,16 @@ class Model {
     } = options;
     const isValuesLowerMin = isSecondValueVisible && firstValue <= minValue && secondValue <= minValue;
     const isValuesHigherMax = isSecondValueVisible && firstValue >= maxValue && secondValue >= maxValue;
-    const isSecondValueHigherMax = isSecondValueVisible && secondValue > maxValue;
-    const isFirstValueLowerMin = firstValue <= minValue;
-    const isFirstValueHigherMax = firstValue >= maxValue;
+    const isSecondValueHigherMax = isSecondValueVisible && secondValue >= maxValue;
+    const isFirstValueLowerMin = isSecondValueVisible === false && firstValue <= minValue;
+    const isFirstValueHigherMax = isSecondValueVisible === false && firstValue >= maxValue;
     const isValuesConfused = isSecondValueVisible && firstValue >= secondValue;
     const isFirstValueNearly = this.modelOptions && this.modelOptions.isSecondValueVisible
     && options.firstValue !== this.modelOptions.firstValue
     && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step;
     const isSecondValueNearly = this.modelOptions && options.secondValue !== this.modelOptions.secondValue
     && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step;
+    const isValuesEqualSteps = step >= 1 && (firstValue % step !== 0 || secondValue % step !== 0);
 
     if (isValuesLowerMin) {
       firstValue = minValue;
@@ -66,6 +67,10 @@ class Model {
     if (isValuesHigherMax) {
       secondValue = maxValue;
       firstValue = secondValue - step;
+    }
+    if (isValuesEqualSteps) {
+      firstValue = Math.round(firstValue / step) * step + (minValue % step);
+      secondValue = Math.round(secondValue / step) * step + (minValue % step);
     }
     if (isFirstValueLowerMin) {
       firstValue = minValue;
@@ -84,8 +89,8 @@ class Model {
     }
     if (isValuesConfused) {
       const changeValue = secondValue;
-      firstValue = secondValue - step;
-      secondValue = changeValue;
+      firstValue = secondValue;
+      secondValue = changeValue + step;
     }
     return {
       ...options,
