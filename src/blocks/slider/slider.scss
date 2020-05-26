@@ -5,7 +5,7 @@
 
   &__scale {
     height: 0.1rem;
-    margin: 3.5rem 0;
+    margin: 3.5rem 0 0.7rem;
     border: 1rem solid $background;
     border-left: none;
     border-right: none;
@@ -21,16 +21,14 @@
     }
   }
 
-  &__values {
-    display: flex;
+  &__steps {
+    position: relative;
     
     &_vertical {
       min-height: 35rem;
-      flex-direction: column;
-      order: 1;
       position: absolute;
       top: 0;
-      left: 0;
+      left: 2.7rem;
     }
   }
 
@@ -42,7 +40,6 @@
     cursor: pointer;
 
     &_vertical {
-      padding: 5px 0;
       transform: translateY(-50%);
     }
   }

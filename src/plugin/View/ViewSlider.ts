@@ -29,7 +29,7 @@ class ViewSlider {
   }
 
   setViewParameters(): void {
-    this.viewScale.setDirection();
+    this.viewScale.setScaleParameters();
     this.viewHandles.setHandlersParameters();
     this.viewBubbles.setBubbleParameters();
   }

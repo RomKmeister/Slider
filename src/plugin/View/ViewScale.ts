@@ -8,11 +8,11 @@ class ViewScale {
 
   scale: HTMLElement;
 
-  values: HTMLElement;
+  steps: HTMLElement;
+
+  minBorder: HTMLElement;
 
   eventEmitter: EventEmitter;
-
-  newpars: { 'step': number, 'scaleStepsNumber': number };
 
   constructor(element: HTMLElement, model: Model) {
     this.element = element;
@@ -22,29 +22,33 @@ class ViewScale {
 
   setDirection(): void {
     const scaleClassDirection = 'slider__scale_vertical';
-    const valuesClassDirection = 'slider__values_vertical';
+    const stepsClassDirection = 'slider__steps_vertical';
 
     if (this.model.modelOptions.isVertical) {
       this.scale.classList.add(scaleClassDirection);
-      this.values.classList.add(valuesClassDirection);
+      this.steps.classList.add(stepsClassDirection);
     } else {
       this.scale.classList.remove(scaleClassDirection);
-      this.values.classList.remove(valuesClassDirection);
+      this.steps.classList.remove(stepsClassDirection);
     }
+  }
+
+  setScaleParameters(): void {
+    this.setDirection();
+    this.setBorders();
+    this.createStepItems();
   }
 
   private init(): void {
     this.eventEmitter = new EventEmitter();
     this.findElements();
     this.bindEventListners();
-    this.setBorders();
-    this.createValuesItems();
   }
 
   private findElements(): void {
     this.scale = this.element.querySelector('.js-slider__scale');
-    this.values = this.element.querySelector('.js-slider__values');
-    this.minBorder = this.values.querySelector('.js-slider__step_value_min');
+    this.steps = this.element.querySelector('.js-slider__steps');
+    this.minBorder = this.steps.querySelector(':first-child');
   }
 
   private bindEventListners(): void {
@@ -60,71 +64,74 @@ class ViewScale {
 
   private handleValueMouseDown(event: MouseEvent): void {
     event.preventDefault();
-    const target = event.target;
-    const coordinate = target.textContent;
+    const { target } = event;
+    let coordinate = 0;
+    if (target instanceof HTMLElement) {
+      coordinate = Number(target.textContent);
+    }
     const newOptions = { target: 'value', newCoordinate: coordinate };
     this.eventEmitter.notify(newOptions, 'valueClicked');
   }
 
-  setBorders() {
-    this.minBorder.textContent = this.model.modelOptions.minValue;
+  setBorders(): void {
+    this.minBorder.textContent = String(this.model.modelOptions.minValue);
   }
 
-  private countScaleSteps(): newpars {
-    const minValueSymbols = String(this.model.modelOptions.minValue).length;
-    const maxValueSymbols = String(this.model.modelOptions.maxValue).length;
-    const areaLength = this.model.modelOptions.isVertical ? this.minBorder.clientHeight : this.minBorder.clientWidth;
+  private countScaleSteps(): Array<number> {
+    this.findElements();
+    const {
+      minValue,
+      maxValue,
+      step,
+      isVertical,
+    } = this.model.modelOptions;
+    const minValueSymbols = String(minValue).length;
+    const maxValueSymbols = String(maxValue).length;
+    const stepSymbolSize = isVertical ? this.minBorder.clientHeight : this.minBorder.clientWidth;
+    const scaleLength = isVertical ? this.scale.clientHeight : this.scale.clientWidth;
+    let stepSize = stepSymbolSize;
     if (maxValueSymbols >= minValueSymbols) {
-      this.stepWidth = maxValueSymbols * areaLength / minValueSymbols;
-    } else {
-      this.stepWidth = areaLength;
-    };
-    const valuesLength = this.model.modelOptions.isVertical ? this.values.clientHeight : this.values.clientWidth;
-    console.log(this.values.clientHeight);
-    const MAX_SCALE_STEPS = Math.round(valuesLength / (this.stepWidth + 10));
-    const { minValue, maxValue, step } = this.model.modelOptions;
-    let scaleStepsNumber = Math.round((maxValue - minValue) / step);
-    let parameters = {};
-    parameters = { ...parameters, 'step': step };
-    parameters = { ...parameters, 'scaleStepsNumber': scaleStepsNumber };
-    if (scaleStepsNumber < MAX_SCALE_STEPS) {
-      parameters = { ...parameters, 'step': step };
-      parameters = { ...parameters, 'scaleStepsNumber': scaleStepsNumber };
-    } else {
-      const count = Math.round(scaleStepsNumber / (MAX_SCALE_STEPS));
-      parameters = { ...parameters, 'step': step * count };
-      parameters = { ...parameters, 'scaleStepsNumber': Math.round(scaleStepsNumber / count) };
+      stepSize = (maxValueSymbols * stepSymbolSize) / minValueSymbols;
     }
-    
-    return parameters;
+    const maxStepItems = Math.round(scaleLength / (stepSize + 10));
+    const stepsItemsNumber = Math.round((maxValue - minValue) / step);
+    const count = Math.round(stepsItemsNumber / (maxStepItems));
+    const stepValue = (count <= 1) ? step : count * step;
+    const maxIndex = Math.round((maxValue - minValue) / stepValue);
+    const steps = [];
+    for (let i = 0; i < maxIndex; i += 1) {
+      steps.push(i * stepValue);
+    }
+    steps.push(maxValue - minValue);
+    return steps;
   }
 
-    private createValuesItems(): nodeValues {
-    const { step, scaleStepsNumber } = this.countScaleSteps();
-    const { minValue, maxValue } = this.model.modelOptions;
+  private createStepItems(): void {
+    const {
+      minValue,
+      maxValue,
+      isVertical,
+      scaleLength,
+    } = this.model.modelOptions;
+    const steps = this.countScaleSteps();
     const fragment = document.createDocumentFragment();
-    for (let i = 1 ; i <= scaleStepsNumber; i += 1) {
+    steps.forEach((value, index) => {
+      const valueRatio = (value) * (100 / scaleLength);
       const stepElement = document.createElement('p');
       stepElement.classList.add('slider__step');
-      stepElement.textContent = String(step * i + minValue);
-      if(this.model.modelOptions.isVertical) {
-        stepElement.style.top = `${(step * i) * (100 / this.model.modelOptions.scaleLength)}%`;
+      const lastStepValue = (index === steps.length - 1) ? maxValue : (value + minValue);
+      stepElement.textContent = String(lastStepValue);
+      if (isVertical) {
+        stepElement.style.top = `${valueRatio}%`;
         stepElement.classList.add('slider__step_vertical');
       } else {
-      stepElement.style.left = `${(step * i) * (100 / this.model.modelOptions.scaleLength)}%`;
+        stepElement.style.left = `${valueRatio}%`;
       }
       stepElement.addEventListener('mousedown', this.handleValueMouseDown.bind(this));
-      if (i === scaleStepsNumber) {
-        stepElement.textContent = String(maxValue);
-        if(this.model.modelOptions.isVertical) {
-          stepElement.style.top = `${(maxValue - minValue ) * 100 / this.model.modelOptions.scaleLength}%`;
-        } else {
-          stepElement.style.left = `${(maxValue - minValue) * 100 / this.model.modelOptions.scaleLength}%`;
-        }
-      }
       fragment.append(stepElement);
-    }
-    this.values.append(fragment);
+    });
+    this.steps.innerHTML = '';
+    this.steps.append(fragment);
   }
 }
 
