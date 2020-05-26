@@ -50,7 +50,7 @@ class ViewScale {
     this.eventEmitter.notify(newOptions, 'scaleClicked');
   }
 
-  private handleValueMouseDown(event: MouseEvent): void {
+  private handleStepMouseDown(event: MouseEvent): void {
     event.preventDefault();
     const { target } = event;
     let coordinate = 0;
@@ -58,7 +58,7 @@ class ViewScale {
       coordinate = Number(target.textContent);
     }
     const newOptions = { target: 'value', newCoordinate: coordinate };
-    this.eventEmitter.notify(newOptions, 'valueClicked');
+    this.eventEmitter.notify(newOptions, 'stepClicked');
   }
 
   private setDirection(): void {
@@ -138,7 +138,7 @@ class ViewScale {
       } else {
         stepElement.style.left = `${valueRatio}%`;
       }
-      stepElement.addEventListener('mousedown', this.handleValueMouseDown.bind(this));
+      stepElement.addEventListener('mousedown', this.handleStepMouseDown.bind(this));
       fragment.append(stepElement);
     });
     this.steps.innerHTML = '';

@@ -41,11 +41,11 @@ class ViewSlider {
       name = data.target;
     }
     if (event === 'scaleClicked') {
-      name = this.model.modelOptions.firstValueArea >= newValue ? 'firstValue' : 'secondValue';
+      name = this.chooseValueForUpdate(newValue) ? 'firstValue' : 'secondValue';
     }
-    if (event === 'valueClicked') {
-      name = this.model.modelOptions.firstValueArea >= data.newCoordinate ? 'firstValue' : 'secondValue';
+    if (event === 'stepClicked') {
       newValue = data.newCoordinate;
+      name = this.chooseValueForUpdate(newValue) ? 'firstValue' : 'secondValue';
     }
     const newOption = { ...this.model.modelOptions, [name]: newValue };
     this.eventEmitter.notify(newOption, 'viewSliderUpdated');
@@ -79,6 +79,11 @@ class ViewSlider {
     this.scalePosition = this.model.modelOptions.isVertical
       ? scale.getBoundingClientRect().top
       : scale.getBoundingClientRect().left;
+  }
+
+  private chooseValueForUpdate(newValue: number): boolean {
+    const { isSecondValueVisible, firstValueArea } = this.model.modelOptions;
+    return (isSecondValueVisible && firstValueArea >= newValue) || isSecondValueVisible === false;
   }
 }
 
