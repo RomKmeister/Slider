@@ -41,6 +41,7 @@ class ViewScale {
 
   private bindEventListners(): void {
     this.scale.addEventListener('mousedown', this.handleScaleMouseDown.bind(this));
+    window.addEventListener('resize', this.createStepItems.bind(this));
   }
 
   private handleScaleMouseDown(event: MouseEvent): void {

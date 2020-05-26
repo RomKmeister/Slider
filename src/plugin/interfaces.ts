@@ -17,6 +17,7 @@ export interface Slider {
   step: number;
   isVertical: boolean;
   isBubbleVisible: boolean;
+  isScaleStepsVisible: boolean;
 }
 
 export interface ModelOptions extends Slider {
