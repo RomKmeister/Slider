@@ -1,75 +1,114 @@
 html {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
   font-size: 14px;
   font-weight: normal;
   color: #000000;
   background: #ffffff; }
 
 body {
-  margin: 0;
-  height: 100%; }
+  margin: 0 auto;
+  padding: 0 5%;
+  max-width: 1920px; }
 
+.input__label {
+  display: block;
+  margin: 0.35rem 0; }
+
+.input__field {
+  margin: 0.35rem;
+  border: none;
+  border-bottom: 0.07rem solid rgba(0, 0, 0, 0.3); }
+  .input__field_type_text {
+    outline: 0;
+    width: 4rem; }
+    .input__field_type_text:hover, .input__field_type_text:focus {
+      border-bottom: 0.07rem solid black; }
+
+.panel {
+  width: 21rem;
+  padding: 1.5rem 1.5rem 2rem;
+  box-shadow: 0 0.07rem 0.43rem 0 rgba(32, 33, 36, 0.28); }
 
 .slider-block {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; }
+  align-items: flex-start;
+  padding: 1rem; }
   .slider-block__slider {
+    flex-grow: 1; }
+  .slider-block__panel {
+    margin: 1rem;
+    margin-left: 5rem; }
+
+.slider {
+  position: relative; }
+  .slider__scale {
+    height: 0.1rem;
+    margin: 3.5rem 0 0.7rem;
+    border: 1rem solid #ffffff;
+    border-left: none;
+    border-right: none;
+    background: #cccccc;
+    cursor: pointer; }
+    .slider__scale_vertical {
+      width: 0.1rem;
+      min-height: 35rem;
+      margin: 0.5rem 0.4rem;
+      border: 1rem solid #ffffff;
+      border-top: none;
+      border-bottom: none; }
+  .slider__steps {
     position: relative;
-    width: 90%;
-    margin: 3.14rem 0; }
-  .slider-block__scale {
-    height: 0.07rem;
-    margin: 0.71rem 0;
-    border: 0.71rem solid #ffffff;
-    background: #cccccc; }
-    .slider-block__scale_vertical {
-      width: 0.07rem;
-      height: 35.71rem;
-      margin: 0 0.71rem; }
-  .slider-block__handle {
+    display: none; }
+    .slider__steps_vertical {
+      min-height: 35rem;
+      position: absolute;
+      top: 0;
+      left: 2.7rem; }
+    .slider__steps_visible {
+      display: block; }
+  .slider__step {
     position: absolute;
-    top: 0.71rem;
-    left: 0;
+    margin: 0;
+    font-size: 0.86rem;
+    transform: translateX(-50%);
+    cursor: pointer; }
+    .slider__step_vertical {
+      transform: translateY(-50%); }
+  .slider__handle {
+    position: absolute;
+    top: 0;
     width: 1.43rem;
     height: 1.43rem;
     background: #ffffff;
     box-shadow: 0 0.07rem 0.43rem 0 rgba(32, 33, 36, 0.28);
     border-radius: 50%;
-    transform: translate(-0.71rem, 0);
+    transform: translate(-50%, 25%);
     cursor: pointer; }
-    .slider-block__handle_vertical {
-      top: 0;
-      left: 0.71rem;
-      transform: translate(0, -0.71rem); }
-  .slider-block__bubble {
+    .slider__handle_vertical {
+      transform: translate(50%, -50%); }
+    .slider__handle_hidden {
+      display: none; }
+  .slider__bubble {
+    display: none;
     width: 2rem;
     padding: 0.43rem;
     transform: translate(-25%, -120%);
     box-shadow: 0 0.07rem 0.43rem 0 rgba(32, 33, 36, 0.28);
     background: #ffffff;
-    text-align: center; }
-    .slider-block__bubble_vertical {
+    text-align: center;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    -webkit-user-select: none;
+    user-select: none; }
+    .slider__bubble_vertical {
       transform: translate(2.85rem, -0.36rem);
       box-shadow: 0 0.07rem 0.43rem 0 rgba(32, 33, 36, 0.28);
       text-align: center; }
-  .slider-block__panel {
-    width: 21.42rem;
-    margin: 1rem;
-    padding: 1.43rem 1.43rem 2.14rem;
-    box-shadow: 0 0.07rem 0.43rem 0 rgba(32, 33, 36, 0.28); }
-  .slider-block__label {
-    display: block;
-    margin: 0.36rem 0; }
-  .slider-block__input {
-    margin: 0.36rem;
-    border: none;
-    border-bottom: 0.07rem solid rgba(0, 0, 0, 0.4); }
-    .slider-block__input_text {
-      outline: 0;
-      width: 3.6rem; }
-      .slider-block__input_text:hover, .slider-block__input_text:focus {
-        border-bottom: 0.07rem solid black; }
+    .slider__bubble_visible {
+      display: block; }
+
 
 
 /*# sourceMappingURL=style.css.map*/
