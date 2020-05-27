@@ -1,5 +1,5 @@
 # Slider
-<a href="https://romkmeister.github.io/Slider/dist/index.html">Демо-страница</a>
+<a href="https://romkmeister.github.io/Slider/">Демо-страница</a>
 <h2>Клонирование репозитория</h2>
  <pre>$ git clone https://github.com/RomKmeister/Slider.git</pre>
 <h2>Сборка проекта</h2>
