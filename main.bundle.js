@@ -11016,8 +11016,8 @@ var map = {
 	"./blocks/input/input.scss": "./src/blocks/input/input.scss",
 	"./blocks/panel/panel.scss": "./src/blocks/panel/panel.scss",
 	"./blocks/slider-block/slider-block.scss": "./src/blocks/slider-block/slider-block.scss",
-	"./blocks/slider/slider.scss": "./src/blocks/slider/slider.scss",
-	"./colors.scss": "./src/colors.scss"
+	"./colors.scss": "./src/colors.scss",
+	"./plugin/slider/slider.scss": "./src/plugin/slider/slider.scss"
 };
 
 
@@ -11169,18 +11169,53 @@ $(() => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-class Slider {
+class SliderBlock {
   constructor(element) {
     this.element = element;
-    this.init();
+    this._init();
   }
 
-  init() {
-    this.element.sliderPlugin();
+  _init() {
+    this._findElements();
+    this._bindEventListners();
+    const options = this.slider.data('options');
+    this.slider.sliderPlugin(options);
+  }
+
+  _findElements() {
+    this.slider = this.element.find('.js-slider');
+    this.inputs = this.element[0].querySelectorAll('.js-input__field');
+  }
+
+  _bindEventListners() {
+    this.slider.on('sliderPluginUpdate', this._setPanelParameters.bind(this));
+    this.inputs.forEach((item) => {
+      item.addEventListener('change', this._handleInputChange.bind(this));
+    });
+  }
+
+  _setPanelParameters() {
+    this.inputs.forEach((item) => {
+      const newValue = item.name;
+      const options = this.slider.data('options');
+      if (item.type === 'checkbox') {
+        item.checked = Boolean(options[newValue]);
+      } else {
+        item.value = String(Math.round(options[newValue]));
+      }
+    });
+  }
+
+  _handleInputChange(event) {
+    const target = event.currentTarget;
+    const elementName = target.name;
+    const elementValue = target.type === 'number' ? Number(target.value) : target.checked;
+    const newOptions = { ...this.slider.data('options'), [elementName]: elementValue };
+    this.slider.sliderPlugin(newOptions);
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Slider);
+/* harmony default export */ __webpack_exports__["default"] = (SliderBlock);
 
 
 /***/ }),
@@ -11189,17 +11224,6 @@ class Slider {
 /*!***************************************************!*\
   !*** ./src/blocks/slider-block/slider-block.scss ***!
   \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ "./src/blocks/slider/slider.scss":
-/*!***************************************!*\
-  !*** ./src/blocks/slider/slider.scss ***!
-  \***************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11446,8 +11470,11 @@ var Model = /** @class */ (function () {
         this.eventEmitter.notify(this.modelOptions, 'modelUpdated');
     };
     Model.prototype.setModelParameters = function (options) {
-        var validOptions = this.correct(options);
-        this.modelOptions = this.calculateRatios(validOptions);
+        var correctMove = this.correctMove(options);
+        var correctConfusedValues = this.correctConfusedValues(correctMove);
+        var correctMinMax = this.correctMinMax(correctConfusedValues);
+        var correctOptions = this.correctStepPosition(correctMinMax);
+        this.modelOptions = this.calculateRatios(correctOptions);
     };
     Model.prototype.calculateRatios = function (options) {
         var minValue = options.minValue, maxValue = options.maxValue, firstValue = options.firstValue, secondValue = options.secondValue;
@@ -11460,7 +11487,38 @@ var Model = /** @class */ (function () {
             scaleLength: scaleLength, firstValueRatio: firstValueRatio, secondValueRatio: secondValueRatio, firstValueArea: firstValueArea,
         });
     };
-    Model.prototype.correct = function (options) {
+    Model.prototype.correctMove = function (options) {
+        var step = options.step;
+        var firstValue = options.firstValue, secondValue = options.secondValue;
+        var isFirstValueNearly = this.modelOptions && this.modelOptions.isSecondValueVisible
+            && options.firstValue !== this.modelOptions.firstValue
+            && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step;
+        var isSecondValueNearly = this.modelOptions && options.secondValue !== this.modelOptions.secondValue
+            && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step;
+        if (isFirstValueNearly) {
+            firstValue = secondValue - step;
+        }
+        if (isSecondValueNearly) {
+            secondValue = firstValue + step;
+        }
+        return __assign(__assign({}, options), {
+            firstValue: firstValue, secondValue: secondValue,
+        });
+    };
+    Model.prototype.correctConfusedValues = function (options) {
+        var isSecondValueVisible = options.isSecondValueVisible, step = options.step;
+        var firstValue = options.firstValue, secondValue = options.secondValue;
+        var isValuesConfused = isSecondValueVisible && firstValue >= secondValue;
+        if (isValuesConfused) {
+            var changeValue = secondValue;
+            firstValue = secondValue;
+            secondValue = changeValue + step;
+        }
+        return __assign(__assign({}, options), {
+            firstValue: firstValue, secondValue: secondValue,
+        });
+    };
+    Model.prototype.correctMinMax = function (options) {
         var minValue = options.minValue, maxValue = options.maxValue, isSecondValueVisible = options.isSecondValueVisible, step = options.step;
         var firstValue = options.firstValue, secondValue = options.secondValue;
         var isValuesLowerMin = isSecondValueVisible && firstValue <= minValue && secondValue <= minValue;
@@ -11468,13 +11526,6 @@ var Model = /** @class */ (function () {
         var isSecondValueHigherMax = isSecondValueVisible && secondValue >= maxValue;
         var isFirstValueLowerMin = isSecondValueVisible === false && firstValue <= minValue;
         var isFirstValueHigherMax = isSecondValueVisible === false && firstValue >= maxValue;
-        var isValuesConfused = isSecondValueVisible && firstValue >= secondValue;
-        var isFirstValueNearly = this.modelOptions && this.modelOptions.isSecondValueVisible
-            && options.firstValue !== this.modelOptions.firstValue
-            && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step;
-        var isSecondValueNearly = this.modelOptions && options.secondValue !== this.modelOptions.secondValue
-            && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step;
-        var isValuesEqualSteps = step >= 1 && (firstValue % step !== 0 || secondValue % step !== 0);
         if (isValuesLowerMin) {
             firstValue = minValue;
             secondValue = firstValue + step;
@@ -11482,10 +11533,6 @@ var Model = /** @class */ (function () {
         if (isValuesHigherMax) {
             secondValue = maxValue;
             firstValue = secondValue - step;
-        }
-        if (isValuesEqualSteps) {
-            firstValue = Math.round(firstValue / step) * step + (minValue % step);
-            secondValue = Math.round(secondValue / step) * step + (minValue % step);
         }
         if (isFirstValueLowerMin) {
             firstValue = minValue;
@@ -11496,16 +11543,20 @@ var Model = /** @class */ (function () {
         if (isSecondValueHigherMax) {
             secondValue = maxValue;
         }
-        if (isFirstValueNearly) {
-            firstValue = secondValue - step;
+        return __assign(__assign({}, options), {
+            firstValue: firstValue, secondValue: secondValue,
+        });
+    };
+    Model.prototype.correctStepPosition = function (options) {
+        var minValue = options.minValue, maxValue = options.maxValue, step = options.step;
+        var firstValue = options.firstValue, secondValue = options.secondValue;
+        var isFirstValueEqualSteps = step >= 1 && firstValue % step !== 0 && firstValue > minValue && firstValue < maxValue;
+        var isSecondValueEqualSteps = step >= 1 && secondValue % step !== 0 && secondValue < maxValue;
+        if (isFirstValueEqualSteps) {
+            firstValue = Math.round(firstValue / step) * step + (minValue % step);
         }
-        if (isSecondValueNearly) {
-            secondValue = firstValue + step;
-        }
-        if (isValuesConfused) {
-            var changeValue = secondValue;
-            firstValue = secondValue;
-            secondValue = changeValue + step;
+        if (isSecondValueEqualSteps) {
+            secondValue = Math.round(secondValue / step) * step + (minValue % step);
         }
         return __assign(__assign({}, options), {
             firstValue: firstValue, secondValue: secondValue,
@@ -11529,26 +11580,20 @@ exports.default = Model;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var Presenter = /** @class */ (function () {
-    function Presenter(model, viewSlider, viewPanel) {
+    function Presenter(model, viewSlider) {
         this.model = model;
         this.viewSlider = viewSlider;
-        this.viewPanel = viewPanel;
         this.init();
     }
     Presenter.prototype.update = function (data, event) {
-        if (event === 'modelUpdated') {
+        if (event === 'modelUpdated')
             this.viewSlider.setViewParameters();
-            this.viewPanel.setPanelParameters();
-        }
         if (event === 'viewSliderUpdated')
-            this.model.update(data);
-        if (event === 'viewPanelUpdated')
             this.model.update(data);
     };
     Presenter.prototype.init = function () {
         this.model.eventEmitter.attach(this);
         this.viewSlider.eventEmitter.attach(this);
-        this.viewPanel.eventEmitter.attach(this);
     };
     return Presenter;
 }());
@@ -12024,27 +12069,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(jQuery) {
+/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable func-names */
 /* eslint-disable no-param-reassign */
 Object.defineProperty(exports, "__esModule", { value: true });
 var Presenter_1 = __webpack_require__(/*! ./Presenter/Presenter */ "./src/plugin/Presenter/Presenter.ts");
 var Model_1 = __webpack_require__(/*! ./Model/Model */ "./src/plugin/Model/Model.ts");
 var ViewSlider_1 = __webpack_require__(/*! ./View/ViewSlider */ "./src/plugin/View/ViewSlider.ts");
-var ViewPanel_1 = __webpack_require__(/*! ./View/ViewPanel */ "./src/plugin/View/ViewPanel.ts");
 (function ($) {
-    $.fn.sliderPlugin = function () {
-        var _a = this.data(), minValue = _a.minvalue, maxValue = _a.maxvalue, firstValue = _a.firstvalue, isSecondValueVisible = _a.issecondvaluevisible, secondValue = _a.secondvalue, step = _a.step, isVertical = _a.isvertical, isBubbleVisible = _a.isbubblevisible, isScaleStepsVisible = _a.isscalestepsvisible;
-        var options = {
-            minValue: minValue,
-            maxValue: maxValue,
-            firstValue: firstValue,
-            isSecondValueVisible: isSecondValueVisible,
-            secondValue: secondValue,
-            step: step,
-            isVertical: isVertical,
-            isBubbleVisible: isBubbleVisible,
-            isScaleStepsVisible: isScaleStepsVisible,
-        };
+    $.fn.sliderPlugin = function (options) {
+        var $this = this;
         var defaultOptions = {
             minValue: 0,
             maxValue: 100,
@@ -12060,12 +12094,34 @@ var ViewPanel_1 = __webpack_require__(/*! ./View/ViewPanel */ "./src/plugin/View
         var elements = this[0];
         var model = new Model_1.default($finalOptions);
         var viewSlider = new ViewSlider_1.default(elements, model);
-        var viewPanel = new ViewPanel_1.default(elements, model);
-        new Presenter_1.default(model, viewSlider, viewPanel);
+        new Presenter_1.default(model, viewSlider);
+        function getData() {
+            $this.data('options', model.modelOptions);
+        }
+        var sliderPluginUpdate = $.Event('sliderPluginUpdate');
+        var pluginObserver = {
+            update: function () {
+                getData();
+                $this.trigger(sliderPluginUpdate);
+            },
+        };
+        model.eventEmitter.attach(pluginObserver);
+        pluginObserver.update();
     };
 }(jQuery));
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
+
+/***/ }),
+
+/***/ "./src/plugin/slider/slider.scss":
+/*!***************************************!*\
+  !*** ./src/plugin/slider/slider.scss ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ })
 
