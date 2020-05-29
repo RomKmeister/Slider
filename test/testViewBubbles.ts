@@ -21,6 +21,7 @@ describe('ViewBubbles', () => {
       step: 1,
       isVertical: false,
       isBubbleVisible: false,
+      isScaleStepsVisible: true,
     };
 
     model = new Model(options);

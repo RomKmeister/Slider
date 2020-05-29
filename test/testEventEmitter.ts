@@ -19,6 +19,7 @@ describe('EventEmitter', () => {
       step: 1,
       isVertical: true,
       isBubbleVisible: true,
+      isScaleStepsVisible: true,
     };
 
     eventEmitter = new EventEmitter();

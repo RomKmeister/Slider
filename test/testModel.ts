@@ -17,6 +17,7 @@ describe('Model', () => {
       step: 1,
       isVertical: true,
       isBubbleVisible: true,
+      isScaleStepsVisible: true,
     };
 
     model = new Model(options);

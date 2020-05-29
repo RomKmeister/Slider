@@ -23,6 +23,7 @@ describe('ViewHandles', () => {
       step: 1,
       isVertical: false,
       isBubbleVisible: true,
+      isScaleStepsVisible: true,
     };
 
     model = new Model(options);
