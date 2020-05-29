@@ -13,14 +13,17 @@ class Model {
     this.setModelParameters(options);
   }
 
-  update(options: ModelOptions): void {
+  update(options: ModelOptions | Slider): void {
     this.setModelParameters(options);
     this.eventEmitter.notify(this.modelOptions, 'modelUpdated');
   }
 
   private setModelParameters(options: Slider | ModelOptions): void {
-    const validOptions = this.correct(options);
-    this.modelOptions = this.calculateRatios(validOptions);
+    const correctMove = this.correctMove(options);
+    const correctConfusedValues = this.correctConfusedValues(correctMove);
+    const correctMinMax = this.correctMinMax(correctConfusedValues);
+    const correctOptions = this.correctStepPosition(correctMinMax);
+    this.modelOptions = this.calculateRatios(correctOptions);
   }
 
   private calculateRatios(options: Slider): ModelOptions {
@@ -40,7 +43,52 @@ class Model {
     };
   }
 
-  private correct(options: Slider): Slider {
+  private correctMove(options: Slider): Slider {
+    const { step } = options;
+    let {
+      firstValue, secondValue,
+    } = options;
+    const isFirstValueNearly = this.modelOptions && this.modelOptions.isSecondValueVisible
+    && options.firstValue !== this.modelOptions.firstValue
+    && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step;
+    const isSecondValueNearly = this.modelOptions && options.secondValue !== this.modelOptions.secondValue
+    && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step;
+    if (isFirstValueNearly) {
+      firstValue = secondValue - step;
+    }
+    if (isSecondValueNearly) {
+      secondValue = firstValue + step;
+    }
+    return {
+      ...options,
+      ...{
+        firstValue, secondValue,
+      },
+    };
+  }
+
+  private correctConfusedValues(options: Slider): Slider {
+    const {
+      isSecondValueVisible, step,
+    } = options;
+    let {
+      firstValue, secondValue,
+    } = options;
+    const isValuesConfused = isSecondValueVisible && firstValue >= secondValue;
+    if (isValuesConfused) {
+      const changeValue = secondValue;
+      firstValue = secondValue;
+      secondValue = changeValue + step;
+    }
+    return {
+      ...options,
+      ...{
+        firstValue, secondValue,
+      },
+    };
+  }
+
+  private correctMinMax(options: Slider): Slider {
     const {
       minValue, maxValue, isSecondValueVisible, step,
     } = options;
@@ -52,13 +100,6 @@ class Model {
     const isSecondValueHigherMax = isSecondValueVisible && secondValue >= maxValue;
     const isFirstValueLowerMin = isSecondValueVisible === false && firstValue <= minValue;
     const isFirstValueHigherMax = isSecondValueVisible === false && firstValue >= maxValue;
-    const isValuesConfused = isSecondValueVisible && firstValue >= secondValue;
-    const isFirstValueNearly = this.modelOptions && this.modelOptions.isSecondValueVisible
-    && options.firstValue !== this.modelOptions.firstValue
-    && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step;
-    const isSecondValueNearly = this.modelOptions && options.secondValue !== this.modelOptions.secondValue
-    && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step;
-    const isValuesEqualSteps = step >= 1 && (firstValue % step !== 0 || secondValue % step !== 0);
 
     if (isValuesLowerMin) {
       firstValue = minValue;
@@ -67,10 +108,6 @@ class Model {
     if (isValuesHigherMax) {
       secondValue = maxValue;
       firstValue = secondValue - step;
-    }
-    if (isValuesEqualSteps) {
-      firstValue = Math.round(firstValue / step) * step + (minValue % step);
-      secondValue = Math.round(secondValue / step) * step + (minValue % step);
     }
     if (isFirstValueLowerMin) {
       firstValue = minValue;
@@ -81,16 +118,28 @@ class Model {
     if (isSecondValueHigherMax) {
       secondValue = maxValue;
     }
-    if (isFirstValueNearly) {
-      firstValue = secondValue - step;
+    return {
+      ...options,
+      ...{
+        firstValue, secondValue,
+      },
+    };
+  }
+
+  private correctStepPosition(options: Slider): Slider {
+    const {
+      minValue, maxValue, step,
+    } = options;
+    let {
+      firstValue, secondValue,
+    } = options;
+    const isFirstValueEqualSteps = step >= 1 && firstValue % step !== 0 && firstValue > minValue && firstValue < maxValue;
+    const isSecondValueEqualSteps = step >= 1 && secondValue % step !== 0 && secondValue < maxValue;
+    if (isFirstValueEqualSteps) {
+      firstValue = Math.round(firstValue / step) * step + (minValue % step);
     }
-    if (isSecondValueNearly) {
-      secondValue = firstValue + step;
-    }
-    if (isValuesConfused) {
-      const changeValue = secondValue;
-      firstValue = secondValue;
-      secondValue = changeValue + step;
+    if (isSecondValueEqualSteps) {
+      secondValue = Math.round(secondValue / step) * step + (minValue % step);
     }
     return {
       ...options,
