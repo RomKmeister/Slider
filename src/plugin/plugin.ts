@@ -1,59 +1,57 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable func-names */
 /* eslint-disable no-param-reassign */
 
 import Presenter from './Presenter/Presenter';
 import Model from './Model/Model';
 import ViewSlider from './View/ViewSlider';
-import ViewPanel from './View/ViewPanel';
+import { Slider, ModelOptions } from './interfaces';
 
 declare global {
   interface JQuery {
-    sliderPlugin(): void;
+    sliderPlugin(options: Slider | ModelOptions| null, method: string): void;
   }
 }
 
 (function ($): void {
-  $.fn.sliderPlugin = function (): void {
-    const {
-      minvalue: minValue,
-      maxvalue: maxValue,
-      firstvalue: firstValue,
-      issecondvaluevisible: isSecondValueVisible,
-      secondvalue: secondValue,
-      step,
-      isvertical: isVertical,
-      isbubblevisible: isBubbleVisible,
-      isscalestepsvisible: isScaleStepsVisible,
-    } = this.data();
+  $.fn.sliderPlugin = function (options, method = 'init'): void {
+    const $this = this;
+    let model: Model;
+    if (method === 'init') {
+      const defaultOptions = {
+        minValue: 0,
+        maxValue: 100,
+        firstValue: 55,
+        isSecondValueVisible: true,
+        secondValue: 70,
+        step: 1,
+        isVertical: false,
+        isBubbleVisible: true,
+        isScaleStepsVisible: true,
+      };
+      const $finalOptions = $.extend({}, defaultOptions, options);
+      const [elements] = this;
+      model = new Model($finalOptions);
+      const viewSlider = new ViewSlider(elements, model);
+      new Presenter(model, viewSlider);
+    }
 
-    const options = {
-      minValue,
-      maxValue,
-      firstValue,
-      isSecondValueVisible,
-      secondValue,
-      step,
-      isVertical,
-      isBubbleVisible,
-      isScaleStepsVisible,
+    if (method === 'setData') {
+      model.update(options);
+    }
+
+    function getData(): void {
+      $this.data('options', model.modelOptions);
+    }
+    const sliderPluginUpdate = $.Event('sliderPluginUpdate');
+    const pluginObserver = {
+      update(): void {
+        getData();
+        $this.trigger(sliderPluginUpdate);
+      },
     };
 
-    const defaultOptions = {
-      minValue: 0,
-      maxValue: 100,
-      firstValue: 55,
-      isSecondValueVisible: true,
-      secondValue: 70,
-      step: 1,
-      isVertical: false,
-      isBubbleVisible: true,
-      isScaleStepsVisible: true,
-    };
-    const $finalOptions = $.extend({}, defaultOptions, options);
-    const [elements] = this;
-    const model = new Model($finalOptions);
-    const viewSlider = new ViewSlider(elements, model);
-    const viewPanel = new ViewPanel(elements, model);
-    new Presenter(model, viewSlider, viewPanel);
+    model.eventEmitter.attach(pluginObserver);
+    pluginObserver.update();
   };
 }(jQuery));
