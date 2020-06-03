@@ -77,8 +77,11 @@ class Model {
     const isValuesConfused = isSecondValueVisible && firstValue >= secondValue;
     if (isValuesConfused) {
       const changeValue = secondValue;
-      firstValue = secondValue;
-      secondValue = changeValue + step;
+      secondValue = firstValue;
+      firstValue = changeValue;
+    }
+    if (firstValue === secondValue) {
+      secondValue += step;
     }
     return {
       ...options,
@@ -98,7 +101,7 @@ class Model {
     const isValuesLowerMin = isSecondValueVisible && firstValue <= minValue && secondValue <= minValue;
     const isValuesHigherMax = isSecondValueVisible && firstValue >= maxValue && secondValue >= maxValue;
     const isSecondValueHigherMax = isSecondValueVisible && secondValue >= maxValue;
-    const isFirstValueLowerMin = isSecondValueVisible === false && firstValue <= minValue;
+    const isFirstValueLowerMin = firstValue <= minValue;
     const isFirstValueHigherMax = isSecondValueVisible === false && firstValue >= maxValue;
 
     if (isValuesLowerMin) {

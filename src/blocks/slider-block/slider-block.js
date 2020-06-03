@@ -40,7 +40,7 @@ class SliderBlock {
     const elementName = target.name;
     const elementValue = target.type === 'number' ? Number(target.value) : target.checked;
     const newOptions = { ...this.slider.data('options'), [elementName]: elementValue };
-    this.slider.sliderPlugin(newOptions, 'setData');
+    this.slider.sliderPlugin(newOptions);
   }
 }
 
