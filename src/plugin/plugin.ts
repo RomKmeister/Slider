@@ -4,7 +4,7 @@
 
 import Presenter from './Presenter/Presenter';
 import Model from './Model/Model';
-import ViewSlider from './View/ViewSlider';
+import View from './View/View';
 import { Slider, ModelOptions } from './interfaces';
 
 declare global {
@@ -32,8 +32,8 @@ declare global {
       const $finalOptions = $.extend({}, defaultOptions, options);
       const [elements] = this;
       model = new Model($finalOptions);
-      const viewSlider = new ViewSlider(elements, model);
-      new Presenter(model, viewSlider);
+      const view = new View(elements, model);
+      new Presenter(model, view);
     }
 
     if (method === 'setData') {

@@ -1,26 +1,26 @@
 import Model from '../Model/Model';
-import ViewSlider from '../View/ViewSlider';
+import View from '../View/View';
 import { ModelOptions } from '../interfaces';
 
 class Presenter {
   model: Model;
 
-  viewSlider: ViewSlider;
+  view: View;
 
-  constructor(model: Model, viewSlider: ViewSlider) {
+  constructor(model: Model, view: View) {
     this.model = model;
-    this.viewSlider = viewSlider;
+    this.view = view;
     this.init();
   }
 
   update(data: ModelOptions, event: string): void {
-    if (event === 'modelUpdated') this.viewSlider.setViewParameters();
+    if (event === 'modelUpdated') this.view.setViewParameters();
     if (event === 'viewSliderUpdated') this.model.update(data);
   }
 
   private init(): void {
     this.model.eventEmitter.attach(this);
-    this.viewSlider.eventEmitter.attach(this);
+    this.view.eventEmitter.attach(this);
   }
 }
 

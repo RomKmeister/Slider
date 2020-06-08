@@ -2,7 +2,7 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 import Presenter from '../src/plugin/Presenter/Presenter';
-import ViewSlider from '../src/plugin/View/ViewSlider';
+import View from '../src/plugin/View/View';
 import Model from '../src/plugin/Model/Model';
 import { Slider } from '../src/plugin/interfaces';
 
@@ -10,7 +10,7 @@ describe('Presenter', () => {
   let presenter: any;
   let model: Model;
   let options: Slider;
-  let viewSlider: ViewSlider;
+  let view: View;
 
   beforeEach(() => {
     const sandbox = sinon.createSandbox();
@@ -31,10 +31,10 @@ describe('Presenter', () => {
     };
 
     model = new Model(options);
-    viewSlider = new ViewSlider(element, model);
-    presenter = new Presenter(model, viewSlider);
+    view = new View(element, model);
+    presenter = new Presenter(model, view);
     sandbox.spy(model, 'update');
-    sandbox.spy(viewSlider, 'setViewParameters');
+    sandbox.spy(view, 'setViewParameters');
   });
 
   it('Should update model', () => {
@@ -44,6 +44,6 @@ describe('Presenter', () => {
 
   it('Should update views', () => {
     presenter.update(presenter.model, 'modelUpdated');
-    expect(presenter.viewSlider.setViewParameters.called).to.deep.equal(true);
+    expect(presenter.view.setViewParameters.called).to.deep.equal(true);
   });
 });

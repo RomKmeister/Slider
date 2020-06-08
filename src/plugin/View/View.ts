@@ -5,7 +5,7 @@ import ViewScale from './ViewScale';
 import ViewBubbles from './ViewBubbles';
 import ViewHandles from './ViewHandles';
 
-class ViewSlider {
+class View {
   element: HTMLElement;
 
   model: Model;
@@ -87,4 +87,4 @@ class ViewSlider {
   }
 }
 
-export default ViewSlider;
+export default View;
