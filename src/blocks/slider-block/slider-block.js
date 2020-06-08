@@ -17,7 +17,7 @@ class SliderBlock {
   }
 
   _bindEventListners() {
-    this.slider.on('sliderPluginUpdate', this._setPanelParameters.bind(this));
+    this.slider.on('eventUpdate', this._setPanelParameters.bind(this));
     this.inputs.forEach((item) => {
       item.addEventListener('change', this._handleInputChange.bind(this));
     });

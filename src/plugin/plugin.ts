@@ -43,11 +43,11 @@ declare global {
     function getData(): void {
       $this.data('options', model.modelOptions);
     }
-    const sliderPluginUpdate = $.Event('sliderPluginUpdate');
+    const eventUpdate = $.Event('eventUpdate');
     const pluginObserver = {
       update(): void {
         getData();
-        $this.trigger(sliderPluginUpdate);
+        $this.trigger(eventUpdate);
       },
     };
 
