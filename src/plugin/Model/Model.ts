@@ -19,10 +19,12 @@ class Model {
   }
 
   private setModelParameters(options: Slider | ModelOptions): void {
-    const correctMove = this.correctMove(options);
+    const correctStep = this.correctStep(options);
+    const correctScale = this.correctScale(correctStep);
+    const correctMove = this.correctMove(correctScale);
     const correctConfusedValues = this.correctConfusedValues(correctMove);
-    const correctMinMax = this.correctMinMax(correctConfusedValues);
-    const correctOptions = this.correctStepPosition(correctMinMax);
+    const correctStepPosition = this.correctStepPosition(correctConfusedValues);
+    const correctOptions = this.correctMinMax(correctStepPosition);
     this.modelOptions = this.calculateRatios(correctOptions);
   }
 
@@ -43,16 +45,44 @@ class Model {
     };
   }
 
+  private correctStep(options: Slider): Slider {
+    let { step } = options;
+    if (step < 1) {
+      step = 1;
+    }
+    return {
+      ...options,
+      ...{
+        step,
+      },
+    };
+  }
+
+  private correctScale(options: Slider): Slider {
+    const { step, maxValue } = options;
+    let { minValue } = options;
+    if (maxValue < minValue) {
+      minValue = maxValue - step;
+    }
+    return {
+      ...options,
+      ...{
+        minValue,
+      },
+    };
+  }
+
   private correctMove(options: Slider): Slider {
-    const { step } = options;
+    const { minValue, maxValue, step } = options;
     let {
       firstValue, secondValue,
     } = options;
+    const isScaleLong = Math.round((maxValue - minValue) / step) > 1;
     const isFirstValueNearly = this.modelOptions && this.modelOptions.isSecondValueVisible
     && options.firstValue !== this.modelOptions.firstValue
-    && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step;
+    && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step && isScaleLong;
     const isSecondValueNearly = this.modelOptions && options.secondValue !== this.modelOptions.secondValue
-    && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step;
+    && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step && isScaleLong;
     if (isFirstValueNearly) {
       firstValue = secondValue - step;
     }
@@ -110,7 +140,7 @@ class Model {
     }
     if (isValuesHigherMax) {
       secondValue = maxValue;
-      firstValue = secondValue - step;
+      firstValue = secondValue - ((maxValue - minValue) % step);
     }
     if (isFirstValueLowerMin) {
       firstValue = minValue;
@@ -136,10 +166,10 @@ class Model {
     let {
       firstValue, secondValue,
     } = options;
-    const isFirstValueEqualSteps = step >= 1 && firstValue % step !== 0 && firstValue > minValue && firstValue < maxValue;
-    const isSecondValueEqualSteps = step >= 1 && secondValue % step !== 0 && secondValue < maxValue;
+    const isFirstValueEqualSteps = step >= 1 && (firstValue + minValue) % step !== 0 && firstValue > minValue && firstValue < maxValue;
+    const isSecondValueEqualSteps = step >= 1 && (secondValue - minValue) % step !== 0 && secondValue < maxValue;
     if (isFirstValueEqualSteps) {
-      firstValue = Math.round(firstValue / step) * step + (minValue % step);
+      firstValue = Math.floor(firstValue / step) * step + (minValue % step);
     }
     if (isSecondValueEqualSteps) {
       secondValue = Math.round(secondValue / step) * step + (minValue % step);
