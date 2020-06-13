@@ -77,14 +77,19 @@ class Model {
     let {
       firstValue, secondValue,
     } = options;
-    const isScaleLong = Math.round((maxValue - minValue) / step) > 1;
     const isFirstValueNearly = this.modelOptions && this.modelOptions.isSecondValueVisible
     && options.firstValue !== this.modelOptions.firstValue
-    && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step && isScaleLong;
+    && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step && this.modelOptions.secondValue < maxValue;
+    const isFirstValueNearly1 = this.modelOptions && this.modelOptions.isSecondValueVisible
+    && options.firstValue !== this.modelOptions.firstValue
+    && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step && this.modelOptions.secondValue >= maxValue;
     const isSecondValueNearly = this.modelOptions && options.secondValue !== this.modelOptions.secondValue
-    && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step && isScaleLong;
+    && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step;
     if (isFirstValueNearly) {
       firstValue = secondValue - step;
+    }
+    if (isFirstValueNearly1) {
+      firstValue = secondValue - step + maxValue % step;
     }
     if (isSecondValueNearly) {
       secondValue = firstValue + step;
