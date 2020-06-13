@@ -1,11 +1,14 @@
 import Model from '../Model/Model';
 import View from '../View/View';
+import EventEmitter from '../EventEmitter/EventEmitter';
 import { ModelOptions } from '../interfaces';
 
 class Presenter {
   model: Model;
 
   view: View;
+
+  eventEmitter = new EventEmitter();
 
   constructor(model: Model, view: View) {
     this.model = model;
@@ -14,7 +17,15 @@ class Presenter {
   }
 
   update(data: ModelOptions, event: string): void {
-    if (event === 'modelUpdated') this.view.setViewParameters();
+    const eventUpdate = new Event('eventUpdate');
+    if (event === 'modelUpdated') {
+      this.view.setViewParameters();
+      this.view.element.dispatchEvent(eventUpdate);
+    }
+    if (event === 'newOptions') {
+      const newOptions = { ...this.model.modelOptions, ...data };
+      this.model.update(newOptions);
+    }
     if (event === 'viewSliderUpdated') this.model.update(data);
   }
 

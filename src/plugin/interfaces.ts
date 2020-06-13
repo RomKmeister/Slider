@@ -31,3 +31,7 @@ export interface NewOption {
   target: string;
   newCoordinate: number;
 }
+
+export interface ExternalOption {
+  [key: string]: number | boolean;
+}

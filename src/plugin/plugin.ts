@@ -5,19 +5,23 @@
 import Presenter from './Presenter/Presenter';
 import Model from './Model/Model';
 import View from './View/View';
-import { Slider, ModelOptions } from './interfaces';
+import { Slider, ExternalOption } from './interfaces';
 
 declare global {
   interface JQuery {
-    sliderPlugin(options: Slider | ModelOptions| null, method: string): void;
+    sliderPlugin(options?: Slider | ExternalOption): JQuery;
   }
 }
 
 (function ($): void {
-  $.fn.sliderPlugin = function (options, method = 'init'): void {
+  $.fn.sliderPlugin = function (options): JQuery {
     const $this = this;
-    let model: Model;
-    if (method === 'init') {
+    const eventUpdate = $.Event('eventUpdate');
+    const isInitialised = $this.data('isInitialised');
+    const getOptions = isInitialised && !options;
+    const setOptions = isInitialised && options;
+
+    if (!isInitialised) {
       const defaultOptions = {
         minValue: 0,
         maxValue: 100,
@@ -31,27 +35,22 @@ declare global {
       };
       const $finalOptions = $.extend({}, defaultOptions, options);
       const [elements] = this;
-      model = new Model($finalOptions);
+      const model = new Model($finalOptions);
       const view = new View(elements, model);
-      new Presenter(model, view);
+      const presenter = new Presenter(model, view);
+      $this.data('presenter', presenter);
+      $this.data('isInitialised', true);
+      $this.trigger(eventUpdate);
     }
 
-    if (method === 'setData') {
-      model.update(options);
+    if (getOptions) {
+      return $this.data('presenter').model.modelOptions;
     }
 
-    function getData(): void {
-      $this.data('options', model.modelOptions);
+    if (setOptions) {
+      $this.data('presenter').update(options, 'newOptions');
+      $this.trigger(eventUpdate);
     }
-    const eventUpdate = $.Event('eventUpdate');
-    const pluginObserver = {
-      update(): void {
-        getData();
-        $this.trigger(eventUpdate);
-      },
-    };
-
-    model.eventEmitter.attach(pluginObserver);
-    pluginObserver.update();
+    return this;
   };
 }(jQuery));
