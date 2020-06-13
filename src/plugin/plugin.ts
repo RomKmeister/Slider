@@ -33,7 +33,7 @@ declare global {
         isBubbleVisible: true,
         isScaleStepsVisible: true,
       };
-      const $finalOptions = $.extend({}, defaultOptions, options);
+      const $finalOptions = $.extend({}, defaultOptions, this.data('options'), options);
       const [elements] = this;
       const model = new Model($finalOptions);
       const view = new View(elements, model);

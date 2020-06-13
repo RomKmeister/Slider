@@ -15,8 +15,7 @@ class SliderBlock {
   private init(): void {
     this.findElements();
     this.bindEventListners();
-    const options = this.$slider.data('options');
-    this.$slider.sliderPlugin(options);
+    this.$slider.sliderPlugin();
   }
 
   private findElements(): void {
