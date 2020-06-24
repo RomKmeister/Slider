@@ -7,6 +7,7 @@ import Presenter from './Presenter/Presenter';
 import Model from './Model/Model';
 import View from './View/View';
 import { Slider, ExternalOption } from './interfaces';
+import defaultOptions from './defaultOptions';
 
 declare global {
   interface JQuery {
@@ -17,8 +18,8 @@ declare global {
 (function ($): void {
   $.fn.sliderPlugin = function (options, ...args): JQuery {
     const $this = this;
-    const eventUpdate = $.Event('eventUpdate');
     const isInitialized = !options || typeof options === 'object';
+    const eventUpdate = $.Event('eventUpdate');
     const plugin = {
       update(): void {
         $this.trigger(eventUpdate);
@@ -26,17 +27,6 @@ declare global {
     };
 
     if (isInitialized) {
-      const defaultOptions = {
-        minValue: 0,
-        maxValue: 100,
-        firstValue: 55,
-        isSecondValueVisible: true,
-        secondValue: 70,
-        step: 1,
-        isVertical: false,
-        isBubbleVisible: true,
-        isScaleStepsVisible: true,
-      };
       const $finalOptions = $.extend({}, defaultOptions, this.data('options'), options);
       const [elements] = this;
       const model = new Model($finalOptions);
