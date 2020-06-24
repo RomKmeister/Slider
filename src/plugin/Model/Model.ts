@@ -77,21 +77,16 @@ class Model {
     let {
       firstValue, secondValue,
     } = options;
-    const isFirstValueChanged = this.modelOptions && this.modelOptions.isSecondValueVisible
+    const isScaleLong = Math.round((maxValue - minValue) / step) > 1;
+    const isFirstValueNearly = this.modelOptions && this.modelOptions.isSecondValueVisible
     && options.firstValue !== this.modelOptions.firstValue
-    && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step && this.modelOptions.secondValue < maxValue;
-    const isNeedShortStep = this.modelOptions && this.modelOptions.isSecondValueVisible
-    && options.firstValue !== this.modelOptions.firstValue
-    && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step && this.modelOptions.secondValue >= maxValue;
-    const isSecondValueChanged = this.modelOptions && options.secondValue !== this.modelOptions.secondValue
-    && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step;
-    if (isFirstValueChanged) {
+    && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step && isScaleLong;
+    const isSecondValueNearly = this.modelOptions && options.secondValue !== this.modelOptions.secondValue
+    && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step && isScaleLong;
+    if (isFirstValueNearly) {
       firstValue = secondValue - step;
     }
-    if (isNeedShortStep) {
-      firstValue = secondValue - step + maxValue % step;
-    }
-    if (isSecondValueChanged) {
+    if (isSecondValueNearly) {
       secondValue = firstValue + step;
     }
     return {

@@ -1,5 +1,3 @@
-import { Slider } from "../../plugin/interfaces";
-
 class SliderBlock {
   $element: JQuery;
 
@@ -29,24 +27,25 @@ class SliderBlock {
   }
 
   private setPanelParameters(): void {
-    const options: { [key: string]: any } = this.$slider.sliderPlugin();
-    this.$inputs.each(function(index, item: HTMLInputElement) {
+    const options: { [key: string]: any } = this.$slider.sliderPlugin('getOptions');
+    this.$inputs.each((index, item: HTMLInputElement) => {
+      const input = item;
       const newValue = options[item.name];
-      if (item.type === 'checkbox') {
-        item.checked = Boolean(newValue);
+      if (input.type === 'checkbox') {
+        input.checked = Boolean(newValue);
       } else {
-        item.value = String(Math.round(newValue));
+        input.value = String(Math.round(newValue));
       }
     });
   }
 
   private handleInputChange(event: InputEvent): void {
-    const  { currentTarget }  = event;
+    const { currentTarget } = event;
     if (currentTarget instanceof HTMLInputElement) {
       const elementName = currentTarget.name;
       const elementValue = currentTarget.type === 'number' ? Number(currentTarget.value) : currentTarget.checked;
       const newOptions = { [elementName]: elementValue };
-      this.$slider.sliderPlugin(newOptions);
+      this.$slider.sliderPlugin('setOptions', newOptions);
     }
   }
 }

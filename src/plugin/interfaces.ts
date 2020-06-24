@@ -1,11 +1,11 @@
 export interface EventEmitter {
   attach(observer: Observer): void;
   detach(observer: Observer): void;
-  notify(data: ModelOptions | NewOption, event: string): void;
+  notify(data?: ModelOptions | NewOption, event?: string): void;
 }
 
 export interface Observer {
-  update(data: ModelOptions | NewOption, event: string): void;
+  update(data: ModelOptions | NewOption | ExternalOption, event: string): void;
 }
 
 export interface Slider {

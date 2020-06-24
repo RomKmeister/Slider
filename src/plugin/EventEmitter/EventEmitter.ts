@@ -11,7 +11,7 @@ class EventEmitter implements EventEmitter {
     this.observers = this.observers.filter((item) => item !== observer);
   }
 
-  notify(data: ModelOptions | NewOption, event: string): void {
+  notify(data?: ModelOptions | NewOption, event?: string): void {
     this.observers.forEach((item) => item.update(data, event));
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable func-names */
 /* eslint-disable no-param-reassign */
@@ -9,19 +10,22 @@ import { Slider, ExternalOption } from './interfaces';
 
 declare global {
   interface JQuery {
-    sliderPlugin(options?: Slider | ExternalOption): JQuery;
+    sliderPlugin(options?: Slider | ExternalOption | string, args?: ExternalOption): JQuery;
   }
 }
 
 (function ($): void {
-  $.fn.sliderPlugin = function (options): JQuery {
+  $.fn.sliderPlugin = function (options, ...args): JQuery {
     const $this = this;
     const eventUpdate = $.Event('eventUpdate');
-    const isInitialised = $this.data('isInitialised');
-    const getOptions = isInitialised && !options;
-    const setOptions = isInitialised && options;
+    const isInitialized = !options || typeof options === 'object';
+    const plugin = {
+      update(): void {
+        $this.trigger(eventUpdate);
+      },
+    };
 
-    if (!isInitialised) {
+    if (isInitialized) {
       const defaultOptions = {
         minValue: 0,
         maxValue: 100,
@@ -38,19 +42,14 @@ declare global {
       const model = new Model($finalOptions);
       const view = new View(elements, model);
       const presenter = new Presenter(model, view);
+      presenter.eventEmitter.attach(plugin);
       $this.data('presenter', presenter);
-      $this.data('isInitialised', true);
-      $this.trigger(eventUpdate);
+      plugin.update();
+      return this;
     }
 
-    if (getOptions) {
-      return $this.data('presenter').model.modelOptions;
+    if (typeof options === 'string') {
+      return $this.data('presenter')[options](...args);
     }
-
-    if (setOptions) {
-      $this.data('presenter').update(options, 'newOptions');
-      $this.trigger(eventUpdate);
-    }
-    return this;
   };
 }(jQuery));
