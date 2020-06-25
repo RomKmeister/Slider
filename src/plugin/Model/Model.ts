@@ -18,6 +18,10 @@ class Model {
     this.eventEmitter.notify(this.options, 'modelUpdated');
   }
 
+  getOptions(): Options {
+    return this.options;
+  }
+
   private setModelParameters(options: Slider | Options): void {
     const correctStep = this.correctStep(options);
     const correctScale = this.correctScale(correctStep);

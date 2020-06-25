@@ -32,7 +32,7 @@ class Presenter {
   }
 
   setOptions(options: ExternalOption): void {
-    const newOptions = { ...this.model.options, ...options };
+    const newOptions = { ...this.model.getOptions(), ...options };
     this.update(newOptions, 'newOptions');
   }
 
