@@ -166,7 +166,8 @@ class Model {
     let {
       firstValue, secondValue,
     } = options;
-    const isFirstValueEqualSteps = step >= 1 && (firstValue + minValue) % step !== 0 && firstValue > minValue && firstValue < maxValue;
+    const isFirstValueEqualSteps = step >= 1 && (firstValue + minValue) % step !== 0
+    && firstValue > minValue && firstValue < maxValue;
     const isSecondValueEqualSteps = step >= 1 && (secondValue - minValue) % step !== 0 && secondValue < maxValue;
     if (isFirstValueEqualSteps) {
       firstValue = Math.floor(firstValue / step) * step + (minValue % step);

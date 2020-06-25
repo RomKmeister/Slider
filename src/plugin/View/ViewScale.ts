@@ -30,7 +30,7 @@ class ViewScale {
   private init(): void {
     this.eventEmitter = new EventEmitter();
     this.findElements();
-    this.bindEventListners();
+    this.bindEventListeners();
   }
 
   private findElements(): void {
@@ -39,7 +39,7 @@ class ViewScale {
     this.minBorder = this.steps.querySelector(':first-child');
   }
 
-  private bindEventListners(): void {
+  private bindEventListeners(): void {
     this.scale.addEventListener('mousedown', this.handleScaleMouseDown.bind(this));
     window.addEventListener('resize', this.createStepItems.bind(this));
   }

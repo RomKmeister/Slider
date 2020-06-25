@@ -12,7 +12,7 @@ class SliderBlock {
 
   private init(): void {
     this.findElements();
-    this.bindEventListners();
+    this.bindEventListeners();
     this.$slider.sliderPlugin();
   }
 
@@ -21,7 +21,7 @@ class SliderBlock {
     this.$inputs = this.$element.find('.js-input__field');
   }
 
-  private bindEventListners(): void {
+  private bindEventListeners(): void {
     this.$slider.on('eventUpdate', this.setPanelParameters.bind(this));
     this.$inputs.on('change', this.handleInputChange.bind(this));
   }

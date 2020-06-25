@@ -38,7 +38,7 @@ class ViewHandles {
   private init(): void {
     this.eventEmitter = new EventEmitter();
     this.findElements();
-    this.bindEventListners();
+    this.bindEventListeners();
   }
 
   private findElements(): void {
@@ -46,9 +46,9 @@ class ViewHandles {
     [this.firstHandle, this.secondHandle] = Array.from(this.handles);
   }
 
-  private bindEventListners(): void {
+  private bindEventListeners(): void {
     this.handles.forEach((item) => item.addEventListener('mousedown', this.handleHandleMouseDown.bind(this)));
-    this.handleDocumentMouseMove = this.bindedHandleDocumentMouseMove.bind(this);
+    this.handleDocumentMouseMove = this.bindHandleDocumentMouseMove.bind(this);
     document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
   }
 
@@ -63,7 +63,7 @@ class ViewHandles {
     document.removeEventListener('mousemove', this.handleDocumentMouseMove);
   }
 
-  private bindedHandleDocumentMouseMove(event: MouseEvent): void {
+  private bindHandleDocumentMouseMove(event: MouseEvent): void {
     const coordinate = this.model.options.isVertical ? event.clientY : event.clientX;
     const name = (this.target === this.firstHandle) ? 'firstValue' : 'secondValue';
     const newOptions = { target: name, newCoordinate: coordinate };
