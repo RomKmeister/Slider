@@ -4,9 +4,9 @@ import EventEmitter from '../EventEmitter/EventEmitter';
 import { Options, ExternalOption } from '../interfaces';
 
 class Presenter {
-  model: Model;
+  private model: Model;
 
-  view: View;
+  private view: View;
 
   eventEmitter = new EventEmitter();
 
