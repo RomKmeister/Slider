@@ -64,43 +64,43 @@ class ViewHandles {
   }
 
   private bindedHandleDocumentMouseMove(event: MouseEvent): void {
-    const coordinate = this.model.modelOptions.isVertical ? event.clientY : event.clientX;
+    const coordinate = this.model.options.isVertical ? event.clientY : event.clientX;
     const name = (this.target === this.firstHandle) ? 'firstValue' : 'secondValue';
     const newOptions = { target: name, newCoordinate: coordinate };
-    this.eventEmitter.notify(newOptions, 'handlerPositionChanged');
+    this.eventEmitter.notify(newOptions, 'handlerChanged');
   }
 
   private setHandlesPosition(): void {
-    if (this.model.modelOptions.isVertical) {
-      this.firstHandle.style.top = `${this.model.modelOptions.firstValueRatio}%`;
-      this.secondHandle.style.top = `${this.model.modelOptions.secondValueRatio}%`;
+    if (this.model.options.isVertical) {
+      this.firstHandle.style.top = `${this.model.options.firstValueRatio}%`;
+      this.secondHandle.style.top = `${this.model.options.secondValueRatio}%`;
     } else {
-      this.firstHandle.style.left = `${this.model.modelOptions.firstValueRatio}%`;
-      this.secondHandle.style.left = `${this.model.modelOptions.secondValueRatio}%`;
+      this.firstHandle.style.left = `${this.model.options.firstValueRatio}%`;
+      this.secondHandle.style.left = `${this.model.options.secondValueRatio}%`;
     }
   }
 
   private setVisibility(): void {
-    const handleClassVisibility = 'slider__handle_hidden';
+    const visibility = 'slider__handle_hidden';
 
-    if (this.model.modelOptions.isSecondValueVisible) {
-      this.secondHandle.classList.remove(handleClassVisibility);
+    if (this.model.options.isSecondValueVisible) {
+      this.secondHandle.classList.remove(visibility);
     } else {
-      this.secondHandle.classList.add(handleClassVisibility);
+      this.secondHandle.classList.add(visibility);
     }
   }
 
   private setDirection(): void {
-    const handleClassDirection = 'slider__handle_vertical';
+    const direction = 'slider__handle_vertical';
 
-    if (this.model.modelOptions.isVertical) {
+    if (this.model.options.isVertical) {
       this.handles.forEach((item) => {
-        item.classList.add(handleClassDirection);
+        item.classList.add(direction);
         item.style.left = '';
       });
     } else {
       this.handles.forEach((item) => {
-        item.classList.remove(handleClassDirection);
+        item.classList.remove(direction);
         item.style.top = '';
       });
     }

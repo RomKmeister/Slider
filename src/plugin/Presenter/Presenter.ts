@@ -1,7 +1,7 @@
 import Model from '../Model/Model';
 import View from '../View/View';
 import EventEmitter from '../EventEmitter/EventEmitter';
-import { ModelOptions, Slider, ExternalOption } from '../interfaces';
+import { Options, ExternalOption } from '../interfaces';
 
 class Presenter {
   model: Model;
@@ -16,23 +16,23 @@ class Presenter {
     this.init();
   }
 
-  update(data: ModelOptions, event: string): void {
+  update(data: Options, event: string): void {
     if (event === 'modelUpdated') {
       this.view.setViewParameters();
     }
     if (event === 'newOptions') {
       this.model.update(data);
     }
-    if (event === 'viewSliderUpdated') this.model.update(data);
+    if (event === 'viewUpdated') this.model.update(data);
     this.eventEmitter.notify();
   }
 
-  getOptions(): ModelOptions {
-    return this.model.modelOptions;
+  getOptions(): Options {
+    return this.model.options;
   }
 
   setOptions(options: ExternalOption): void {
-    const newOptions = { ...this.model.modelOptions, ...options };
+    const newOptions = { ...this.model.options, ...options };
     this.update(newOptions, 'newOptions');
   }
 

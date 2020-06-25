@@ -40,7 +40,7 @@ describe('ViewHandles', () => {
   });
 
   it('Should set the vertical position of handles', () => {
-    viewHandles.model.modelOptions.isVertical = true;
+    viewHandles.model.options.isVertical = true;
     viewHandles.setHandlersParameters();
     expect(viewHandles.firstHandle.style.top).to.deep.equal('55%');
     expect(viewHandles.secondHandle.style.top).to.deep.equal('70%');
@@ -53,7 +53,7 @@ describe('ViewHandles', () => {
   });
 
   it('Should hide the second handle', () => {
-    viewHandles.model.modelOptions.isSecondValueVisible = false;
+    viewHandles.model.options.isSecondValueVisible = false;
     viewHandles.setHandlersParameters();
     expect(viewHandles.secondHandle.className).to.deep.equal('js-slider__handle slider__handle_hidden');
   });

@@ -46,7 +46,7 @@ class ViewScale {
 
   private handleScaleMouseDown(event: MouseEvent): void {
     event.preventDefault();
-    const coordinate = this.model.modelOptions.isVertical ? event.clientY : event.clientX;
+    const coordinate = this.model.options.isVertical ? event.clientY : event.clientX;
     const newOptions = { target: 'scale', newCoordinate: coordinate };
     this.eventEmitter.notify(newOptions, 'scaleClicked');
   }
@@ -63,30 +63,30 @@ class ViewScale {
   }
 
   private setDirection(): void {
-    const scaleClassDirection = 'slider__scale_vertical';
-    const stepsClassDirection = 'slider__steps_vertical';
+    const scaleDirection = 'slider__scale_vertical';
+    const stepsDirection = 'slider__steps_vertical';
 
-    if (this.model.modelOptions.isVertical) {
-      this.scale.classList.add(scaleClassDirection);
-      this.steps.classList.add(stepsClassDirection);
+    if (this.model.options.isVertical) {
+      this.scale.classList.add(scaleDirection);
+      this.steps.classList.add(stepsDirection);
     } else {
-      this.scale.classList.remove(scaleClassDirection);
-      this.steps.classList.remove(stepsClassDirection);
+      this.scale.classList.remove(scaleDirection);
+      this.steps.classList.remove(stepsDirection);
     }
   }
 
   private setVisibility(): void {
-    const stepClassVisibility = 'slider__steps_visible';
+    const visibility = 'slider__steps_visible';
 
-    if (this.model.modelOptions.isScaleStepsVisible) {
-      this.steps.classList.add(stepClassVisibility);
+    if (this.model.options.isScaleStepsVisible) {
+      this.steps.classList.add(visibility);
     } else {
-      this.steps.classList.remove(stepClassVisibility);
+      this.steps.classList.remove(visibility);
     }
   }
 
   private setBorders(): void {
-    this.minBorder.textContent = String(this.model.modelOptions.minValue);
+    this.minBorder.textContent = String(this.model.options.minValue);
   }
 
   private countScaleSteps(): Array<number> {
@@ -96,7 +96,7 @@ class ViewScale {
       maxValue,
       step,
       isVertical,
-    } = this.model.modelOptions;
+    } = this.model.options;
     const minValueSymbols = String(minValue).length;
     const maxValueSymbols = String(maxValue).length;
     const stepSymbolSize = isVertical ? this.minBorder.clientHeight : this.minBorder.clientWidth;
@@ -124,7 +124,7 @@ class ViewScale {
       maxValue,
       isVertical,
       scaleLength,
-    } = this.model.modelOptions;
+    } = this.model.options;
     const steps = this.countScaleSteps();
     const fragment = document.createDocumentFragment();
     steps.forEach((value, index) => {

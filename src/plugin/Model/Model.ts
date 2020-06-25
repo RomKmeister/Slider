@@ -1,11 +1,11 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-param-reassign */
 
-import { Slider, ModelOptions } from '../interfaces';
+import { Slider, Options } from '../interfaces';
 import EventEmitter from '../EventEmitter/EventEmitter';
 
 class Model {
-  modelOptions: ModelOptions;
+  options: Options;
 
   eventEmitter = new EventEmitter();
 
@@ -13,22 +13,22 @@ class Model {
     this.setModelParameters(options);
   }
 
-  update(options: ModelOptions | Slider): void {
+  update(options: Options | Slider): void {
     this.setModelParameters(options);
-    this.eventEmitter.notify(this.modelOptions, 'modelUpdated');
+    this.eventEmitter.notify(this.options, 'modelUpdated');
   }
 
-  private setModelParameters(options: Slider | ModelOptions): void {
+  private setModelParameters(options: Slider | Options): void {
     const correctStep = this.correctStep(options);
     const correctScale = this.correctScale(correctStep);
     const correctMove = this.correctMove(correctScale);
     const correctConfusedValues = this.correctConfusedValues(correctMove);
     const correctStepPosition = this.correctStepPosition(correctConfusedValues);
     const correctOptions = this.correctMinMax(correctStepPosition);
-    this.modelOptions = this.calculateRatios(correctOptions);
+    this.options = this.calculateRatios(correctOptions);
   }
 
-  private calculateRatios(options: Slider): ModelOptions {
+  private calculateRatios(options: Slider): Options {
     const {
       minValue, maxValue, firstValue, secondValue,
     } = options;
@@ -78,11 +78,11 @@ class Model {
       firstValue, secondValue,
     } = options;
     const isScaleLong = Math.round((maxValue - minValue) / step) > 1;
-    const isFirstValueNearly = this.modelOptions && this.modelOptions.isSecondValueVisible
-    && options.firstValue !== this.modelOptions.firstValue
-    && this.modelOptions.secondValue - options.firstValue <= this.modelOptions.step && isScaleLong;
-    const isSecondValueNearly = this.modelOptions && options.secondValue !== this.modelOptions.secondValue
-    && options.secondValue - this.modelOptions.firstValue <= this.modelOptions.step && isScaleLong;
+    const isFirstValueNearly = this.options && this.options.isSecondValueVisible
+    && options.firstValue !== this.options.firstValue
+    && this.options.secondValue - options.firstValue <= this.options.step && isScaleLong;
+    const isSecondValueNearly = this.options && options.secondValue !== this.options.secondValue
+    && options.secondValue - this.options.firstValue <= this.options.step && isScaleLong;
     if (isFirstValueNearly) {
       firstValue = secondValue - step;
     }

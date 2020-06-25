@@ -37,7 +37,7 @@ class View {
   update(data: NewOption, event: string): void {
     let name = '';
     let newValue = this.calculateValue(data.newCoordinate);
-    if (event === 'handlerPositionChanged') {
+    if (event === 'handlerChanged') {
       name = data.target;
     }
     if (event === 'scaleClicked') {
@@ -47,8 +47,8 @@ class View {
       newValue = data.newCoordinate;
       name = this.chooseValueForUpdate(newValue) ? 'firstValue' : 'secondValue';
     }
-    const newOption = { ...this.model.modelOptions, [name]: newValue };
-    this.eventEmitter.notify(newOption, 'viewSliderUpdated');
+    const newOption = { ...this.model.options, [name]: newValue };
+    this.eventEmitter.notify(newOption, 'viewUpdated');
   }
 
   private init(): void {
@@ -64,25 +64,25 @@ class View {
   private calculateValue(coordinate: number): number {
     this.getScaleSizes();
     const LIQUID_MOVE = 0.01;
-    const step = this.model.modelOptions.step > 1 ? this.model.modelOptions.step : LIQUID_MOVE;
-    const value = this.model.modelOptions.minValue
+    const step = this.model.options.step > 1 ? this.model.options.step : LIQUID_MOVE;
+    const value = this.model.options.minValue
     + Math.round(((coordinate - this.scalePosition) / step)
-    / (this.scaleLength / this.model.modelOptions.scaleLength)) * step;
+    / (this.scaleLength / this.model.options.scaleLength)) * step;
     return value;
   }
 
   private getScaleSizes(): void {
     const scale = this.element.querySelector('.js-slider__scale');
-    this.scaleLength = this.model.modelOptions.isVertical
+    this.scaleLength = this.model.options.isVertical
       ? scale.clientHeight
       : scale.clientWidth;
-    this.scalePosition = this.model.modelOptions.isVertical
+    this.scalePosition = this.model.options.isVertical
       ? scale.getBoundingClientRect().top
       : scale.getBoundingClientRect().left;
   }
 
   private chooseValueForUpdate(newValue: number): boolean {
-    const { isSecondValueVisible, firstValueArea } = this.model.modelOptions;
+    const { isSecondValueVisible, firstValueArea } = this.model.options;
     return (isSecondValueVisible && firstValueArea >= newValue) || isSecondValueVisible === false;
   }
 }

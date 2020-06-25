@@ -29,27 +29,27 @@ class ViewBubbles {
   }
 
   private setBubbleValue(): void {
-    this.firstBubble.textContent = String(Math.round(this.model.modelOptions.firstValue));
-    this.secondBubble.textContent = String(Math.round(this.model.modelOptions.secondValue));
+    this.firstBubble.textContent = String(Math.round(this.model.options.firstValue));
+    this.secondBubble.textContent = String(Math.round(this.model.options.secondValue));
   }
 
   private setDirection(): void {
-    const bubbleClassDirection = 'slider__bubble_vertical';
+    const direction = 'slider__bubble_vertical';
 
-    if (this.model.modelOptions.isVertical) {
-      this.bubbles.forEach((item) => item.classList.add(bubbleClassDirection));
+    if (this.model.options.isVertical) {
+      this.bubbles.forEach((item) => item.classList.add(direction));
     } else {
-      this.bubbles.forEach((item) => item.classList.remove(bubbleClassDirection));
+      this.bubbles.forEach((item) => item.classList.remove(direction));
     }
   }
 
   private setVisibility(): void {
-    const bubbleClassVisibility = 'slider__bubble_visible';
+    const visibility = 'slider__bubble_visible';
 
-    if (this.model.modelOptions.isBubbleVisible) {
-      this.bubbles.forEach((item) => item.classList.add(bubbleClassVisibility));
+    if (this.model.options.isBubbleVisible) {
+      this.bubbles.forEach((item) => item.classList.add(visibility));
     } else {
-      this.bubbles.forEach((item) => item.classList.remove(bubbleClassVisibility));
+      this.bubbles.forEach((item) => item.classList.remove(visibility));
     }
   }
 }

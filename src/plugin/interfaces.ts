@@ -1,11 +1,11 @@
 export interface EventEmitter {
   attach(observer: Observer): void;
   detach(observer: Observer): void;
-  notify(data?: ModelOptions | NewOption, event?: string): void;
+  notify(data?: Options | NewOption, event?: string): void;
 }
 
 export interface Observer {
-  update(data: ModelOptions | NewOption | ExternalOption, event: string): void;
+  update(data: Options | NewOption | ExternalOption, event: string): void;
 }
 
 export interface Slider {
@@ -20,7 +20,7 @@ export interface Slider {
   isScaleStepsVisible: boolean;
 }
 
-export interface ModelOptions extends Slider {
+export interface Options extends Slider {
   scaleLength: number;
   firstValueRatio: number;
   secondValueRatio: number;

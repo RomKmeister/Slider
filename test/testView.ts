@@ -48,23 +48,23 @@ describe('view', () => {
 
   it('Should set the first value as name and 10 as value', () => {
     view.update({ target: 'firstValue', newCoordinate: 120 }, 'handlerPositionChanged');
-    let newOption = { ...view.model.modelOptions, firstValue: 10 };
+    let newOption = { ...view.model.options, firstValue: 10 };
     expect(view.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOption);
     expect(view.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('viewUpdated');
 
     view.update({ target: 'scale', newCoordinate: 120 }, 'scaleClicked');
-    newOption = { ...view.model.modelOptions, firstValue: 10 };
+    newOption = { ...view.model.options, firstValue: 10 };
     expect(view.eventEmitter.notify.getCall(1).args[0]).to.deep.equal(newOption);
   });
 
   it('Should set the second value as name and 80 as value', () => {
     view.update({ target: 'secondValue', newCoordinate: 960 }, 'handlerPositionChanged');
-    let newOption = { ...view.model.modelOptions, secondValue: 80 };
+    let newOption = { ...view.model.options, secondValue: 80 };
     expect(view.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOption);
     expect(view.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('viewUpdated');
 
     view.update({ target: 'scale', newCoordinate: 960 }, 'scaleClicked');
-    newOption = { ...view.model.modelOptions, secondValue: 80 };
+    newOption = { ...view.model.options, secondValue: 80 };
     expect(view.eventEmitter.notify.getCall(1).args[0]).to.deep.equal(newOption);
   });
 });
