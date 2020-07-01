@@ -10,6 +10,14 @@ class View {
 
   model: Model;
 
+  handlesElements: NodeListOf<HTMLElement>;
+
+  bubblesElements: NodeListOf<HTMLElement>;
+
+  handles: Array<ViewHandles>
+
+  bubbles: Array<ViewBubbles>
+
   viewScale: ViewScale;
 
   viewHandles: ViewHandles;
@@ -30,8 +38,8 @@ class View {
 
   setViewParameters(): void {
     this.viewScale.setScaleParameters();
-    this.viewHandles.setHandlersParameters();
-    this.viewBubbles.setBubbleParameters();
+    this.handles.forEach((item) => item.setHandlersParameters());
+    this.bubbles.forEach((item) => item.setBubbleParameters());
   }
 
   update(data: NewOption, event: string): void {
@@ -52,13 +60,19 @@ class View {
   }
 
   private init(): void {
+    this.findElements();
     this.eventEmitter = new EventEmitter();
     this.viewScale = new ViewScale(this.element, this.model);
-    this.viewHandles = new ViewHandles(this.element, this.model);
-    this.viewBubbles = new ViewBubbles(this.element, this.model);
-    this.viewHandles.eventEmitter.attach(this);
+    this.bubbles = Array.from(this.bubblesElements).map((item, index) => new ViewBubbles(item, index, this.model));
+    this.handles = Array.from(this.handlesElements).map((item, index) => new ViewHandles(item, index, this.model));
+    this.handles.forEach((item) => item.eventEmitter.attach(this));
     this.viewScale.eventEmitter.attach(this);
     this.setViewParameters();
+  }
+
+  private findElements(): void {
+    this.bubblesElements = this.element.querySelectorAll('.js-slider__bubble');
+    this.handlesElements = this.element.querySelectorAll('.js-slider__handle');
   }
 
   private calculateValue(coordinate: number): number {

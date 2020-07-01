@@ -7,13 +7,9 @@ import EventEmitter from '../EventEmitter/EventEmitter';
 class ViewHandles {
   element: HTMLElement;
 
+  index: number;
+
   model: Model;
-
-  handles: NodeListOf<HTMLElement>;
-
-  firstHandle: HTMLElement;
-
-  secondHandle: HTMLElement;
 
   mousemove: boolean;
 
@@ -23,8 +19,9 @@ class ViewHandles {
 
   eventEmitter: EventEmitter;
 
-  constructor(element: HTMLElement, model: Model) {
+  constructor(element: HTMLElement, index: number, model: Model) {
     this.element = element;
+    this.index = index;
     this.model = model;
     this.init();
   }
@@ -37,18 +34,12 @@ class ViewHandles {
 
   private init(): void {
     this.eventEmitter = new EventEmitter();
-    this.findElements();
     this.bindEventListeners();
   }
 
-  private findElements(): void {
-    this.handles = this.element.querySelectorAll('.js-slider__handle');
-    [this.firstHandle, this.secondHandle] = Array.from(this.handles);
-  }
-
   private bindEventListeners(): void {
-    this.handles.forEach((item) => item.addEventListener('mousedown', this.handleHandleMouseDown.bind(this)));
-    this.handleDocumentMouseMove = this.bindHandleDocumentMouseMove.bind(this);
+    this.element.addEventListener('mousedown', this.handleHandleMouseDown.bind(this));
+    this.handleDocumentMouseMove = this.bindedHandleDocumentMouseMove.bind(this);
     document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
   }
 
@@ -63,46 +54,43 @@ class ViewHandles {
     document.removeEventListener('mousemove', this.handleDocumentMouseMove);
   }
 
-  private bindHandleDocumentMouseMove(event: MouseEvent): void {
+  private bindedHandleDocumentMouseMove(event: MouseEvent): void {
     const coordinate = this.model.options.isVertical ? event.clientY : event.clientX;
-    const name = (this.target === this.firstHandle) ? 'firstValue' : 'secondValue';
+    const name = (this.index === 0) ? 'firstValue' : 'secondValue';
     const newOptions = { target: name, newCoordinate: coordinate };
     this.eventEmitter.notify(newOptions, 'handlerChanged');
   }
 
   private setHandlesPosition(): void {
-    if (this.model.options.isVertical) {
-      this.firstHandle.style.top = `${this.model.options.firstValueRatio}%`;
-      this.secondHandle.style.top = `${this.model.options.secondValueRatio}%`;
+    const { isVertical, firstValueRatio, secondValueRatio } = this.model.options;
+    const ratio = this.index === 0 ? firstValueRatio : secondValueRatio;
+    if (isVertical) {
+      this.element.style.top = `${ratio}%`;
     } else {
-      this.firstHandle.style.left = `${this.model.options.firstValueRatio}%`;
-      this.secondHandle.style.left = `${this.model.options.secondValueRatio}%`;
+      this.element.style.left = `${ratio}%`;
     }
   }
 
   private setVisibility(): void {
-    const visibility = 'slider__handle_hidden';
-
-    if (this.model.options.isSecondValueVisible) {
-      this.secondHandle.classList.remove(visibility);
-    } else {
-      this.secondHandle.classList.add(visibility);
+    const handleClassVisibility = 'slider__handle_hidden';
+    const isSecondValueVisible = this.model.options.isSecondValueVisible && this.index === 1;
+    const isSecondValueInvisible = !this.model.options.isSecondValueVisible && this.index === 1;
+    if (isSecondValueVisible) {
+      this.element.classList.remove(handleClassVisibility);
+    } else if (isSecondValueInvisible) {
+      this.element.classList.add(handleClassVisibility);
     }
   }
 
   private setDirection(): void {
-    const direction = 'slider__handle_vertical';
+    const handleClassDirection = 'slider__handle_vertical';
 
     if (this.model.options.isVertical) {
-      this.handles.forEach((item) => {
-        item.classList.add(direction);
-        item.style.left = '';
-      });
+      this.element.classList.add(handleClassDirection);
+      this.element.style.left = '';
     } else {
-      this.handles.forEach((item) => {
-        item.classList.remove(direction);
-        item.style.top = '';
-      });
+      this.element.classList.remove(handleClassDirection);
+      this.element.style.top = '';
     }
   }
 }
