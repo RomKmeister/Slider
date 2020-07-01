@@ -1,6 +1,6 @@
 import Model from '../Model/Model';
 
-class ViewBubbles {
+class ViewBubble {
   element: HTMLElement;
 
   index: number;
@@ -48,4 +48,4 @@ class ViewBubbles {
   }
 }
 
-export default ViewBubbles;
+export default ViewBubble;

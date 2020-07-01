@@ -4,7 +4,7 @@
 import Model from '../Model/Model';
 import EventEmitter from '../EventEmitter/EventEmitter';
 
-class ViewHandles {
+class ViewHandle {
   element: HTMLElement;
 
   index: number;
@@ -95,4 +95,4 @@ class ViewHandles {
   }
 }
 
-export default ViewHandles;
+export default ViewHandle;
