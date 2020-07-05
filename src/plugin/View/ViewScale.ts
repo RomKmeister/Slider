@@ -53,13 +53,9 @@ class ViewScale {
 
   private handleStepMouseDown(event: MouseEvent): void {
     event.preventDefault();
-    const { target } = event;
-    let coordinate = 0;
-    if (target instanceof HTMLElement) {
-      coordinate = Number(target.textContent);
-    }
-    const newOptions = { target: 'value', newCoordinate: coordinate };
-    this.eventEmitter.notify(newOptions, 'stepClicked');
+    const coordinate = this.model.options.isVertical ? event.clientY : event.clientX;
+    const newOptions = { target: 'scale', newCoordinate: coordinate };
+    this.eventEmitter.notify(newOptions, 'scaleClicked');
   }
 
   private setDirection(): void {

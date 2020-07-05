@@ -44,18 +44,14 @@ class View {
 
   update(data: NewOption, event: string): void {
     let name = '';
-    let newValue = this.calculateValue(data.newCoordinate);
+    const newValue = this.calculateValue(data.newCoordinate);
     if (event === 'handlerChanged') {
       name = data.target;
     }
-    if (event === 'scaleClicked') {
-      name = this.chooseValueForUpdate(newValue) ? 'firstValue' : 'secondValue';
+    if (event === 'scaleClicked' || event === 'stepClicked') {
+      name = this.chooseValueForUpdate(newValue) ? 'firstValueRatio' : 'secondValueRatio';
     }
-    if (event === 'stepClicked') {
-      newValue = data.newCoordinate;
-      name = this.chooseValueForUpdate(newValue) ? 'firstValue' : 'secondValue';
-    }
-    const newOption = { ...this.model.options, [name]: newValue };
+    const newOption = { [name]: newValue };
     this.eventEmitter.notify(newOption, 'viewUpdated');
   }
 
@@ -77,11 +73,7 @@ class View {
 
   private calculateValue(coordinate: number): number {
     this.getScaleSizes();
-    const LIQUID_MOVE = 0.01;
-    const step = this.model.options.step > 1 ? this.model.options.step : LIQUID_MOVE;
-    const value = this.model.options.minValue
-    + Math.round(((coordinate - this.scalePosition) / step)
-    / (this.scaleLength / this.model.options.scaleLength)) * step;
+    const value = ((coordinate - this.scalePosition) * 100) / this.scaleLength;
     return value;
   }
 

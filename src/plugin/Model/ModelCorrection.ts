@@ -4,24 +4,19 @@
 import { Slider, Options } from '../interfaces';
 
 class ModelCorrection {
-  options: Options;
+  options: Slider | Options;
 
-  correctOptions: Slider;
-
-  constructor(options: Slider) {
-    this.setModelParameters(options);
-  }
-
-  setModelParameters(options: Slider | Options): void {
+  setModelParameters(options: Slider | Options): Slider | Options {
     const correctStep = this.correctStep(options);
     const correctScale = this.correctScale(correctStep);
     const correctMove = this.options ? this.correctMove(correctScale) : options;
     const correctConfusedValues = this.correctConfusedValues(correctMove);
     const correctStepPosition = this.correctStepPosition(correctConfusedValues);
-    this.correctOptions = this.correctMinMax(correctStepPosition);
+    this.options = this.correctMinMax(correctStepPosition);
+    return this.options;
   }
 
-  private correctStep(options: Slider): Slider {
+  private correctStep(options: Slider | Options): Slider | Options {
     let { step } = options;
     if (step < 1) {
       step = 1;
@@ -34,7 +29,7 @@ class ModelCorrection {
     };
   }
 
-  private correctScale(options: Slider): Slider {
+  private correctScale(options: Slider | Options): Slider | Options {
     const { step, maxValue } = options;
     let { minValue } = options;
     if (maxValue < minValue) {
@@ -48,7 +43,7 @@ class ModelCorrection {
     };
   }
 
-  private correctMove(options: Slider): Slider {
+  private correctMove(options: Slider | Options): Slider | Options {
     const { minValue, maxValue, step } = options;
     let {
       firstValue, secondValue,
@@ -89,7 +84,7 @@ class ModelCorrection {
     };
   }
 
-  private correctConfusedValues(options: Slider): Slider {
+  private correctConfusedValues(options: Slider | Options): Slider | Options {
     const {
       isSecondValueVisible, step,
     } = options;
@@ -114,7 +109,7 @@ class ModelCorrection {
     };
   }
 
-  private correctMinMax(options: Slider): Slider {
+  private correctMinMax(options: Slider | Options): Slider | Options {
     const {
       minValue, maxValue, isSecondValueVisible, step,
     } = options;
@@ -157,7 +152,7 @@ class ModelCorrection {
     };
   }
 
-  private correctStepPosition(options: Slider): Slider {
+  private correctStepPosition(options: Slider | Options): Slider | Options {
     const {
       minValue, maxValue, step,
     } = options;
@@ -168,7 +163,7 @@ class ModelCorrection {
     && firstValue > minValue && firstValue < maxValue;
     const isSecondValueEqualSteps = step >= 1 && (secondValue - minValue) % step !== 0 && secondValue < maxValue;
     if (isFirstValueEqualSteps) {
-      firstValue = Math.floor(firstValue / step) * step + (minValue % step);
+      firstValue = Math.round(firstValue / step) * step + (minValue % step);
     }
     if (isSecondValueEqualSteps) {
       secondValue = Math.round(secondValue / step) * step + (minValue % step);

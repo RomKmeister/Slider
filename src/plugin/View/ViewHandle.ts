@@ -56,7 +56,7 @@ class ViewHandle {
 
   private bindedHandleDocumentMouseMove(event: MouseEvent): void {
     const coordinate = this.model.options.isVertical ? event.clientY : event.clientX;
-    const name = (this.index === 0) ? 'firstValue' : 'secondValue';
+    const name = (this.index === 0) ? 'firstValueRatio' : 'secondValueRatio';
     const newOptions = { target: name, newCoordinate: coordinate };
     this.eventEmitter.notify(newOptions, 'handlerChanged');
   }

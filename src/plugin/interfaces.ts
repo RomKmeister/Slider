@@ -1,7 +1,7 @@
 export interface EventEmitter {
   attach(observer: Observer): void;
   detach(observer: Observer): void;
-  notify(data?: Options | NewOption, event?: string): void;
+  notify(data?: Options | NewOption | ExternalOption, event?: string): void;
 }
 
 export interface Observer {
