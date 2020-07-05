@@ -1,7 +1,7 @@
 import Model from '../Model/Model';
 import EventEmitter from '../EventEmitter/EventEmitter';
 
-class ViewScale {
+class ScaleView {
   element: HTMLElement;
 
   model: Model;
@@ -143,4 +143,4 @@ class ViewScale {
   }
 }
 
-export default ViewScale;
+export default ScaleView;

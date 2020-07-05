@@ -1,9 +1,9 @@
 import Model from '../Model/Model';
 import EventEmitter from '../EventEmitter/EventEmitter';
 import { NewOption } from '../interfaces';
-import ViewScale from './ViewScale';
-import ViewBubble from './ViewBubble';
-import ViewHandle from './ViewHandle';
+import ScaleView from './ScaleView';
+import BubbleView from './BubbleView';
+import HandleView from './HandleView';
 
 class View {
   element: HTMLElement;
@@ -14,15 +14,11 @@ class View {
 
   bubblesElements: NodeListOf<HTMLElement>;
 
-  handles: Array<ViewHandle>
+  viewScale: ScaleView;
 
-  bubbles: Array<ViewBubble>
+  handles: Array<HandleView>
 
-  viewScale: ViewScale;
-
-  viewHandles: ViewHandle;
-
-  viewBubbles: ViewBubble;
+  bubbles: Array<BubbleView>
 
   scaleLength: number;
 
@@ -58,9 +54,9 @@ class View {
   private init(): void {
     this.findElements();
     this.eventEmitter = new EventEmitter();
-    this.viewScale = new ViewScale(this.element, this.model);
-    this.bubbles = Array.from(this.bubblesElements).map((item, index) => new ViewBubble(item, index, this.model));
-    this.handles = Array.from(this.handlesElements).map((item, index) => new ViewHandle(item, index, this.model));
+    this.viewScale = new ScaleView(this.element, this.model);
+    this.handles = Array.from(this.handlesElements).map((item, index) => new HandleView(item, index, this.model));
+    this.bubbles = Array.from(this.bubblesElements).map((item, index) => new BubbleView(item, index, this.model));
     this.handles.forEach((item) => item.eventEmitter.attach(this));
     this.viewScale.eventEmitter.attach(this);
     this.setViewParameters();
