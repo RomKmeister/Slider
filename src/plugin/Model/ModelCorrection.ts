@@ -1,12 +1,12 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-param-reassign */
 
-import { Slider, Options } from '../interfaces';
+import { BaseOptions, ExtendOptions } from '../interfaces';
 
 class ModelCorrection {
-  options: Slider | Options;
+  options: BaseOptions | ExtendOptions;
 
-  setModelParameters(options: Slider | Options): Slider | Options {
+  setModelParameters(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const correctStep = this.correctStep(options);
     const correctScale = this.correctScale(correctStep);
     const correctMove = this.options ? this.correctMove(correctScale) : options;
@@ -16,7 +16,7 @@ class ModelCorrection {
     return this.options;
   }
 
-  private correctStep(options: Slider | Options): Slider | Options {
+  private correctStep(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     let { step } = options;
     if (step < 1) {
       step = 1;
@@ -29,7 +29,7 @@ class ModelCorrection {
     };
   }
 
-  private correctScale(options: Slider | Options): Slider | Options {
+  private correctScale(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const { step, maxValue } = options;
     let { minValue } = options;
     if (maxValue < minValue) {
@@ -43,7 +43,7 @@ class ModelCorrection {
     };
   }
 
-  private correctMove(options: Slider | Options): Slider | Options {
+  private correctMove(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const { minValue, maxValue, step } = options;
     let {
       firstValue, secondValue,
@@ -84,7 +84,7 @@ class ModelCorrection {
     };
   }
 
-  private correctConfusedValues(options: Slider | Options): Slider | Options {
+  private correctConfusedValues(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const {
       isSecondValueVisible, step,
     } = options;
@@ -109,7 +109,7 @@ class ModelCorrection {
     };
   }
 
-  private correctMinMax(options: Slider | Options): Slider | Options {
+  private correctMinMax(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const {
       minValue, maxValue, isSecondValueVisible, step,
     } = options;
@@ -152,7 +152,7 @@ class ModelCorrection {
     };
   }
 
-  private correctStepPosition(options: Slider | Options): Slider | Options {
+  private correctStepPosition(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const {
       minValue, maxValue, step,
     } = options;

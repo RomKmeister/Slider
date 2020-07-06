@@ -1,32 +1,32 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-param-reassign */
 
-import { Slider, Options } from '../interfaces';
+import { BaseOptions, ExtendOptions, NewRatio } from '../interfaces';
 import EventEmitter from '../EventEmitter/EventEmitter';
 import ModelCorrection from './ModelCorrection';
 
 class Model {
-  options: Options;
+  options: ExtendOptions;
 
   eventEmitter = new EventEmitter();
 
   correctOptions = new ModelCorrection();
 
-  constructor(options: Slider) {
+  constructor(options: BaseOptions) {
     this.setModelParameters(options);
   }
 
-  update(options: Options): void {
+  update(options: ExtendOptions | NewRatio): void {
     const newOptions = this.isValuesChanged(options);
     this.setModelParameters(newOptions);
     this.eventEmitter.notify(this.options, 'modelUpdated');
   }
 
-  getOptions(): Options {
+  getOptions(): ExtendOptions {
     return this.options;
   }
 
-  private isValuesChanged(options: Options): Options {
+  private isValuesChanged(options: ExtendOptions | NewRatio): ExtendOptions {
     const isFirstRatioChanged = Object.keys(options).length === 1 && options.firstValueRatio;
     const isSecondRatioChanged = Object.keys(options).length === 1 && options.secondValueRatio;
     if (isFirstRatioChanged) {
@@ -39,15 +39,15 @@ class Model {
       const newOptions = { ...this.options, secondValue: newSecondValue };
       return newOptions;
     }
-    return options;
+    return { ...this.options, ...options };
   }
 
-  private setModelParameters(options: Slider | Options): void {
+  private setModelParameters(options: BaseOptions | ExtendOptions): void {
     const correctOptions = this.correctOptions.setModelParameters(options);
     this.options = this.calculateRatios(correctOptions);
   }
 
-  private calculateRatios(options: Slider): Options {
+  private calculateRatios(options: BaseOptions | ExtendOptions): ExtendOptions {
     const {
       minValue, maxValue, firstValue, secondValue,
     } = options;

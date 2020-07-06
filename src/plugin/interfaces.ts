@@ -1,14 +1,14 @@
 export interface EventEmitter {
   attach(observer: Observer): void;
   detach(observer: Observer): void;
-  notify(data?: Options | NewOption | ExternalOption, event?: string): void;
+  notify(data?: ExtendOptions | NewCoordinate | ExternalOption, event?: string): void;
 }
 
 export interface Observer {
-  update(data: Options | NewOption | ExternalOption, event: string): void;
+  update(data: ExtendOptions | NewCoordinate | ExternalOption, event: string): void;
 }
 
-export interface Slider {
+export interface BaseOptions {
   minValue: number;
   maxValue: number;
   firstValue: number;
@@ -20,16 +20,20 @@ export interface Slider {
   isScaleStepsVisible: boolean;
 }
 
-export interface Options extends Slider {
+export interface ExtendOptions extends BaseOptions {
   scaleLength: number;
   firstValueRatio: number;
   secondValueRatio: number;
   firstValueArea: number;
 }
 
-export interface NewOption {
+export interface NewCoordinate {
   target: string;
   newCoordinate: number;
+}
+
+export interface NewRatio {
+  [key: string]: number;
 }
 
 export interface ExternalOption {

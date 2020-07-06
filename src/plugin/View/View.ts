@@ -1,6 +1,6 @@
 import Model from '../Model/Model';
 import EventEmitter from '../EventEmitter/EventEmitter';
-import { NewOption } from '../interfaces';
+import { NewCoordinate } from '../interfaces';
 import ScaleView from './ScaleView';
 import BubbleView from './BubbleView';
 import HandleView from './HandleView';
@@ -38,7 +38,7 @@ class View {
     this.bubbles.forEach((item) => item.setBubbleParameters());
   }
 
-  update(data: NewOption, event: string): void {
+  update(data: NewCoordinate, event: string): void {
     let name = '';
     const newValue = this.calculateValue(data.newCoordinate);
     if (event === 'handlerChanged') {
