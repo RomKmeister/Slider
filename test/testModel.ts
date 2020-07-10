@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 import Model from '../src/plugin/Model/Model';
-import { Slider } from '../src/plugin/interfaces';
+import { BaseOptions } from '../src/plugin/interfaces';
 
 describe('Model', () => {
   let model: any;
-  let options: Slider;
+  let options: BaseOptions;
   beforeEach(() => {
     const sandbox = sinon.createSandbox();
     options = {
@@ -25,34 +25,9 @@ describe('Model', () => {
     model.update(options);
   });
 
-  it('Should decrease the first value to the max value', () => {
-    options = { ...options, firstValue: 150 };
-    model.update(options);
-    expect(model.options.firstValue).to.deep.equal(100);
-  });
-
-  it('Should increase the first value to the min value', () => {
-    options = { ...options, firstValue: -15 };
-    model.update(options);
-    expect(model.options.firstValue).to.deep.equal(0);
-  });
-
-  it('Should set the first value and the step less the second value if it visible', () => {
-    options = { ...options, ...{ firstValue: 85, isSecondValueVisible: true } };
-    model.update(options);
-    expect(model.options.firstValue).to.deep.equal(69);
-  });
-
-  it('Should decrease the second value to the max', () => {
-    options = { ...options, ...{ secondValue: 200, isSecondValueVisible: true } };
-    model.update(options);
-    expect(model.options.secondValue).to.deep.equal(100);
-  });
-
-  it('Should set the second value bigger than the first value', () => {
-    options = { ...options, secondValue: 50 };
-    model.update(options);
-    expect(model.options.secondValue).to.deep.equal(56);
+  it('Should get the options', () => {
+    const testOptions = model.getOptions();
+    expect(testOptions).to.deep.equal(model.options);
   });
 
   it('Should calculate the ratios', () => {

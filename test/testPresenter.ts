@@ -4,19 +4,19 @@ import * as sinon from 'sinon';
 import Presenter from '../src/plugin/Presenter/Presenter';
 import View from '../src/plugin/View/View';
 import Model from '../src/plugin/Model/Model';
-import { Slider } from '../src/plugin/interfaces';
+import { BaseOptions } from '../src/plugin/interfaces';
 
 describe('Presenter', () => {
   let presenter: any;
   let model: Model;
-  let options: Slider;
+  let options: BaseOptions;
   let view: View;
 
   beforeEach(() => {
     const sandbox = sinon.createSandbox();
     const element = document.createElement('div');
     element.classList.add('js-slider-block');
-    element.insertAdjacentHTML('afterbegin', '<div class="js-slider"><div class="js-slider__scale" style="width:1200px"></div><div class="js-slider__handle"><div class="js-slider__bubble"></div></div><div class="js-slider__handle"><div class="js-slider__bubble"></div></div>');
+    element.insertAdjacentHTML('afterbegin', '<div class="js-slider"><div class="js-slider__scale"></div><div class="js-slider__steps"><div class="slider__step"></div></div><div class="js-slider__handle"><div class="js-slider__bubble"></div></div><div class="js-slider__handle"><div class="js-slider__bubble"></div></div>');
 
     options = {
       minValue: 0,
@@ -38,12 +38,24 @@ describe('Presenter', () => {
   });
 
   it('Should update model', () => {
-    presenter.update(presenter.model, 'viewSliderUpdated');
-    expect(presenter.model.update.called).to.deep.equal(true);
+    presenter.update(presenter.model, 'viewUpdated');
+    presenter.update(presenter.model, 'newOptions');
+    expect(presenter.model.update.calledTwice).to.deep.equal(true);
   });
 
   it('Should update views', () => {
     presenter.update(presenter.model, 'modelUpdated');
     expect(presenter.view.setViewParameters.called).to.deep.equal(true);
+  });
+
+  it('Should get model options', () => {
+    const getOptions = presenter.getOptions();
+    expect(getOptions).to.deep.equal(model.options);
+  });
+
+  it('Should set model options', () => {
+    presenter.setOptions({ minValue: 44 });
+    expect(presenter.model.update.called).to.deep.equal(true);
+    expect(presenter.model.options.minValue).to.deep.equal(44);
   });
 });

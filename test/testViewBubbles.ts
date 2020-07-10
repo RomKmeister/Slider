@@ -1,16 +1,17 @@
 import { expect } from 'chai';
 import Model from '../src/plugin/Model/Model';
-import { Slider } from '../src/plugin/interfaces';
-import ViewBubbles from '../src/plugin/View/ViewBubbles';
+import { BaseOptions } from '../src/plugin/interfaces';
+import BubbleView from '../src/plugin/View/BubbleView';
 
-describe('ViewBubbles', () => {
-  let options: Slider;
+describe('Bubble View', () => {
+  let options: BaseOptions;
   let model: Model;
-  let viewBubbles: ViewBubbles;
+  let bubbleView: BubbleView;
+  let testElement: HTMLElement;
   beforeEach(() => {
     const element = document.createElement('div');
-    element.insertAdjacentHTML('afterbegin',
-      '<div class="js-slider__bubble"></div><div class="js-slider__bubble"></div>');
+    element.classList.add('js-slider__bubble');
+    const index = 0;
 
     options = {
       minValue: 0,
@@ -25,36 +26,32 @@ describe('ViewBubbles', () => {
     };
 
     model = new Model(options);
-    viewBubbles = new ViewBubbles(element, model);
-    viewBubbles.setBubbleParameters();
+    bubbleView = new BubbleView(element, index, model);
+    bubbleView.setBubbleParameters();
+    testElement = bubbleView.element;
   });
 
   it('Should set the bubble value', () => {
-    expect(viewBubbles.firstBubble.textContent).to.deep.equal('55');
-    expect(viewBubbles.secondBubble.textContent).to.deep.equal('70');
+    expect(testElement.textContent).to.deep.equal('55');
   });
 
-  it('Should show the bubbles', () => {
-    viewBubbles.model.options.isBubbleVisible = true;
-    viewBubbles.setBubbleParameters();
-    expect(viewBubbles.firstBubble.className).to.deep.equal('js-slider__bubble slider__bubble_visible');
-    expect(viewBubbles.secondBubble.className).to.deep.equal('js-slider__bubble slider__bubble_visible');
+  it('Should show the bubble', () => {
+    bubbleView.model.options.isBubbleVisible = true;
+    bubbleView.setBubbleParameters();
+    expect(testElement.className).to.deep.equal('js-slider__bubble slider__bubble_visible');
   });
 
-  it('Should hide the bubbles', () => {
-    expect(viewBubbles.firstBubble.className).to.deep.equal('js-slider__bubble');
-    expect(viewBubbles.secondBubble.className).to.deep.equal('js-slider__bubble');
+  it('Should hide the bubble', () => {
+    expect(testElement.className).to.deep.equal('js-slider__bubble');
   });
 
   it('Should set the horizontal direction', () => {
-    expect(viewBubbles.firstBubble.className).to.deep.equal('js-slider__bubble');
-    expect(viewBubbles.secondBubble.className).to.deep.equal('js-slider__bubble');
+    expect(testElement.className).to.deep.equal('js-slider__bubble');
   });
 
   it('Should set the vertical direction', () => {
-    viewBubbles.model.options.isVertical = true;
-    viewBubbles.setBubbleParameters();
-    expect(viewBubbles.firstBubble.className).to.deep.equal('js-slider__bubble slider__bubble_vertical');
-    expect(viewBubbles.secondBubble.className).to.deep.equal('js-slider__bubble slider__bubble_vertical');
+    bubbleView.model.options.isVertical = true;
+    bubbleView.setBubbleParameters();
+    expect(testElement.className).to.deep.equal('js-slider__bubble slider__bubble_vertical');
   });
 });

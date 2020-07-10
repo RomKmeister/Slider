@@ -1,17 +1,18 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import ViewScale from '../src/plugin/View/ViewScale';
+import ScaleView from '../src/plugin/View/ScaleView';
 import Model from '../src/plugin/Model/Model';
-import { Slider } from '../src/plugin/interfaces';
+import { BaseOptions } from '../src/plugin/interfaces';
 
-describe('ViewScale', () => {
-  let options: Slider;
-  let viewScale: any;
+describe('Scale View', () => {
+  let options: BaseOptions;
+  let scaleView: any;
   let model: Model;
   beforeEach(() => {
     const sandbox = sinon.createSandbox();
     const element = document.createElement('div');
-    element.insertAdjacentHTML('afterbegin', '<div class="js-slider__scale"></div>');
+    element.insertAdjacentHTML('afterbegin',
+      '<div class="js-slider__scale"></div><div class="js-slider__steps"><div class="slider__step"></div></div>');
 
     options = {
       minValue: 0,
@@ -26,25 +27,25 @@ describe('ViewScale', () => {
     };
 
     model = new Model(options);
-    viewScale = new ViewScale(element, model);
-    sandbox.spy(viewScale.eventEmitter, 'notify');
+    scaleView = new ScaleView(element, model);
+    sandbox.spy(scaleView.eventEmitter, 'notify');
   });
 
   it('Should set the horizontal direction of scale', () => {
-    viewScale.setDirection();
-    expect(viewScale.scale.className).to.equal('js-slider__scale');
+    scaleView.setDirection();
+    expect(scaleView.scale.className).to.equal('js-slider__scale');
   });
 
   it('Should set the vertical direction of scale', () => {
-    viewScale.model.options.isVertical = true;
-    viewScale.setDirection();
-    expect(viewScale.scale.className).to.equal('js-slider__scale slider__scale_vertical');
+    scaleView.model.options.isVertical = true;
+    scaleView.setDirection();
+    expect(scaleView.scale.className).to.equal('js-slider__scale slider__scale_vertical');
   });
 
   it('Should send new options from the scale to the observers', () => {
-    viewScale.scale.dispatchEvent(new MouseEvent('mousedown', { clientX: 100 }));
+    scaleView.scale.dispatchEvent(new MouseEvent('mousedown', { clientX: 100 }));
     const newOptions = { target: 'scale', newCoordinate: 100 };
-    expect(viewScale.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOptions);
-    expect(viewScale.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('scaleClicked');
+    expect(scaleView.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOptions);
+    expect(scaleView.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('scaleClicked');
   });
 });

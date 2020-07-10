@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 import Model from '../src/plugin/Model/Model';
-import { Slider } from '../src/plugin/interfaces';
+import { BaseOptions } from '../src/plugin/interfaces';
 import EventEmitter from '../src/plugin/EventEmitter/EventEmitter';
 
 describe('EventEmitter', () => {
   let eventEmitter: any;
   let model: any;
-  let options: Slider;
+  let options: BaseOptions;
   beforeEach(() => {
     const sandbox = sinon.createSandbox();
     options = {

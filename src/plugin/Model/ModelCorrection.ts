@@ -9,7 +9,7 @@ class ModelCorrection {
   setModelParameters(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const correctStep = this.correctStep(options);
     const correctScale = this.correctScale(correctStep);
-    const correctMove = this.options ? this.correctMove(correctScale) : options;
+    const correctMove = this.options ? this.correctMove(correctScale) : correctScale;
     const correctConfusedValues = this.correctConfusedValues(correctMove);
     const correctStepPosition = this.correctStepPosition(correctConfusedValues);
     this.options = this.correctMinMax(correctStepPosition);
@@ -30,15 +30,15 @@ class ModelCorrection {
   }
 
   private correctScale(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
-    const { step, maxValue } = options;
-    let { minValue } = options;
+    const { step, minValue } = options;
+    let { maxValue } = options;
     if (maxValue < minValue) {
-      minValue = maxValue - step;
+      maxValue = minValue + step;
     }
     return {
       ...options,
       ...{
-        minValue,
+        maxValue,
       },
     };
   }
