@@ -1,20 +1,20 @@
-module.exports =  {
+module.exports = {
   env: {
     'browser': true,
     'node': true,
     'mocha': true,
     'jquery': true,
     },
-  parser:  '@typescript-eslint/parser',
-  extends:  [
+  parser: '@typescript-eslint/parser',
+  extends: [
     'airbnb/base',
     'plugin:@typescript-eslint/recommended',
   ],
-  parserOptions:  {
-    ecmaVersion:  6,
-    sourceType:  'module',
+  parserOptions: {
+    ecmaVersion: 6,
+    sourceType: 'module',
   },
-  rules:  {
+  rules: {
     'linebreak-style': ['error', 'windows'],
     'max-len': ['error', { 'code': 125 }],
     '@typescript-eslint/no-explicit-any': 0,
