@@ -1,7 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-return-assign */
-
-import Model from '../Model/Model';
 import EventEmitter from '../EventEmitter/EventEmitter';
 
 class HandleView {
@@ -9,24 +5,28 @@ class HandleView {
 
   index: number;
 
-  model: Model;
+  ratio: number;
+
+  isVertical: boolean;
+
+  isVisible: boolean;
 
   mousemove: boolean;
 
   handleDocumentMouseMove: any;
 
-  target: HTMLElement;
-
   eventEmitter: EventEmitter;
 
-  constructor(element: HTMLElement, index: number, model: Model) {
+  constructor(element: HTMLElement) {
     this.element = element;
-    this.index = index;
-    this.model = model;
     this.init();
   }
 
-  setHandlersParameters(): void {
+  setHandlersParameters(index: number, ratio: number, isVertical: boolean, isVisible: boolean): void {
+    this.index = index;
+    this.ratio = ratio;
+    this.isVertical = isVertical;
+    this.isVisible = isVisible;
     this.setHandlesPosition();
     this.setVisibility();
     this.setDirection();
@@ -45,8 +45,6 @@ class HandleView {
 
   private handleHandleMouseDown(event: MouseEvent): void {
     event.preventDefault();
-    const findClosest = event.target as HTMLElement;
-    this.target = findClosest.closest('.js-slider__handle');
     document.addEventListener('mousemove', this.handleDocumentMouseMove);
   }
 
@@ -55,29 +53,22 @@ class HandleView {
   }
 
   private bindedHandleDocumentMouseMove(event: MouseEvent): void {
-    const coordinate = this.model.options.isVertical ? event.clientY : event.clientX;
-    const name = (this.index === 0) ? 'firstValueRatio' : 'secondValueRatio';
-    const newOptions = { target: name, newCoordinate: coordinate };
+    const coordinate = this.isVertical ? event.clientY : event.clientX;
+    const newOptions = { target: this.index, newCoordinate: coordinate };
     this.eventEmitter.notify(newOptions, 'handlerChanged');
   }
 
   private setHandlesPosition(): void {
-    const { isVertical, firstValueRatio, secondValueRatio } = this.model.options;
-    const ratio = this.index === 0 ? firstValueRatio : secondValueRatio;
-    if (isVertical) {
-      this.element.style.top = `${ratio}%`;
+    if (this.isVertical) {
+      this.element.style.top = `${this.ratio}%`;
     } else {
-      this.element.style.left = `${ratio}%`;
+      this.element.style.left = `${this.ratio}%`;
     }
   }
 
   private setVisibility(): void {
     const handleClassVisibility = 'slider__handle_hidden';
-    const isSecondValueVisible = this.model.options.isSecondValueVisible && this.index === 1;
-    const isSecondValueInvisible = !this.model.options.isSecondValueVisible && this.index === 1;
-    if (isSecondValueVisible) {
-      this.element.classList.remove(handleClassVisibility);
-    } else if (isSecondValueInvisible) {
+    if (this.isVisible === false) {
       this.element.classList.add(handleClassVisibility);
     }
   }
@@ -85,7 +76,7 @@ class HandleView {
   private setDirection(): void {
     const handleClassDirection = 'slider__handle_vertical';
 
-    if (this.model.options.isVertical) {
+    if (this.isVertical) {
       this.element.classList.add(handleClassDirection);
       this.element.style.left = '';
     } else {

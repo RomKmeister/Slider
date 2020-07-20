@@ -1,36 +1,36 @@
-import Model from '../Model/Model';
-
 class BubbleView {
   element: HTMLElement;
 
   index: number;
 
-  model: Model;
+  value: number;
 
-  constructor(element: HTMLElement, index: number, model: Model) {
+  isVertical: boolean;
+
+  isBubbleVisible: boolean;
+
+  constructor(element: HTMLElement) {
     this.element = element;
-    this.index = index;
-    this.model = model;
   }
 
-  setBubbleParameters(): void {
+  setBubbleParameters(index: number, value: number, isVertical: boolean, isBubbleVisible: boolean): void {
+    this.index = index;
+    this.value = value;
+    this.isVertical = isVertical;
+    this.isBubbleVisible = isBubbleVisible;
     this.setBubbleValue();
     this.setDirection();
     this.setVisibility();
   }
 
   private setBubbleValue(): void {
-    if (this.index === 0) {
-      this.element.textContent = String(Math.round(this.model.options.firstValue));
-    } else {
-      this.element.textContent = String(Math.round(this.model.options.secondValue));
-    }
+    this.element.textContent = String(Math.round(this.value));
   }
 
   private setDirection(): void {
     const bubbleClassDirection = 'slider__bubble_vertical';
 
-    if (this.model.options.isVertical) {
+    if (this.isVertical) {
       this.element.classList.add(bubbleClassDirection);
     } else {
       this.element.classList.remove(bubbleClassDirection);
@@ -40,7 +40,7 @@ class BubbleView {
   private setVisibility(): void {
     const bubbleClassVisibility = 'slider__bubble_visible';
 
-    if (this.model.options.isBubbleVisible) {
+    if (this.isBubbleVisible) {
       this.element.classList.add(bubbleClassVisibility);
     } else {
       this.element.classList.remove(bubbleClassVisibility);

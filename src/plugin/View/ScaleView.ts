@@ -1,10 +1,19 @@
-import Model from '../Model/Model';
 import EventEmitter from '../EventEmitter/EventEmitter';
 
 class ScaleView {
   element: HTMLElement;
 
-  model: Model;
+  minValue: number;
+
+  maxValue: number;
+
+  step: number;
+
+  isVertical: boolean;
+
+  isScaleStepsVisible: boolean;
+
+  scaleLength: number;
 
   scale: HTMLElement;
 
@@ -14,13 +23,25 @@ class ScaleView {
 
   eventEmitter: EventEmitter;
 
-  constructor(element: HTMLElement, model: Model) {
+  constructor(element: HTMLElement) {
     this.element = element;
-    this.model = model;
     this.init();
   }
 
-  setScaleParameters(): void {
+  setScaleParameters(
+    minValue: number,
+    maxValue: number,
+    step: number,
+    isVertical: boolean,
+    isScaleStepsVisible: boolean,
+    scaleLength: number,
+  ): void {
+    this.minValue = minValue;
+    this.maxValue = maxValue;
+    this.step = step;
+    this.isVertical = isVertical;
+    this.isScaleStepsVisible = isScaleStepsVisible;
+    this.scaleLength = scaleLength;
     this.setDirection();
     this.setVisibility();
     this.setBorders();
@@ -46,14 +67,14 @@ class ScaleView {
 
   private handleScaleMouseDown(event: MouseEvent): void {
     event.preventDefault();
-    const coordinate = this.model.options.isVertical ? event.clientY : event.clientX;
+    const coordinate = this.isVertical ? event.clientY : event.clientX;
     const newOptions = { target: 'scale', newCoordinate: coordinate };
     this.eventEmitter.notify(newOptions, 'scaleClicked');
   }
 
   private handleStepMouseDown(event: MouseEvent): void {
     event.preventDefault();
-    const coordinate = this.model.options.isVertical ? event.clientY : event.clientX;
+    const coordinate = this.isVertical ? event.clientY : event.clientX;
     const newOptions = { target: 'scale', newCoordinate: coordinate };
     this.eventEmitter.notify(newOptions, 'scaleClicked');
   }
@@ -62,7 +83,7 @@ class ScaleView {
     const scaleDirection = 'slider__scale_vertical';
     const stepsDirection = 'slider__steps_vertical';
 
-    if (this.model.options.isVertical) {
+    if (this.isVertical) {
       this.scale.classList.add(scaleDirection);
       this.steps.classList.add(stepsDirection);
     } else {
@@ -74,7 +95,7 @@ class ScaleView {
   private setVisibility(): void {
     const visibility = 'slider__steps_visible';
 
-    if (this.model.options.isScaleStepsVisible) {
+    if (this.isScaleStepsVisible) {
       this.steps.classList.add(visibility);
     } else {
       this.steps.classList.remove(visibility);
@@ -82,54 +103,42 @@ class ScaleView {
   }
 
   private setBorders(): void {
-    this.minBorder.textContent = String(this.model.options.minValue);
+    this.minBorder.textContent = String(this.minValue);
   }
 
   private countScaleSteps(): Array<number> {
     this.findElements();
-    const {
-      minValue,
-      maxValue,
-      step,
-      isVertical,
-    } = this.model.options;
-    const minValueSymbols = String(minValue).length;
-    const maxValueSymbols = String(maxValue).length;
-    const stepSymbolSize = isVertical ? this.minBorder.clientHeight : this.minBorder.clientWidth;
-    const scaleLength = isVertical ? this.scale.clientHeight : this.scale.clientWidth;
+    const minValueSymbols = String(this.minValue).length;
+    const maxValueSymbols = String(this.maxValue).length;
+    const stepSymbolSize = this.isVertical ? this.minBorder.clientHeight : this.minBorder.clientWidth;
+    const scaleLength = this.isVertical ? this.scale.clientHeight : this.scale.clientWidth;
     let stepSize = stepSymbolSize;
     if (maxValueSymbols >= minValueSymbols) {
       stepSize = (maxValueSymbols * stepSymbolSize) / minValueSymbols;
     }
     const maxStepItems = Math.round(scaleLength / (stepSize + 10));
-    const stepsItemsNumber = Math.round((maxValue - minValue) / step);
+    const stepsItemsNumber = Math.round((this.maxValue - this.minValue) / this.step);
     const count = Math.round(stepsItemsNumber / (maxStepItems));
-    const stepValue = (count <= 1) ? step : count * step;
-    const maxIndex = Math.round((maxValue - minValue) / stepValue);
+    const stepValue = (count <= 1) ? this.step : count * this.step;
+    const maxIndex = Math.round((this.maxValue - this.minValue) / stepValue);
     const steps = [];
     for (let i = 0; i < maxIndex; i += 1) {
       steps.push(i * stepValue);
     }
-    steps.push(maxValue - minValue);
+    steps.push(this.maxValue - this.minValue);
     return steps;
   }
 
   private createStepItems(): void {
-    const {
-      minValue,
-      maxValue,
-      isVertical,
-      scaleLength,
-    } = this.model.options;
     const steps = this.countScaleSteps();
     const fragment = document.createDocumentFragment();
     steps.forEach((value, index) => {
-      const valueRatio = (value) * (100 / scaleLength);
+      const valueRatio = (value) * (100 / this.scaleLength);
       const stepElement = document.createElement('p');
       stepElement.classList.add('slider__step');
-      const lastStepValue = (index === steps.length - 1) ? maxValue : (value + minValue);
+      const lastStepValue = (index === steps.length - 1) ? this.maxValue : (value + this.minValue);
       stepElement.textContent = String(lastStepValue);
-      if (isVertical) {
+      if (this.isVertical) {
         stepElement.style.top = `${valueRatio}%`;
         stepElement.classList.add('slider__step_vertical');
       } else {

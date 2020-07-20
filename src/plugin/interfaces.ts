@@ -28,7 +28,7 @@ export interface ExtendOptions extends BaseOptions {
 }
 
 export interface NewCoordinate {
-  target: string;
+  target: string | number;
   newCoordinate: number;
 }
 

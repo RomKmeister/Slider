@@ -33,16 +33,37 @@ class View {
   }
 
   setViewParameters(): void {
-    this.viewScale.setScaleParameters();
-    this.handles.forEach((item) => item.setHandlersParameters());
-    this.bubbles.forEach((item) => item.setBubbleParameters());
+    const {
+      minValue,
+      maxValue,
+      firstValue,
+      isSecondValueVisible,
+      secondValue,
+      step,
+      isVertical,
+      isBubbleVisible,
+      isScaleStepsVisible,
+      firstValueRatio,
+      secondValueRatio,
+      scaleLength,
+    } = this.model.options;
+    this.viewScale.setScaleParameters(minValue, maxValue, step, isVertical, isScaleStepsVisible, scaleLength);
+    this.handles.forEach((item, index) => {
+      const ratio = index === 0 ? firstValueRatio : secondValueRatio;
+      const isVisible = index === 0 ? true : isSecondValueVisible;
+      return item.setHandlersParameters(index, ratio, isVertical, isVisible);
+    });
+    this.bubbles.forEach((item, index) => {
+      const value = index === 0 ? firstValue : secondValue;
+      return item.setBubbleParameters(index, value, isVertical, isBubbleVisible);
+    });
   }
 
   update(data: NewCoordinate, event: string): void {
     let name = '';
     const newValue = this.calculateValue(data.newCoordinate);
     if (event === 'handlerChanged') {
-      name = data.target;
+      name = data.target === 0 ? 'firstValueRatio' : 'secondValueRatio';
     }
     if (event === 'scaleClicked' || event === 'stepClicked') {
       name = this.chooseValueForUpdate(newValue) ? 'firstValueRatio' : 'secondValueRatio';
@@ -54,9 +75,9 @@ class View {
   private init(): void {
     this.findElements();
     this.eventEmitter = new EventEmitter();
-    this.viewScale = new ScaleView(this.element, this.model);
-    this.handles = Array.from(this.handlesElements).map((item, index) => new HandleView(item, index, this.model));
-    this.bubbles = Array.from(this.bubblesElements).map((item, index) => new BubbleView(item, index, this.model));
+    this.viewScale = new ScaleView(this.element);
+    this.handles = Array.from(this.handlesElements).map((item) => new HandleView(item));
+    this.bubbles = Array.from(this.bubblesElements).map((item) => new BubbleView(item));
     this.handles.forEach((item) => item.eventEmitter.attach(this));
     this.viewScale.eventEmitter.attach(this);
     this.setViewParameters();
