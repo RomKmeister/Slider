@@ -1,6 +1,3 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-param-reassign */
-
 import { BaseOptions, ExtendOptions } from '../interfaces';
 
 class ModelCorrection {
@@ -8,46 +5,42 @@ class ModelCorrection {
 
   setModelParameters(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const correctStep = this.correctStep(options);
-    const correctScale = this.correctScale(correctStep);
+    const correctScale = this.correctRange(correctStep);
     const correctMove = this.options ? this.correctMove(correctScale) : correctScale;
-    const correctConfusedValues = this.correctConfusedValues(correctMove);
+    const correctConfusedValues = this.correctDisorderedValues(correctMove);
     const correctStepPosition = this.correctStepPosition(correctConfusedValues);
     this.options = this.correctMinMax(correctStepPosition);
     return this.options;
   }
 
   private correctStep(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
-    let { step } = options;
-    if (step < 1) {
-      step = 1;
-    }
+    const { step } = options;
+    const correctedStep = step < 1 ? 1 : step;
     return {
       ...options,
       ...{
-        step,
+        step: correctedStep,
       },
     };
   }
 
-  private correctScale(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
-    const { step, minValue } = options;
-    let { maxValue } = options;
-    if (maxValue < minValue) {
-      maxValue = minValue + step;
-    }
+  private correctRange(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
+    const { step, minValue, maxValue } = options;
+    const correctedMaxValue = maxValue < minValue ? (minValue + step) : maxValue;
     return {
       ...options,
       ...{
-        maxValue,
+        maxValue: correctedMaxValue,
       },
     };
   }
 
   private correctMove(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
-    const { minValue, maxValue, step } = options;
-    let {
-      firstValue, secondValue,
+    const {
+      minValue, maxValue, firstValue, secondValue, step,
     } = options;
+    let correctedFirstValue = firstValue;
+    let correctedSecondValue = secondValue;
     const isValuesCanChange = this.options.maxValue - this.options.minValue > this.options.step;
     const isFirstValueChanged = options.firstValue !== this.options.firstValue;
     const isSecondValueChanged = options.secondValue !== this.options.secondValue;
@@ -57,65 +50,63 @@ class ModelCorrection {
     const isFirstValueNeedCorrect = this.options.isSecondValueVisible && isFirstValueChanged
     && isFirstValueNearlySecond && this.options.secondValue < maxValue;
 
-    const isNeedShortStep = this.options.isSecondValueVisible && isValuesCanChange
+    const isIncompleteStep = this.options.isSecondValueVisible && isValuesCanChange
     && isFirstValueChanged && isFirstValueNearlySecond && this.options.secondValue >= maxValue
     && (maxValue - minValue) % step > 0;
 
     const isSecondValueNeedCorrect = isSecondValueChanged && isSecondValueNearlyFirst;
 
     if (!isValuesCanChange) {
-      firstValue = minValue;
-      secondValue = maxValue;
+      correctedFirstValue = minValue;
+      correctedSecondValue = maxValue;
     }
     if (isFirstValueNeedCorrect) {
-      firstValue = secondValue - step;
+      correctedFirstValue = secondValue - step;
     }
-    if (isNeedShortStep) {
-      firstValue = secondValue - step + (maxValue % step);
+    if (isIncompleteStep) {
+      correctedFirstValue = secondValue - step + (maxValue % step);
     }
     if (isSecondValueNeedCorrect) {
-      secondValue = firstValue + step;
+      correctedSecondValue = firstValue + step;
     }
     return {
       ...options,
       ...{
-        firstValue, secondValue,
+        firstValue: correctedFirstValue, secondValue: correctedSecondValue,
       },
     };
   }
 
-  private correctConfusedValues(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
+  private correctDisorderedValues(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const {
-      isSecondValueVisible, step,
+      firstValue, secondValue, isSecondValueVisible, step,
     } = options;
-    let {
-      firstValue, secondValue,
-    } = options;
-    const isValuesConfused = isSecondValueVisible && firstValue >= secondValue;
+    let correctedFirstValue = firstValue;
+    let correctedSecondValue = secondValue;
+    const isValuesDisordered = isSecondValueVisible && firstValue >= secondValue;
     const isValuesEqual = isSecondValueVisible && firstValue === secondValue;
-    if (isValuesConfused) {
+    if (isValuesDisordered) {
       const changeValue = secondValue;
-      secondValue = firstValue;
-      firstValue = changeValue;
+      correctedSecondValue = firstValue;
+      correctedFirstValue = changeValue;
     }
     if (isValuesEqual) {
-      secondValue += step;
+      correctedSecondValue += step;
     }
     return {
       ...options,
       ...{
-        firstValue, secondValue,
+        firstValue: correctedFirstValue, secondValue: correctedSecondValue,
       },
     };
   }
 
   private correctMinMax(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const {
-      minValue, maxValue, isSecondValueVisible, step,
+      minValue, maxValue, firstValue, secondValue, isSecondValueVisible, step,
     } = options;
-    let {
-      firstValue, secondValue,
-    } = options;
+    let correctedFirstValue = firstValue;
+    let correctedSecondValue = secondValue;
     const isInit = isSecondValueVisible && firstValue >= maxValue && secondValue >= maxValue;
     const isValuesLowerMin = isSecondValueVisible && firstValue <= minValue && secondValue <= minValue;
     const isValuesHigherMax = this.options && isInit;
@@ -124,54 +115,53 @@ class ModelCorrection {
     const isFirstValueHigherMax = isSecondValueVisible === false && firstValue >= maxValue;
 
     if (isInit) {
-      secondValue = maxValue;
-      firstValue = secondValue - ((maxValue - minValue) % step);
+      correctedSecondValue = maxValue;
+      correctedFirstValue = correctedSecondValue - ((maxValue - minValue) % step);
     }
     if (isValuesLowerMin) {
-      firstValue = minValue;
-      secondValue = firstValue + step;
+      correctedFirstValue = minValue;
+      correctedSecondValue = correctedFirstValue + step;
     }
     if (isValuesHigherMax) {
-      secondValue = maxValue;
-      firstValue = secondValue - step;
+      correctedSecondValue = maxValue;
+      correctedFirstValue = correctedSecondValue - step;
     }
     if (isFirstValueLowerMin) {
-      firstValue = minValue;
+      correctedFirstValue = minValue;
     }
     if (isFirstValueHigherMax) {
-      firstValue = maxValue;
+      correctedFirstValue = maxValue;
     }
     if (isSecondValueHigherMax) {
-      secondValue = maxValue;
+      correctedSecondValue = maxValue;
     }
     return {
       ...options,
       ...{
-        firstValue, secondValue,
+        firstValue: correctedFirstValue, secondValue: correctedSecondValue,
       },
     };
   }
 
   private correctStepPosition(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const {
-      minValue, maxValue, step,
+      minValue, maxValue, firstValue, secondValue, step,
     } = options;
-    let {
-      firstValue, secondValue,
-    } = options;
+    let correctedFirstValue = firstValue;
+    let correctedSecondValue = secondValue;
     const isFirstValueEqualSteps = step >= 1 && (firstValue + minValue) % step !== 0
     && firstValue > minValue && firstValue < maxValue;
     const isSecondValueEqualSteps = step >= 1 && (secondValue - minValue) % step !== 0 && secondValue < maxValue;
     if (isFirstValueEqualSteps) {
-      firstValue = Math.round(firstValue / step) * step + (minValue % step);
+      correctedFirstValue = Math.round(firstValue / step) * step + (minValue % step);
     }
     if (isSecondValueEqualSteps) {
-      secondValue = Math.round(secondValue / step) * step + (minValue % step);
+      correctedSecondValue = Math.round(secondValue / step) * step + (minValue % step);
     }
     return {
       ...options,
       ...{
-        firstValue, secondValue,
+        firstValue: correctedFirstValue, secondValue: correctedSecondValue,
       },
     };
   }
