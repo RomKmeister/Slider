@@ -70,6 +70,8 @@ class HandleView {
     const handleClassVisibility = 'slider__handle_hidden';
     if (this.isVisible === false) {
       this.element.classList.add(handleClassVisibility);
+    } else {
+      this.element.classList.remove(handleClassVisibility);
     }
   }
 
