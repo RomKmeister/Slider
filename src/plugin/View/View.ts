@@ -60,14 +60,9 @@ class View {
   }
 
   update(data: NewCoordinate, event: string): void {
-    let name = '';
     const newValue = this.calculateValue(data.newCoordinate);
-    if (event === 'handlerChanged') {
-      name = data.target === 0 ? 'firstValueRatio' : 'secondValueRatio';
-    }
-    if (event === 'scaleClicked' || event === 'stepClicked') {
-      name = this.chooseValueForUpdate(newValue) ? 'firstValueRatio' : 'secondValueRatio';
-    }
+    const chooseHandler = data.target === 0 ? 'first' : 'second';
+    const name = event === 'handlerChanged' ? this.chooseValueForUpdate(chooseHandler) : this.chooseValueForUpdate(newValue);
     const newOption = { [name]: newValue };
     this.eventEmitter.notify(newOption, 'viewUpdated');
   }
@@ -104,9 +99,14 @@ class View {
       : scale.getBoundingClientRect().left;
   }
 
-  private chooseValueForUpdate(newValue: number): boolean {
+  private chooseValueForUpdate(newValue: number | string): string {
     const { isSecondValueVisible, firstValueArea } = this.model.options;
-    return (isSecondValueVisible && firstValueArea >= newValue) || isSecondValueVisible === false;
+    const checking = newValue === 'first'
+    || (isSecondValueVisible && firstValueArea >= newValue) || isSecondValueVisible === false;
+    if (checking) {
+      return 'firstValueRatio';
+    }
+    return 'secondValueRatio';
   }
 }
 
