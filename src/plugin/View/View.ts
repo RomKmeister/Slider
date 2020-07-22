@@ -45,9 +45,9 @@ class View {
       isScaleStepsVisible,
       firstValueRatio,
       secondValueRatio,
-      scaleLength,
+      range,
     } = this.model.options;
-    this.viewScale.setScaleParameters(minValue, maxValue, step, isVertical, isScaleStepsVisible, scaleLength);
+    this.viewScale.setScaleParameters(minValue, maxValue, step, isVertical, isScaleStepsVisible, range);
     this.handles.forEach((item, index) => {
       const ratio = index === 0 ? firstValueRatio : secondValueRatio;
       const isVisible = index === 0 ? true : isSecondValueVisible;

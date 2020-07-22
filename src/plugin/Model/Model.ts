@@ -38,7 +38,7 @@ class Model {
   }
 
   private calculateNewValue(newValue: number): number {
-    return (newValue * this.options.scaleLength) / 100 + this.options.minValue;
+    return (newValue * this.options.range) / 100 + this.options.minValue;
   }
 
   private setModelParameters(options: BaseOptions | ExtendOptions): void {
@@ -50,14 +50,14 @@ class Model {
     const {
       minValue, maxValue, firstValue, secondValue,
     } = options;
-    const scaleLength = maxValue - minValue;
-    const firstValueRatio = (firstValue - minValue) * (100 / scaleLength);
-    const secondValueRatio = (secondValue - minValue) * (100 / scaleLength);
+    const range = maxValue - minValue;
+    const firstValueRatio = (firstValue - minValue) * (100 / range);
+    const secondValueRatio = (secondValue - minValue) * (100 / range);
     const firstValueArea = firstValueRatio + (secondValueRatio - firstValueRatio) / 2;
     return {
       ...options,
       ...{
-        scaleLength, firstValueRatio, secondValueRatio, firstValueArea,
+        range, firstValueRatio, secondValueRatio, firstValueArea,
       },
     };
   }

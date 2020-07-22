@@ -21,7 +21,7 @@ export interface BaseOptions {
 }
 
 export interface ExtendOptions extends BaseOptions {
-  scaleLength: number;
+  range: number;
   firstValueRatio: number;
   secondValueRatio: number;
   firstValueArea: number;
