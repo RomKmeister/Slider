@@ -50,9 +50,6 @@ class ModelCorrection {
     const isFirstValueNeedCorrect = this.options.isSecondValueVisible && isFirstValueChanged
     && isFirstValueNearlySecond && this.options.secondValue < maxValue;
 
-    const isIncompleteStep = this.options.isSecondValueVisible && isValuesCanChange
-    && isFirstValueChanged && isFirstValueNearlySecond && this.options.secondValue >= maxValue;
-
     const isSecondValueNeedCorrect = isSecondValueChanged && isSecondValueNearlyFirst;
 
     if (!isValuesCanChange) {
@@ -61,9 +58,6 @@ class ModelCorrection {
     }
     if (isFirstValueNeedCorrect) {
       correctedFirstValue = secondValue - step;
-    }
-    if (isIncompleteStep) {
-      correctedFirstValue = secondValue - step + (maxValue % step);
     }
     if (isSecondValueNeedCorrect) {
       correctedSecondValue = firstValue + step;
@@ -107,7 +101,8 @@ class ModelCorrection {
     let correctedFirstValue = firstValue;
     let correctedSecondValue = secondValue;
     const isValuesLowerMin = isSecondValueVisible && firstValue <= minValue && secondValue <= minValue;
-    const isValuesHigherMax = isSecondValueVisible && firstValue >= maxValue && secondValue >= maxValue;
+    const isValuesHigherMax = isSecondValueVisible && firstValue >= maxValue && secondValue >= maxValue && (maxValue - minValue) % step === 0;
+    const isValuesHigherMax1 = isSecondValueVisible && firstValue >= maxValue && secondValue >= maxValue && (maxValue - minValue) % step % step > 0;
     const isSecondValueHigherMax = isSecondValueVisible && secondValue >= maxValue;
     const isFirstValueLowerMin = firstValue <= minValue;
     const isFirstValueHigherMax = isSecondValueVisible === false && firstValue >= maxValue;
@@ -117,6 +112,10 @@ class ModelCorrection {
       correctedSecondValue = correctedFirstValue + step;
     }
     if (isValuesHigherMax) {
+      correctedSecondValue = maxValue;
+      correctedFirstValue = correctedSecondValue - step;
+    }
+    if (isValuesHigherMax1) {
       correctedSecondValue = maxValue;
       correctedFirstValue = correctedSecondValue - ((maxValue - minValue) % step);
     }
