@@ -1,6 +1,3 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-param-reassign */
-
 import { BaseOptions, ExtendOptions, NewRatio } from '../interfaces';
 import EventEmitter from '../EventEmitter/EventEmitter';
 import ModelCorrection from './ModelCorrection';
@@ -30,16 +27,18 @@ class Model {
     const isFirstRatioChanged = Object.keys(options).length === 1 && options.firstValueRatio;
     const isSecondRatioChanged = Object.keys(options).length === 1 && options.secondValueRatio;
     if (isFirstRatioChanged) {
-      const newFirstValue = (options.firstValueRatio * this.options.scaleLength) / 100 + this.options.minValue;
-      const newOptions = { ...this.options, firstValue: newFirstValue };
-      return newOptions;
+      const newFirstValue = this.calculateNewValue(options.firstValueRatio);
+      return { ...this.options, ...{ firstValue: newFirstValue } };
     }
     if (isSecondRatioChanged) {
-      const newSecondValue = (options.secondValueRatio * this.options.scaleLength) / 100 + this.options.minValue;
-      const newOptions = { ...this.options, secondValue: newSecondValue };
-      return newOptions;
+      const newSecondValue = this.calculateNewValue(options.secondValueRatio);
+      return { ...this.options, ...{ secondValue: newSecondValue } };
     }
     return { ...this.options, ...options };
+  }
+
+  private calculateNewValue(newValue: number): number {
+    return (newValue * this.options.scaleLength) / 100 + this.options.minValue;
   }
 
   private setModelParameters(options: BaseOptions | ExtendOptions): void {
@@ -54,8 +53,7 @@ class Model {
     const scaleLength = maxValue - minValue;
     const firstValueRatio = (firstValue - minValue) * (100 / scaleLength);
     const secondValueRatio = (secondValue - minValue) * (100 / scaleLength);
-    const interval = (secondValueRatio - firstValueRatio) / 2;
-    const firstValueArea = firstValueRatio + interval;
+    const firstValueArea = firstValueRatio + (secondValueRatio - firstValueRatio) / 2;
     return {
       ...options,
       ...{
