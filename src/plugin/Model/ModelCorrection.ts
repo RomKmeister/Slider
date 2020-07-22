@@ -51,8 +51,7 @@ class ModelCorrection {
     && isFirstValueNearlySecond && this.options.secondValue < maxValue;
 
     const isIncompleteStep = this.options.isSecondValueVisible && isValuesCanChange
-    && isFirstValueChanged && isFirstValueNearlySecond && this.options.secondValue >= maxValue
-    && (maxValue - minValue) % step > 0;
+    && isFirstValueChanged && isFirstValueNearlySecond && this.options.secondValue >= maxValue;
 
     const isSecondValueNeedCorrect = isSecondValueChanged && isSecondValueNearlyFirst;
 
@@ -107,24 +106,19 @@ class ModelCorrection {
     } = options;
     let correctedFirstValue = firstValue;
     let correctedSecondValue = secondValue;
-    const isInit = isSecondValueVisible && firstValue >= maxValue && secondValue >= maxValue;
     const isValuesLowerMin = isSecondValueVisible && firstValue <= minValue && secondValue <= minValue;
-    const isValuesHigherMax = this.options && isInit;
+    const isValuesHigherMax = isSecondValueVisible && firstValue >= maxValue && secondValue >= maxValue;
     const isSecondValueHigherMax = isSecondValueVisible && secondValue >= maxValue;
     const isFirstValueLowerMin = firstValue <= minValue;
     const isFirstValueHigherMax = isSecondValueVisible === false && firstValue >= maxValue;
 
-    if (isInit) {
-      correctedSecondValue = maxValue;
-      correctedFirstValue = correctedSecondValue - ((maxValue - minValue) % step);
-    }
     if (isValuesLowerMin) {
       correctedFirstValue = minValue;
       correctedSecondValue = correctedFirstValue + step;
     }
     if (isValuesHigherMax) {
       correctedSecondValue = maxValue;
-      correctedFirstValue = correctedSecondValue - step;
+      correctedFirstValue = correctedSecondValue - ((maxValue - minValue) % step);
     }
     if (isFirstValueLowerMin) {
       correctedFirstValue = minValue;
@@ -147,23 +141,23 @@ class ModelCorrection {
     const {
       minValue, maxValue, firstValue, secondValue, step,
     } = options;
-    let correctedFirstValue = firstValue;
-    let correctedSecondValue = secondValue;
-    const isFirstValueEqualSteps = step >= 1 && (firstValue + minValue) % step !== 0
+    const isFirstValueEqualStep = (firstValue + minValue) % step !== 0
     && firstValue > minValue && firstValue < maxValue;
-    const isSecondValueEqualSteps = step >= 1 && (secondValue - minValue) % step !== 0 && secondValue < maxValue;
-    if (isFirstValueEqualSteps) {
-      correctedFirstValue = Math.round(firstValue / step) * step + (minValue % step);
-    }
-    if (isSecondValueEqualSteps) {
-      correctedSecondValue = Math.round(secondValue / step) * step + (minValue % step);
-    }
+    const isSecondValueEqualStep = (secondValue - minValue) % step !== 0 && secondValue < maxValue;
+    const correctedFirstValue = isFirstValueEqualStep ? this.calculateCorrectValue(firstValue, minValue, step) : firstValue;
+    const correctedSecondValue = isSecondValueEqualStep
+      ? this.calculateCorrectValue(secondValue, minValue, step) : secondValue;
     return {
       ...options,
       ...{
         firstValue: correctedFirstValue, secondValue: correctedSecondValue,
       },
     };
+  }
+
+  private calculateCorrectValue(value: number, minValue: number, step: number): number {
+    const nextStepValue = Math.round(value / step) * step + (minValue % step);
+    return (nextStepValue - value) >= step / 2 ? nextStepValue - step : nextStepValue;
   }
 }
 
