@@ -60,9 +60,9 @@ class View {
   }
 
   update(data: NewCoordinate, event: string): void {
-    const newValue = this.calculateValue(data.newCoordinate);
+    const newValue = this.calculateRatio(data.newCoordinate);
     const chooseHandler = data.target === 0 ? 'first' : 'second';
-    const name = event === 'handlerChanged' ? this.chooseValueForUpdate(chooseHandler) : this.chooseValueForUpdate(newValue);
+    const name = event === 'handlerChanged' ? this.chooseRatioForUpdate(chooseHandler) : this.chooseRatioForUpdate(newValue);
     const newOption = { [name]: newValue };
     this.eventEmitter.notify(newOption, 'viewUpdated');
   }
@@ -83,7 +83,7 @@ class View {
     this.handlesElements = this.element.querySelectorAll('.js-slider__handle');
   }
 
-  private calculateValue(coordinate: number): number {
+  private calculateRatio(coordinate: number): number {
     this.getScaleSizes();
     const value = ((coordinate - this.scalePosition) * 100) / this.scaleLength;
     return value;
@@ -99,7 +99,7 @@ class View {
       : scale.getBoundingClientRect().left;
   }
 
-  private chooseValueForUpdate(newValue: number | string): string {
+  private chooseRatioForUpdate(newValue: number | string): string {
     const { isSecondValueVisible, firstValueArea } = this.model.options;
     const checking = newValue === 'first'
     || (isSecondValueVisible && firstValueArea >= newValue) || isSecondValueVisible === false;
