@@ -45,19 +45,10 @@ describe('View', () => {
     expect(view.handles[0].setHandlersParameters.called).to.deep.equal(true);
     expect(view.bubbles[0].setBubbleParameters.called).to.deep.equal(true);
   });
-  it('Should set the first value ratio as name and 10 as value', () => {
-    const newOption = { firstValueRatio: 10 };
-    view.update({ target: 'firstValueRatio', newCoordinate: 120 }, 'handlerChanged');
+  it('Should calculate new ratio and choose target for update', () => {
+    const newOption = { 'firstValueRatio': 10 };
+    view.update({ target: 0, newCoordinate: 120 }, 'handlerChanged');
     view.update({ target: 'scale', newCoordinate: 120 }, 'scaleClicked');
-    expect(view.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOption);
-    expect(view.eventEmitter.notify.getCall(1).args[0]).to.deep.equal(newOption);
-    expect(view.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('viewUpdated');
-  });
-
-  it('Should set the second value as name and 80 as value', () => {
-    const newOption = { secondValueRatio: 80 };
-    view.update({ target: 'secondValueRatio', newCoordinate: 960 }, 'handlerChanged');
-    view.update({ target: 'scale', newCoordinate: 960 }, 'scaleClicked');
     expect(view.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOption);
     expect(view.eventEmitter.notify.getCall(1).args[0]).to.deep.equal(newOption);
     expect(view.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('viewUpdated');

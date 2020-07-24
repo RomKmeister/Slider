@@ -31,7 +31,7 @@ describe('Model', () => {
   });
 
   it('Should calculate the ratios', () => {
-    expect(model.options.scaleLength).to.deep.equal(100);
+    expect(model.options.range).to.deep.equal(100);
     expect(model.options.firstValueRatio).to.deep.equal(55);
     expect(model.options.secondValueRatio).to.deep.equal(70);
     expect(model.options.firstValueArea).to.deep.equal(62.5);

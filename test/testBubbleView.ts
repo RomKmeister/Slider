@@ -1,57 +1,42 @@
 import { expect } from 'chai';
-import Model from '../src/plugin/Model/Model';
-import { BaseOptions } from '../src/plugin/interfaces';
 import BubbleView from '../src/plugin/View/BubbleView';
 
 describe('Bubble View', () => {
-  let options: BaseOptions;
-  let model: Model;
   let bubbleView: BubbleView;
   let testElement: HTMLElement;
   beforeEach(() => {
     const element = document.createElement('div');
     element.classList.add('js-slider__bubble');
-    const index = 0;
-
-    options = {
-      minValue: 0,
-      maxValue: 100,
-      firstValue: 55,
-      isSecondValueVisible: true,
-      secondValue: 70,
-      step: 1,
-      isVertical: false,
-      isBubbleVisible: false,
-      isScaleStepsVisible: true,
-    };
-
-    model = new Model(options);
-    bubbleView = new BubbleView(element, index, model);
-    bubbleView.setBubbleParameters();
+    bubbleView = new BubbleView(element);
     testElement = bubbleView.element;
   });
-
-  it('Should set the bubble value', () => {
+  it('Should set the first bubble value', () => {
+    bubbleView.setBubbleParameters(0, 55, false, true);
     expect(testElement.textContent).to.deep.equal('55');
   });
 
+  it('Should set the second bubble value', () => {
+    bubbleView.setBubbleParameters(1, 70, false, true);
+    expect(testElement.textContent).to.deep.equal('70');
+  });
+
   it('Should show the bubble', () => {
-    bubbleView.model.options.isBubbleVisible = true;
-    bubbleView.setBubbleParameters();
+    bubbleView.setBubbleParameters(1, 70, false, true);
     expect(testElement.className).to.deep.equal('js-slider__bubble slider__bubble_visible');
   });
 
   it('Should hide the bubble', () => {
+    bubbleView.setBubbleParameters(0, 55, false, false);
     expect(testElement.className).to.deep.equal('js-slider__bubble');
   });
 
   it('Should set the horizontal direction', () => {
+    bubbleView.setBubbleParameters(1, 70, false, false);
     expect(testElement.className).to.deep.equal('js-slider__bubble');
   });
 
   it('Should set the vertical direction', () => {
-    bubbleView.model.options.isVertical = true;
-    bubbleView.setBubbleParameters();
+    bubbleView.setBubbleParameters(0, 55, true, false);
     expect(testElement.className).to.deep.equal('js-slider__bubble slider__bubble_vertical');
   });
 });
