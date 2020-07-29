@@ -28,11 +28,11 @@ class Model {
     const isSecondRatioChanged = Object.keys(options).length === 1 && options.secondValueRatio;
     if (isFirstRatioChanged) {
       const newFirstValue = this.calculateNewValue(options.firstValueRatio);
-      return { ...this.options, ...{ firstValue: newFirstValue } };
+      return { ...this.options, firstValue: newFirstValue };
     }
     if (isSecondRatioChanged) {
       const newSecondValue = this.calculateNewValue(options.secondValueRatio);
-      return { ...this.options, ...{ secondValue: newSecondValue } };
+      return { ...this.options, secondValue: newSecondValue };
     }
     return { ...this.options, ...options };
   }
@@ -55,10 +55,7 @@ class Model {
     const secondValueRatio = (secondValue - minValue) * (100 / range);
     const firstValueArea = firstValueRatio + (secondValueRatio - firstValueRatio) / 2;
     return {
-      ...options,
-      ...{
-        range, firstValueRatio, secondValueRatio, firstValueArea,
-      },
+      ...options, range, firstValueRatio, secondValueRatio, firstValueArea,
     };
   }
 }

@@ -16,23 +16,13 @@ class ModelCorrection {
   private correctStep(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const { step } = options;
     const correctedStep = step < 1 ? 1 : step;
-    return {
-      ...options,
-      ...{
-        step: correctedStep,
-      },
-    };
+    return { ...options, step: correctedStep };
   }
 
   private correctRange(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const { step, minValue, maxValue } = options;
     const correctedMaxValue = maxValue < minValue ? (minValue + step) : maxValue;
-    return {
-      ...options,
-      ...{
-        maxValue: correctedMaxValue,
-      },
-    };
+    return { ...options, maxValue: correctedMaxValue };
   }
 
   private correctMove(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
@@ -62,12 +52,7 @@ class ModelCorrection {
     if (isSecondValueNeedCorrect) {
       correctedSecondValue = firstValue + step;
     }
-    return {
-      ...options,
-      ...{
-        firstValue: correctedFirstValue, secondValue: correctedSecondValue,
-      },
-    };
+    return { ...options, firstValue: correctedFirstValue, secondValue: correctedSecondValue };
   }
 
   private correctDisorderedValues(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
@@ -86,12 +71,7 @@ class ModelCorrection {
     if (isValuesEqual) {
       correctedSecondValue += step;
     }
-    return {
-      ...options,
-      ...{
-        firstValue: correctedFirstValue, secondValue: correctedSecondValue,
-      },
-    };
+    return { ...options, firstValue: correctedFirstValue, secondValue: correctedSecondValue };
   }
 
   private correctMinMax(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
@@ -128,12 +108,7 @@ class ModelCorrection {
     if (isSecondValueHigherMax) {
       correctedSecondValue = maxValue;
     }
-    return {
-      ...options,
-      ...{
-        firstValue: correctedFirstValue, secondValue: correctedSecondValue,
-      },
-    };
+    return { ...options, firstValue: correctedFirstValue, secondValue: correctedSecondValue };
   }
 
   private correctStepPosition(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
@@ -146,12 +121,7 @@ class ModelCorrection {
     const correctedFirstValue = isFirstValueEqualStep ? this.calculateCorrectValue(firstValue, minValue, step) : firstValue;
     const correctedSecondValue = isSecondValueEqualStep
       ? this.calculateCorrectValue(secondValue, minValue, step) : secondValue;
-    return {
-      ...options,
-      ...{
-        firstValue: correctedFirstValue, secondValue: correctedSecondValue,
-      },
-    };
+    return { ...options, firstValue: correctedFirstValue, secondValue: correctedSecondValue };
   }
 
   private calculateCorrectValue(value: number, minValue: number, step: number): number {
