@@ -1,4 +1,5 @@
-import EventEmitter from '../EventEmitter/EventEmitter';
+import EventEmitter from '../../EventEmitter/EventEmitter';
+import { Parameters } from './ScaleViewInterfaces';
 
 class ScaleView {
   element: HTMLElement;
@@ -35,7 +36,7 @@ class ScaleView {
     isVertical,
     isScaleStepsVisible,
     range,
-  }: any): void {
+  }: Parameters): void {
     this.minValue = minValue;
     this.maxValue = maxValue;
     this.step = step;

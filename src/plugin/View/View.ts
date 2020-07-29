@@ -1,9 +1,9 @@
 import Model from '../Model/Model';
 import EventEmitter from '../EventEmitter/EventEmitter';
 import { NewCoordinate } from '../interfaces';
-import ScaleView from './ScaleView';
-import BubbleView from './BubbleView';
-import HandleView from './HandleView';
+import ScaleView from './ScaleView/ScaleView';
+import BubbleView from './BubbleView/BubbleView';
+import HandleView from './HandleView/HandleView';
 
 class View {
   element: HTMLElement;
@@ -53,11 +53,15 @@ class View {
     this.handles.forEach((item, index) => {
       const ratio = index === 0 ? firstValueRatio : secondValueRatio;
       const isVisible = index === 0 ? true : isSecondValueVisible;
-      return item.setHandlersParameters(index, ratio, isVertical, isVisible);
+      return item.setHandlersParameters({
+        index, ratio, isVertical, isVisible,
+      });
     });
     this.bubbles.forEach((item, index) => {
       const value = index === 0 ? firstValue : secondValue;
-      return item.setBubbleParameters(index, value, isVertical, isBubbleVisible);
+      return item.setBubbleParameters({
+        index, value, isVertical, isBubbleVisible,
+      });
     });
   }
 

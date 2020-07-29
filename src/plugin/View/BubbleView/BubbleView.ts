@@ -1,3 +1,5 @@
+import { Parameters } from './BubbleViewInterfaces';
+
 class BubbleView {
   element: HTMLElement;
 
@@ -13,7 +15,9 @@ class BubbleView {
     this.element = element;
   }
 
-  setBubbleParameters(index: number, value: number, isVertical: boolean, isBubbleVisible: boolean): void {
+  setBubbleParameters({
+    index, value, isVertical, isBubbleVisible,
+  }: Parameters): void {
     this.index = index;
     this.value = value;
     this.isVertical = isVertical;

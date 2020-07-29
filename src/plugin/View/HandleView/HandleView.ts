@@ -1,4 +1,5 @@
-import EventEmitter from '../EventEmitter/EventEmitter';
+import EventEmitter from '../../EventEmitter/EventEmitter';
+import { Parameters } from './HandleViewInterfaces';
 
 class HandleView {
   element: HTMLElement;
@@ -22,7 +23,9 @@ class HandleView {
     this.init();
   }
 
-  setHandlersParameters(index: number, ratio: number, isVertical: boolean, isVisible: boolean): void {
+  setHandlersParameters({
+    index, ratio, isVertical, isVisible,
+  }: Parameters): void {
     this.index = index;
     this.ratio = ratio;
     this.isVertical = isVertical;
