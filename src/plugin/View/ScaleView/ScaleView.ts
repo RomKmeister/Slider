@@ -29,7 +29,7 @@ class ScaleView {
     this.init();
   }
 
-  setScaleParameters({
+  setParameters({
     minValue,
     maxValue,
     step,

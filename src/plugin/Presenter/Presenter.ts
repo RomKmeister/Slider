@@ -19,7 +19,7 @@ class Presenter {
   update(data: ExtendOptions | NewRatio, event: string): void {
     const needModelUpdate = event === 'newOptions' || event === 'viewUpdated';
     if (event === 'modelUpdated') {
-      this.view.setViewParameters();
+      this.view.setParameters();
     }
     if (needModelUpdate) {
       this.model.update(data);

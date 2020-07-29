@@ -23,7 +23,7 @@ class HandleView {
     this.init();
   }
 
-  setHandlersParameters({
+  setParameters({
     index, ratio, isVertical, isVisible,
   }: Parameters): void {
     this.index = index;

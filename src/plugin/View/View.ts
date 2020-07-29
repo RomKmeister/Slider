@@ -32,7 +32,7 @@ class View {
     this.init();
   }
 
-  setViewParameters(): void {
+  setParameters(): void {
     const {
       minValue,
       maxValue,
@@ -47,19 +47,19 @@ class View {
       secondValueRatio,
       range,
     } = this.model.options;
-    this.viewScale.setScaleParameters({
+    this.viewScale.setParameters({
       minValue, maxValue, step, isVertical, isScaleStepsVisible, range,
     });
     this.handles.forEach((item, index) => {
       const ratio = index === 0 ? firstValueRatio : secondValueRatio;
       const isVisible = index === 0 ? true : isSecondValueVisible;
-      return item.setHandlersParameters({
+      return item.setParameters({
         index, ratio, isVertical, isVisible,
       });
     });
     this.bubbles.forEach((item, index) => {
       const value = index === 0 ? firstValue : secondValue;
-      return item.setBubbleParameters({
+      return item.setParameters({
         index, value, isVertical, isBubbleVisible,
       });
     });
@@ -81,7 +81,7 @@ class View {
     this.bubbles = Array.from(this.bubblesElements).map((item) => new BubbleView(item));
     this.handles.forEach((item) => item.eventEmitter.attach(this));
     this.viewScale.eventEmitter.attach(this);
-    this.setViewParameters();
+    this.setParameters();
   }
 
   private findElements(): void {

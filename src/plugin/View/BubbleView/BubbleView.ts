@@ -15,7 +15,7 @@ class BubbleView {
     this.element = element;
   }
 
-  setBubbleParameters({
+  setParameters({
     index, value, isVertical, isBubbleVisible,
   }: Parameters): void {
     this.index = index;
