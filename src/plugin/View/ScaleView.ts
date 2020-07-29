@@ -28,20 +28,20 @@ class ScaleView {
     this.init();
   }
 
-  setScaleParameters(
-    minValue: number,
-    maxValue: number,
-    step: number,
-    isVertical: boolean,
-    isScaleStepsVisible: boolean,
-    scaleLength: number,
-  ): void {
+  setScaleParameters({
+    minValue,
+    maxValue,
+    step,
+    isVertical,
+    isScaleStepsVisible,
+    range,
+  }: any): void {
     this.minValue = minValue;
     this.maxValue = maxValue;
     this.step = step;
     this.isVertical = isVertical;
     this.isScaleStepsVisible = isScaleStepsVisible;
-    this.scaleLength = scaleLength;
+    this.scaleLength = range;
     this.setDirection();
     this.setVisibility();
     this.setBorders();
