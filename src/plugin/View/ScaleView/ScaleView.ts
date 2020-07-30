@@ -44,9 +44,7 @@ class ScaleView {
     this.isScaleStepsVisible = isScaleStepsVisible;
     this.scaleLength = range;
     this.setDirection();
-    this.setVisibility();
-    this.setBorders();
-    this.createStepItems();
+    this.setSteps();
   }
 
   private init(): void {
@@ -63,7 +61,7 @@ class ScaleView {
 
   private bindEventListeners(): void {
     this.scale.addEventListener('mousedown', this.handleScaleMouseDown.bind(this));
-    window.addEventListener('resize', this.createStepItems.bind(this));
+    window.addEventListener('resize', this.setSteps.bind(this));
   }
 
   private handleScaleMouseDown(event: MouseEvent): void {
@@ -93,11 +91,13 @@ class ScaleView {
     }
   }
 
-  private setVisibility(): void {
+  private setSteps(): void {
     const visibility = 'slider__steps_visible';
 
     if (this.isScaleStepsVisible) {
       this.steps.classList.add(visibility);
+      this.setBorders();
+      this.createStepItems();
     } else {
       this.steps.classList.remove(visibility);
     }
