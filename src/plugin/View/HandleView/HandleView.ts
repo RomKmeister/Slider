@@ -14,8 +14,6 @@ class HandleView {
 
   mousemove: boolean;
 
-  handleDocumentMouseMove: any;
-
   eventEmitter: EventEmitter;
 
   constructor(element: HTMLElement) {
@@ -30,7 +28,7 @@ class HandleView {
     this.ratio = ratio;
     this.isVertical = isVertical;
     this.isVisible = isVisible;
-    this.setHandlesPosition();
+    this.setPosition();
     this.setVisibility();
     this.setDirection();
   }
@@ -42,7 +40,6 @@ class HandleView {
 
   private bindEventListeners(): void {
     this.element.addEventListener('mousedown', this.handleHandleMouseDown.bind(this));
-    this.handleDocumentMouseMove = this.bindedHandleDocumentMouseMove.bind(this);
     document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
   }
 
@@ -55,13 +52,14 @@ class HandleView {
     document.removeEventListener('mousemove', this.handleDocumentMouseMove);
   }
 
-  private bindedHandleDocumentMouseMove(event: MouseEvent): void {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  private handleDocumentMouseMove = (event: MouseEvent) => {
     const coordinate = this.isVertical ? event.clientY : event.clientX;
     const newOptions = { target: this.index, newCoordinate: coordinate };
-    this.eventEmitter.notify(newOptions, 'handlerChanged');
+    this.eventEmitter.notify(newOptions, 'handleMoved');
   }
 
-  private setHandlesPosition(): void {
+  private setPosition(): void {
     if (this.isVertical) {
       this.element.style.top = `${this.ratio}%`;
     } else {
