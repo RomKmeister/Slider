@@ -3,20 +3,20 @@ import EventEmitter from '../EventEmitter/EventEmitter';
 import { NewCoordinate } from '../interfaces';
 import ScaleView from './ScaleView/ScaleView';
 import BubbleView from './BubbleView/BubbleView';
-import HandleView from './HandleView/HandleView';
+import RunnerView from './RunnerView/RunnerView';
 
 class View {
   element: HTMLElement;
 
   model: Model;
 
-  handlesElements: Array<HTMLElement>;
+  runnersElements: Array<HTMLElement>;
 
   bubblesElements: Array<HTMLElement>;
 
   scaleView: ScaleView;
 
-  handles: Array<HandleView>
+  runners: Array<RunnerView>
 
   bubbles: Array<BubbleView>
 
@@ -50,7 +50,7 @@ class View {
     this.scaleView.setParameters({
       minValue, maxValue, step, isVertical, isScaleStepsVisible, range,
     });
-    this.handles.forEach((item, index) => {
+    this.runners.forEach((item, index) => {
       const ratio = index === 0 ? firstValueRatio : secondValueRatio;
       const isVisible = index === 0 ? true : isSecondValueVisible;
       item.setParameters({
@@ -81,16 +81,16 @@ class View {
     this.findElements();
     this.eventEmitter = new EventEmitter();
     this.scaleView = new ScaleView(this.element);
-    this.handles = this.handlesElements.map((item) => new HandleView(item));
+    this.runners = this.runnersElements.map((item) => new RunnerView(item));
     this.bubbles = this.bubblesElements.map((item) => new BubbleView(item));
-    this.handles.forEach((item) => item.eventEmitter.attach(this));
+    this.runners.forEach((item) => item.eventEmitter.attach(this));
     this.scaleView.eventEmitter.attach(this);
     this.setParameters();
   }
 
   private findElements(): void {
     this.bubblesElements = Array.from(this.element.querySelectorAll('.js-slider__bubble'));
-    this.handlesElements = Array.from(this.element.querySelectorAll('.js-slider__handle'));
+    this.runnersElements = Array.from(this.element.querySelectorAll('.js-slider__handle'));
   }
 
   private calculateRatio(coordinate: number): number {

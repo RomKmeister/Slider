@@ -1,7 +1,7 @@
 import EventEmitter from '../../EventEmitter/EventEmitter';
-import { Parameters } from './HandleViewInterfaces';
+import { Parameters } from './RunnerViewInterfaces';
 
-class HandleView {
+class RunnerView {
   element: HTMLElement;
 
   index: number;
@@ -39,11 +39,11 @@ class HandleView {
   }
 
   private bindEventListeners(): void {
-    this.element.addEventListener('mousedown', this.handleHandleMouseDown.bind(this));
+    this.element.addEventListener('mousedown', this.handleRunnerMouseDown.bind(this));
     document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
   }
 
-  private handleHandleMouseDown(event: MouseEvent): void {
+  private handleRunnerMouseDown(event: MouseEvent): void {
     event.preventDefault();
     document.addEventListener('mousemove', this.handleDocumentMouseMove);
   }
@@ -56,7 +56,7 @@ class HandleView {
   private handleDocumentMouseMove = (event: MouseEvent) => {
     const coordinate = this.isVertical ? event.clientY : event.clientX;
     const newCoordinate = { target: this.index, coordinate };
-    this.eventEmitter.notify(newCoordinate, 'handleMoved');
+    this.eventEmitter.notify(newCoordinate, 'runnerMoved');
   }
 
   private setPosition(): void {
@@ -68,25 +68,25 @@ class HandleView {
   }
 
   private setVisibility(): void {
-    const handleClassVisibility = 'slider__handle_hidden';
+    const runnerClassVisibility = 'slider__runner_hidden';
     if (this.isVisible === false) {
-      this.element.classList.add(handleClassVisibility);
+      this.element.classList.add(runnerClassVisibility);
     } else {
-      this.element.classList.remove(handleClassVisibility);
+      this.element.classList.remove(runnerClassVisibility);
     }
   }
 
   private setDirection(): void {
-    const handleClassDirection = 'slider__handle_vertical';
+    const runnerClassDirection = 'slider__runner_vertical';
 
     if (this.isVertical) {
-      this.element.classList.add(handleClassDirection);
+      this.element.classList.add(runnerClassDirection);
       this.element.style.left = '';
     } else {
-      this.element.classList.remove(handleClassDirection);
+      this.element.classList.remove(runnerClassDirection);
       this.element.style.top = '';
     }
   }
 }
 
-export default HandleView;
+export default RunnerView;
