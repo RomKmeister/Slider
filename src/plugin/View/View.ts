@@ -66,10 +66,14 @@ class View {
   }
 
   update(data: NewCoordinate, event: string): void {
-    const newValue = this.calculateRatio(data.newCoordinate);
-    const chosenHandle = data.target === 0 ? 'first' : 'second';
-    const name = event === 'handlerChanged' ? this.chooseRatioForUpdate(chosenHandle) : this.chooseRatioForUpdate(newValue);
-    const newOption = { [name]: newValue };
+    const newRatio = this.calculateRatio(data.newCoordinate);
+    let name = '';
+    if (event === 'scaleClicked') {
+      name = this.chooseRatioForUpdate(newRatio);
+    } else {
+      name = data.target === 0 ? 'firstValueRatio' : 'secondValueRatio';
+    }
+    const newOption = { [name]: newRatio };
     this.eventEmitter.notify(newOption, 'viewUpdated');
   }
 
@@ -105,10 +109,9 @@ class View {
       : scale.getBoundingClientRect().left;
   }
 
-  private chooseRatioForUpdate(newValue: number | string): string {
+  private chooseRatioForUpdate(newRatio: number): string {
     const { isSecondValueVisible, firstValueArea } = this.model.options;
-    const needFirstValueRatio = newValue === 'first'
-    || (isSecondValueVisible && firstValueArea >= newValue) || isSecondValueVisible === false;
+    const needFirstValueRatio = (isSecondValueVisible && firstValueArea >= newRatio) || isSecondValueVisible === false;
     if (needFirstValueRatio) {
       return 'firstValueRatio';
     }
