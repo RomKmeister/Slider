@@ -10,9 +10,9 @@ class View {
 
   model: Model;
 
-  handlesElements: NodeListOf<HTMLElement>;
+  handlesElements: Array<HTMLElement>;
 
-  bubblesElements: NodeListOf<HTMLElement>;
+  bubblesElements: Array<HTMLElement>;
 
   scaleView: ScaleView;
 
@@ -77,16 +77,16 @@ class View {
     this.findElements();
     this.eventEmitter = new EventEmitter();
     this.scaleView = new ScaleView(this.element);
-    this.handles = Array.from(this.handlesElements).map((item) => new HandleView(item));
-    this.bubbles = Array.from(this.bubblesElements).map((item) => new BubbleView(item));
+    this.handles = this.handlesElements.map((item) => new HandleView(item));
+    this.bubbles = this.bubblesElements.map((item) => new BubbleView(item));
     this.handles.forEach((item) => item.eventEmitter.attach(this));
     this.scaleView.eventEmitter.attach(this);
     this.setParameters();
   }
 
   private findElements(): void {
-    this.bubblesElements = this.element.querySelectorAll('.js-slider__bubble');
-    this.handlesElements = this.element.querySelectorAll('.js-slider__handle');
+    this.bubblesElements = Array.from(this.element.querySelectorAll('.js-slider__bubble'));
+    this.handlesElements = Array.from(this.element.querySelectorAll('.js-slider__handle'));
   }
 
   private calculateRatio(coordinate: number): number {
