@@ -67,8 +67,8 @@ class View {
 
   update(data: NewCoordinate, event: string): void {
     const newValue = this.calculateRatio(data.newCoordinate);
-    const chooseHandler = data.target === 0 ? 'first' : 'second';
-    const name = event === 'handlerChanged' ? this.chooseRatioForUpdate(chooseHandler) : this.chooseRatioForUpdate(newValue);
+    const chosenHandle = data.target === 0 ? 'first' : 'second';
+    const name = event === 'handlerChanged' ? this.chooseRatioForUpdate(chosenHandle) : this.chooseRatioForUpdate(newValue);
     const newOption = { [name]: newValue };
     this.eventEmitter.notify(newOption, 'viewUpdated');
   }
@@ -107,9 +107,9 @@ class View {
 
   private chooseRatioForUpdate(newValue: number | string): string {
     const { isSecondValueVisible, firstValueArea } = this.model.options;
-    const checking = newValue === 'first'
+    const needFirstValueRatio = newValue === 'first'
     || (isSecondValueVisible && firstValueArea >= newValue) || isSecondValueVisible === false;
-    if (checking) {
+    if (needFirstValueRatio) {
       return 'firstValueRatio';
     }
     return 'secondValueRatio';
