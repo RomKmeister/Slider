@@ -3,7 +3,7 @@ import { BaseOptions, ExtendOptions } from '../interfaces';
 class ModelCorrection {
   options: BaseOptions | ExtendOptions;
 
-  setModelParameters(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
+  correctOptions(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
     const correctStep = this.correctStep(options);
     const correctScale = this.correctRange(correctStep);
     const correctMove = this.options ? this.correctMove(correctScale) : correctScale;
@@ -81,8 +81,9 @@ class ModelCorrection {
     let correctedFirstValue = firstValue;
     let correctedSecondValue = secondValue;
     const isValuesLowerMin = isSecondValueVisible && firstValue <= minValue && secondValue <= minValue;
-    const isValuesHigherMax = isSecondValueVisible && firstValue >= maxValue && secondValue >= maxValue && (maxValue - minValue) % step === 0;
-    const isValuesHigherMax1 = isSecondValueVisible && firstValue >= maxValue && secondValue >= maxValue && (maxValue - minValue) % step % step > 0;
+    const isValuesHigherMax = isSecondValueVisible && firstValue >= maxValue && secondValue >= maxValue;
+    const isMaxValuesEqualStep = isValuesHigherMax && (maxValue - minValue) % step === 0;
+    const isMaxValuesUnequalStep = isValuesHigherMax && (maxValue - minValue) % step > 0;
     const isSecondValueHigherMax = isSecondValueVisible && secondValue >= maxValue;
     const isFirstValueLowerMin = firstValue <= minValue;
     const isFirstValueHigherMax = isSecondValueVisible === false && firstValue >= maxValue;
@@ -91,11 +92,11 @@ class ModelCorrection {
       correctedFirstValue = minValue;
       correctedSecondValue = correctedFirstValue + step;
     }
-    if (isValuesHigherMax) {
+    if (isMaxValuesEqualStep) {
       correctedSecondValue = maxValue;
       correctedFirstValue = correctedSecondValue - step;
     }
-    if (isValuesHigherMax1) {
+    if (isMaxValuesUnequalStep) {
       correctedSecondValue = maxValue;
       correctedFirstValue = correctedSecondValue - ((maxValue - minValue) % step);
     }
