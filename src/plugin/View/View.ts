@@ -14,7 +14,7 @@ class View {
 
   bubblesElements: NodeListOf<HTMLElement>;
 
-  viewScale: ScaleView;
+  scaleView: ScaleView;
 
   handles: Array<HandleView>
 
@@ -47,7 +47,7 @@ class View {
       secondValueRatio,
       range,
     } = this.model.options;
-    this.viewScale.setParameters({
+    this.scaleView.setParameters({
       minValue, maxValue, step, isVertical, isScaleStepsVisible, range,
     });
     this.handles.forEach((item, index) => {
@@ -76,11 +76,11 @@ class View {
   private init(): void {
     this.findElements();
     this.eventEmitter = new EventEmitter();
-    this.viewScale = new ScaleView(this.element);
+    this.scaleView = new ScaleView(this.element);
     this.handles = Array.from(this.handlesElements).map((item) => new HandleView(item));
     this.bubbles = Array.from(this.bubblesElements).map((item) => new BubbleView(item));
     this.handles.forEach((item) => item.eventEmitter.attach(this));
-    this.viewScale.eventEmitter.attach(this);
+    this.scaleView.eventEmitter.attach(this);
     this.setParameters();
   }
 
