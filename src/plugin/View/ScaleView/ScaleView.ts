@@ -67,15 +67,15 @@ class ScaleView {
   private handleScaleMouseDown(event: MouseEvent): void {
     event.preventDefault();
     const coordinate = this.isVertical ? event.clientY : event.clientX;
-    const newOptions = { target: 'scale', newCoordinate: coordinate };
-    this.eventEmitter.notify(newOptions, 'scaleClicked');
+    const newCoordinate = { target: 'scale', coordinate };
+    this.eventEmitter.notify(newCoordinate, 'scaleClicked');
   }
 
   private handleStepMouseDown(event: MouseEvent): void {
     event.preventDefault();
     const coordinate = this.isVertical ? event.clientY : event.clientX;
-    const newOptions = { target: 'scale', newCoordinate: coordinate };
-    this.eventEmitter.notify(newOptions, 'scaleClicked');
+    const newCoordinate = { target: 'scale', coordinate };
+    this.eventEmitter.notify(newCoordinate, 'scaleClicked');
   }
 
   private setDirection(): void {

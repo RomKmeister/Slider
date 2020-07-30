@@ -66,7 +66,7 @@ class View {
   }
 
   update(data: NewCoordinate, event: string): void {
-    const newRatio = this.calculateRatio(data.newCoordinate);
+    const newRatio = this.calculateRatio(data.coordinate);
     let name = '';
     if (event === 'scaleClicked') {
       name = this.chooseRatioForUpdate(newRatio);

@@ -29,7 +29,7 @@ export interface ExtendOptions extends BaseOptions {
 
 export interface NewCoordinate {
   target: string | number;
-  newCoordinate: number;
+  coordinate: number;
 }
 
 export interface NewRatio {

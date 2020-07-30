@@ -55,8 +55,8 @@ class HandleView {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   private handleDocumentMouseMove = (event: MouseEvent) => {
     const coordinate = this.isVertical ? event.clientY : event.clientX;
-    const newOptions = { target: this.index, newCoordinate: coordinate };
-    this.eventEmitter.notify(newOptions, 'handleMoved');
+    const newCoordinate = { target: this.index, coordinate };
+    this.eventEmitter.notify(newCoordinate, 'handleMoved');
   }
 
   private setPosition(): void {
