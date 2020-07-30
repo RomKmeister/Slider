@@ -53,13 +53,13 @@ class View {
     this.handles.forEach((item, index) => {
       const ratio = index === 0 ? firstValueRatio : secondValueRatio;
       const isVisible = index === 0 ? true : isSecondValueVisible;
-      return item.setParameters({
+      item.setParameters({
         index, ratio, isVertical, isVisible,
       });
     });
     this.bubbles.forEach((item, index) => {
       const value = index === 0 ? firstValue : secondValue;
-      return item.setParameters({
+      item.setParameters({
         index, value, isVertical, isBubbleVisible,
       });
     });
