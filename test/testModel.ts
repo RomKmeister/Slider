@@ -4,10 +4,9 @@ import Model from '../src/plugin/Model/Model';
 import { BaseOptions } from '../src/plugin/interfaces';
 
 describe('Model', () => {
-  let model: any;
+  let model: Model;
   let options: BaseOptions;
   beforeEach(() => {
-    const sandbox = sinon.createSandbox();
     options = {
       minValue: 0,
       maxValue: 100,
@@ -21,8 +20,6 @@ describe('Model', () => {
     };
 
     model = new Model(options);
-    sandbox.spy(model.eventEmitter, 'notify');
-    model.update(options);
   });
 
   it('Should get the options', () => {
@@ -38,7 +35,9 @@ describe('Model', () => {
   });
 
   it('Should send the data to the observers', () => {
-    expect(model.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(model.options);
-    expect(model.eventEmitter.notify.getCall(0).args[1]).to.equal('modelUpdated');
+    const spy = sinon.spy(model.eventEmitter, 'notify');
+    model.update(model.options);
+    expect(spy.getCall(0).args[0]).to.deep.equal(model.options);
+    expect(spy.getCall(0).args[1]).to.equal('modelUpdated');
   });
 });

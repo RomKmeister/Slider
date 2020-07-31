@@ -3,7 +3,7 @@ import ModelCorrection from '../src/plugin/Model/ModelCorrection';
 import { BaseOptions } from '../src/plugin/interfaces';
 
 describe('Model Corrections', () => {
-  let model: any;
+  let model: ModelCorrection;
   let options: BaseOptions;
   let testOptions: any;
   beforeEach(() => {

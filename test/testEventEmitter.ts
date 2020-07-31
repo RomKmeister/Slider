@@ -5,11 +5,10 @@ import { BaseOptions } from '../src/plugin/interfaces';
 import EventEmitter from '../src/plugin/EventEmitter/EventEmitter';
 
 describe('EventEmitter', () => {
-  let eventEmitter: any;
-  let model: any;
+  let eventEmitter: EventEmitter;
+  let model: Model;
   let options: BaseOptions;
   beforeEach(() => {
-    const sandbox = sinon.createSandbox();
     options = {
       minValue: 0,
       maxValue: 100,
@@ -24,17 +23,17 @@ describe('EventEmitter', () => {
 
     eventEmitter = new EventEmitter();
     model = new Model(options);
-    sandbox.spy(eventEmitter, 'attach');
-    sandbox.spy(eventEmitter, 'detach');
-    eventEmitter.attach(model);
   });
 
   it('Should attach observer', () => {
-    expect(eventEmitter.attach.called).to.equal(true);
+    const spy = sinon.spy(eventEmitter, 'attach');
+    eventEmitter.attach(model);
+    expect(spy.called).to.equal(true);
   });
 
   it('Should detach observer', () => {
+    const spy = sinon.spy(eventEmitter, 'detach');
     eventEmitter.detach(model);
-    expect(eventEmitter.detach.called).to.equal(true);
+    expect(spy.called).to.equal(true);
   });
 });

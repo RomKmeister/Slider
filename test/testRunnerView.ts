@@ -3,14 +3,12 @@ import * as sinon from 'sinon';
 import RunnerView from '../src/plugin/View/RunnerView/RunnerView';
 
 describe('Runner View', () => {
-  let runnerView: any;
+  let runnerView: RunnerView;
   let testElement: HTMLElement;
   beforeEach(() => {
-    const sandbox = sinon.createSandbox();
     const element = document.createElement('div');
     element.classList.add('js-slider__runner');
     runnerView = new RunnerView(element);
-    sandbox.spy(runnerView.eventEmitter, 'notify');
     testElement = runnerView.element;
   });
 
@@ -67,6 +65,7 @@ describe('Runner View', () => {
   });
 
   it('Should send new options from the first handler to the observers', () => {
+    const spy = sinon.spy(runnerView.eventEmitter, 'notify');
     runnerView.setParameters({
       index: 0,
       ratio: 55,
@@ -76,7 +75,7 @@ describe('Runner View', () => {
     testElement.dispatchEvent(new Event('mousedown'));
     document.dispatchEvent(new MouseEvent('mousemove', { clientX: 100 }));
     const newCoordinate = { target: 0, coordinate: 100 };
-    expect(runnerView.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newCoordinate);
-    expect(runnerView.eventEmitter.notify.getCall(0).args[1]).to.equal('runnerMoved');
+    expect(spy.getCall(0).args[0]).to.deep.equal(newCoordinate);
+    expect(spy.getCall(0).args[1]).to.equal('runnerMoved');
   });
 });

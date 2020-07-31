@@ -6,10 +6,9 @@ import { BaseOptions } from '../src/plugin/interfaces';
 
 describe('View', () => {
   let options: BaseOptions;
-  let view: any;
+  let view: View;
   let model: Model;
   beforeEach(() => {
-    const sandbox = sinon.createSandbox();
     const element = document.createElement('div');
     element.classList.add('js-slider-block');
     // eslint-disable-next-line max-len
@@ -29,28 +28,28 @@ describe('View', () => {
 
     model = new Model(options);
     view = new View(element, model);
-    sandbox.spy(view.scaleView, 'setParameters');
-    sandbox.spy(view.runners[0], 'setParameters');
-    sandbox.spy(view.bubbles[0], 'setParameters');
-    sandbox.spy(view.eventEmitter, 'notify');
-    sandbox.stub(view, 'getScaleSizes').callsFake(() => {
+    sinon.stub(view, 'getScaleSizes').callsFake(() => {
       view.scaleLength = 1200;
       view.scalePosition = 0;
     });
   });
 
   it('Should set the parameters at the slider elements', () => {
+    const spyScale = sinon.spy(view.scaleView, 'setParameters');
+    const spyRunner = sinon.spy(view.runners[0], 'setParameters');
+    const spyBubble = sinon.spy(view.bubbles[0], 'setParameters');
     view.setParameters();
-    expect(view.scaleView.setParameters.called).to.equal(true);
-    expect(view.runners[0].setParameters.called).to.equal(true);
-    expect(view.bubbles[0].setParameters.called).to.equal(true);
+    expect(spyScale.called).to.equal(true);
+    expect(spyRunner.called).to.equal(true);
+    expect(spyBubble.called).to.equal(true);
   });
   it('Should calculate new ratio and choose target for update', () => {
+    const spy = sinon.spy(view.eventEmitter, 'notify');
     const newOption = { firstValueRatio: 10 };
     view.update({ target: 0, coordinate: 120 }, 'runnerMoved');
     view.update({ target: 'scale', coordinate: 120 }, 'scaleClicked');
-    expect(view.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(newOption);
-    expect(view.eventEmitter.notify.getCall(1).args[0]).to.deep.equal(newOption);
-    expect(view.eventEmitter.notify.getCall(0).args[1]).to.equal('viewUpdated');
+    expect(spy.getCall(0).args[0]).to.deep.equal(newOption);
+    expect(spy.getCall(1).args[0]).to.deep.equal(newOption);
+    expect(spy.getCall(0).args[1]).to.equal('viewUpdated');
   });
 });
