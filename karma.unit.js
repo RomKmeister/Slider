@@ -10,15 +10,14 @@ module.exports = function (config) {
     exclude: [
     ],
     preprocessors: {
-      'test/**/*.ts': ['webpack'],
+      'test/**/*.ts': ['webpack', 'coverage'],
     },
     webpack: {
       mode: 'development',
-      devtool: 'inline-source-map',
       module: webpackConfig.module,
       resolve: webpackConfig.resolve,
     },
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
