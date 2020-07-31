@@ -30,11 +30,11 @@ describe('EventEmitter', () => {
   });
 
   it('Should attach observer', () => {
-    expect(eventEmitter.attach.called).to.deep.equal(true);
+    expect(eventEmitter.attach.called).to.equal(true);
   });
 
   it('Should detach observer', () => {
     eventEmitter.detach(model);
-    expect(eventEmitter.detach.called).to.deep.equal(true);
+    expect(eventEmitter.detach.called).to.equal(true);
   });
 });

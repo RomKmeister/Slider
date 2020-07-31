@@ -34,28 +34,28 @@ describe('Presenter', () => {
     view = new View(element, model);
     presenter = new Presenter(model, view);
     sandbox.spy(model, 'update');
-    sandbox.spy(view, 'setViewParameters');
+    sandbox.spy(view, 'setParameters');
   });
 
   it('Should update model', () => {
     presenter.update(presenter.model, 'viewUpdated');
     presenter.update(presenter.model, 'newOptions');
-    expect(presenter.model.update.calledTwice).to.deep.equal(true);
+    expect(presenter.model.update.calledTwice).to.equal(true);
   });
 
   it('Should update views', () => {
     presenter.update(presenter.model, 'modelUpdated');
-    expect(presenter.view.setViewParameters.called).to.deep.equal(true);
+    expect(presenter.view.setParameters.called).to.equal(true);
   });
 
   it('Should get model options', () => {
     const getOptions = presenter.getOptions();
-    expect(getOptions).to.deep.equal(model.options);
+    expect(getOptions).to.equal(model.options);
   });
 
   it('Should set model options', () => {
     presenter.setOptions({ minValue: 44 });
-    expect(presenter.model.update.called).to.deep.equal(true);
-    expect(presenter.model.options.minValue).to.deep.equal(44);
+    expect(presenter.model.update.called).to.equal(true);
+    expect(presenter.model.options.minValue).to.equal(44);
   });
 });

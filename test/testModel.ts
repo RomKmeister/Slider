@@ -31,14 +31,14 @@ describe('Model', () => {
   });
 
   it('Should calculate the ratios', () => {
-    expect(model.options.range).to.deep.equal(100);
-    expect(model.options.firstValueRatio).to.deep.equal(55);
-    expect(model.options.secondValueRatio).to.deep.equal(70);
-    expect(model.options.firstValueArea).to.deep.equal(62.5);
+    expect(model.options.range).to.equal(100);
+    expect(model.options.firstValueRatio).to.equal(55);
+    expect(model.options.secondValueRatio).to.equal(70);
+    expect(model.options.firstValueArea).to.equal(62.5);
   });
 
   it('Should send the data to the observers', () => {
     expect(model.eventEmitter.notify.getCall(0).args[0]).to.deep.equal(model.options);
-    expect(model.eventEmitter.notify.getCall(0).args[1]).to.deep.equal('modelUpdated');
+    expect(model.eventEmitter.notify.getCall(0).args[1]).to.equal('modelUpdated');
   });
 });
