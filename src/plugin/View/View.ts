@@ -90,7 +90,7 @@ class View {
 
   private findElements(): void {
     this.bubblesElements = Array.from(this.element.querySelectorAll('.js-slider__bubble'));
-    this.runnersElements = Array.from(this.element.querySelectorAll('.js-slider__handle'));
+    this.runnersElements = Array.from(this.element.querySelectorAll('.js-slider__runner'));
   }
 
   private calculateRatio(coordinate: number): number {
