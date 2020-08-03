@@ -72,7 +72,7 @@ class ScaleView {
     this.updateCoordinate(event);
   }
 
-  private updateCoordinate(event: MouseEvent):void {
+  private updateCoordinate(event: MouseEvent): void {
     event.preventDefault();
     const coordinate = this.isVertical ? event.clientY : event.clientX;
     const newCoordinate = { target: 'scale', coordinate };
