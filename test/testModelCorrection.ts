@@ -50,13 +50,13 @@ describe('Model Corrections', () => {
 
   it('Should set the first value and the step less the second value if it visible', () => {
     model.correctOptions(options);
-    options = { ...options, ...{ firstValue: 70, isSecondValueVisible: true } };
+    options = { ...options, firstValue: 70, isSecondValueVisible: true };
     testOptions = model.correctOptions(options);
     expect(testOptions.firstValue).to.equal(70);
   });
 
   it('Should decrease the second value to the max', () => {
-    options = { ...options, ...{ secondValue: 200, isSecondValueVisible: true } };
+    options = { ...options, secondValue: 200, isSecondValueVisible: true };
     testOptions = model.correctOptions(options);
     expect(testOptions.secondValue).to.equal(100);
   });
