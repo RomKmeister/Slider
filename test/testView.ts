@@ -28,7 +28,7 @@ describe('View', () => {
 
     model = new Model(options);
     view = new View(element, model);
-    sinon.stub(view, 'getScaleSizes').callsFake(() => {
+    sinon.stub(view, 'getScaleSizes' as any).callsFake(() => {
       view.scaleLength = 1200;
       view.scalePosition = 0;
     });
