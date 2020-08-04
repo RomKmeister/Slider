@@ -1,6 +1,8 @@
 import {
-  Observer, NewCoordinate, NewRatio, ExtendOptions, ExternalOption,
+  NewCoordinate, NewRatio, ExtendOptions, ExternalOption,
 } from '../interfaces';
+
+import { Observer } from './EventEmitterInterfaces';
 
 class EventEmitter implements EventEmitter {
   private observers: Observer[] = [];
