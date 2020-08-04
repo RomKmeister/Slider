@@ -10,12 +10,12 @@ class Model {
   correctOptions = new ModelCorrection();
 
   constructor(options: BaseOptions) {
-    this.createOptions(options);
+    this.getExtendOptions(options);
   }
 
   update(options: ExtendOptions | NewRatio): void {
     const newOptions = this.isValuesChanged(options);
-    this.createOptions(newOptions);
+    this.getExtendOptions(newOptions);
     this.eventEmitter.notify(this.options, 'modelUpdated');
   }
 
@@ -41,7 +41,7 @@ class Model {
     return (newValue * this.options.range) / 100 + this.options.minValue;
   }
 
-  private createOptions(options: BaseOptions | ExtendOptions): void {
+  private getExtendOptions(options: BaseOptions | ExtendOptions): void {
     const correctOptions = this.correctOptions.correctOptions(options);
     this.options = this.calculateRatios(correctOptions);
   }
