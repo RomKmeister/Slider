@@ -49,14 +49,24 @@ class ScaleView {
 
   private init(): void {
     this.eventEmitter = new EventEmitter();
-    this.findElements();
+    this.findElement();
     this.bindEventListeners();
   }
 
-  private findElements(): void {
+  private findElement(): void {
     this.scale = this.element.querySelector('.js-slider__scale');
-    this.steps = this.element.querySelector('.js-slider__steps');
-    this.minBorder = this.steps.querySelector(':first-child');
+  }
+
+  private createScaleSteps(): void {
+    this.steps = document.createElement('div');
+    if (this.isVertical) {
+      this.steps.classList.add('slider__steps');
+      this.steps.classList.add('slider__steps_vertical');
+    } else {
+      this.steps.classList.add('slider__steps');
+    }
+    this.steps.insertAdjacentHTML('afterbegin', '<div class="slider__step"></div>');
+    this.scale.after(this.steps);
   }
 
   private bindEventListeners(): void {
@@ -81,54 +91,31 @@ class ScaleView {
 
   private setDirection(): void {
     const scaleDirection = 'slider__scale_vertical';
-    const stepsDirection = 'slider__steps_vertical';
-
     if (this.isVertical) {
       this.scale.classList.add(scaleDirection);
-      this.steps.classList.add(stepsDirection);
     } else {
       this.scale.classList.remove(scaleDirection);
-      this.steps.classList.remove(stepsDirection);
     }
   }
 
   private setSteps(): void {
-    const visibility = 'slider__steps_visible';
-
+    if (this.steps) {
+      this.steps.remove();
+    }
     if (this.isScaleStepsVisible) {
-      this.steps.classList.add(visibility);
-      this.setBorders();
+      this.createScaleSteps();
+      this.setBorder();
       this.createStepItems();
-    } else {
-      this.steps.classList.remove(visibility);
     }
   }
 
-  private setBorders(): void {
+  private findMinBorder(): void {
+    this.minBorder = this.steps.querySelector(':first-child');
+  }
+
+  private setBorder(): void {
+    this.findMinBorder();
     this.minBorder.textContent = String(this.minValue);
-  }
-
-  private countScaleSteps(): Array<number> {
-    this.findElements();
-    const minValueSymbols = String(this.minValue).length;
-    const maxValueSymbols = String(this.maxValue).length;
-    const stepSymbolSize = this.isVertical ? this.minBorder.clientHeight : this.minBorder.clientWidth;
-    const scaleLength = this.isVertical ? this.scale.clientHeight : this.scale.clientWidth;
-    let stepSize = stepSymbolSize;
-    if (maxValueSymbols >= minValueSymbols) {
-      stepSize = (maxValueSymbols * stepSymbolSize) / minValueSymbols;
-    }
-    const maxStepItems = Math.round(scaleLength / (stepSize + 10));
-    const stepsItemsNumber = Math.round((this.maxValue - this.minValue) / this.step);
-    const count = Math.round(stepsItemsNumber / (maxStepItems));
-    const stepValue = (count <= 1) ? this.step : count * this.step;
-    const maxIndex = Math.round((this.maxValue - this.minValue) / stepValue);
-    const steps = [];
-    for (let i = 0; i < maxIndex; i += 1) {
-      steps.push(i * stepValue);
-    }
-    steps.push(this.maxValue - this.minValue);
-    return steps;
   }
 
   private createStepItems(): void {
@@ -151,6 +138,29 @@ class ScaleView {
     });
     this.steps.innerHTML = '';
     this.steps.append(fragment);
+  }
+
+  private countScaleSteps(): Array<number> {
+    this.setBorder();
+    const minValueSymbols = String(this.minValue).length;
+    const maxValueSymbols = String(this.maxValue).length;
+    const stepSymbolSize = this.isVertical ? this.minBorder.clientHeight : this.minBorder.clientWidth;
+    const scaleLength = this.isVertical ? this.scale.clientHeight : this.scale.clientWidth;
+    let stepSize = stepSymbolSize;
+    if (maxValueSymbols >= minValueSymbols) {
+      stepSize = (maxValueSymbols * stepSymbolSize) / minValueSymbols;
+    }
+    const maxStepItems = Math.round(scaleLength / (stepSize + 10));
+    const stepsItemsNumber = Math.round((this.maxValue - this.minValue) / this.step);
+    const count = Math.round(stepsItemsNumber / (maxStepItems));
+    const stepValue = (count <= 1) ? this.step : count * this.step;
+    const maxIndex = Math.round((this.maxValue - this.minValue) / stepValue);
+    const steps = [];
+    for (let i = 0; i < maxIndex; i += 1) {
+      steps.push(i * stepValue);
+    }
+    steps.push(this.maxValue - this.minValue);
+    return steps;
   }
 }
 

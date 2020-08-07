@@ -24,8 +24,7 @@
 
   &__steps {
     position: relative;
-    display: none;
-    
+
     &_vertical {
       min-height: 35rem;
       position: absolute;
@@ -60,7 +59,7 @@
     border-radius: 50%;
     transform: translate(-50%, 25%);
     cursor: pointer;
-		
+
 		&_vertical {
       transform: translate(50%, -50%);
     }
