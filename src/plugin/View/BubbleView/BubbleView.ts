@@ -3,7 +3,7 @@ import { Parameters } from './BubbleViewInterfaces';
 class BubbleView {
   element: HTMLElement;
 
-  index: number;
+  bubble: HTMLElement;
 
   value: number;
 
@@ -13,41 +13,35 @@ class BubbleView {
 
   constructor(element: HTMLElement) {
     this.element = element;
+    this.createBubble();
   }
 
   setParameters({
-    index, value, isVertical, isBubbleVisible,
+    value, isVertical,
   }: Parameters): void {
-    this.index = index;
     this.value = value;
     this.isVertical = isVertical;
-    this.isBubbleVisible = isBubbleVisible;
     this.setBubbleValue();
     this.setDirection();
-    this.setVisibility();
+  }
+
+  private createBubble(): void {
+    this.bubble = document.createElement('div');
+    this.bubble.classList.add('slider__bubble');
+    this.element.append(this.bubble);
   }
 
   private setBubbleValue(): void {
-    this.element.textContent = String(Math.round(this.value));
+    this.bubble.textContent = String(Math.round(this.value));
   }
 
   private setDirection(): void {
     const bubbleClassDirection = 'slider__bubble_vertical';
 
     if (this.isVertical) {
-      this.element.classList.add(bubbleClassDirection);
+      this.bubble.classList.add(bubbleClassDirection);
     } else {
-      this.element.classList.remove(bubbleClassDirection);
-    }
-  }
-
-  private setVisibility(): void {
-    const bubbleClassVisibility = 'slider__bubble_visible';
-
-    if (this.isBubbleVisible) {
-      this.element.classList.add(bubbleClassVisibility);
-    } else {
-      this.element.classList.remove(bubbleClassVisibility);
+      this.bubble.classList.remove(bubbleClassDirection);
     }
   }
 }

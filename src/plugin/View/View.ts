@@ -10,15 +10,19 @@ class View {
 
   model: Model;
 
-  runnersElements: Array<HTMLElement>;
+  firstRunnerElement: HTMLElement;
 
-  bubblesElements: Array<HTMLElement>;
+  secondRunnerElement: HTMLElement;
 
   scaleView: ScaleView;
 
-  runners: Array<RunnerView>
+  firstRunner: RunnerView;
 
-  bubbles: Array<BubbleView>
+  secondRunner: RunnerView;
+
+  firstBubble: BubbleView;
+
+  secondBubble: BubbleView;
 
   scaleLength: number;
 
@@ -47,22 +51,31 @@ class View {
       secondValueRatio,
       range,
     } = this.model.options;
+    this.render();
     this.scaleView.setParameters({
       minValue, maxValue, step, isVertical, isScaleStepsVisible, range,
     });
-    this.runners.forEach((item, index) => {
-      const ratio = index === 0 ? firstValueRatio : secondValueRatio;
-      const isVisible = index === 0 ? true : isSecondValueVisible;
-      item.setParameters({
-        index, ratio, isVertical, isVisible,
+    if (isSecondValueVisible) {
+      [this.firstRunner, this.secondRunner].forEach((item, index) => {
+        const ratio = index === 0 ? firstValueRatio : secondValueRatio;
+        item.setParameters({
+          index, ratio, isVertical,
+        });
       });
-    });
-    this.bubbles.forEach((item, index) => {
-      const value = index === 0 ? firstValue : secondValue;
-      item.setParameters({
-        index, value, isVertical, isBubbleVisible,
+    } else {
+      this.firstRunner.setParameters({ index: 0, ratio: firstValueRatio, isVertical });
+    }
+    if (isBubbleVisible && isSecondValueVisible) {
+      [this.firstBubble, this.secondBubble].forEach((item, index) => {
+        const value = index === 0 ? firstValue : secondValue;
+        item.setParameters({
+          value, isVertical,
+        });
       });
-    });
+    }
+    if (isBubbleVisible && !isSecondValueVisible) {
+      this.firstBubble.setParameters({ value: firstValue, isVertical });
+    }
   }
 
   update(data: NewCoordinate, event: string): void {
@@ -78,19 +91,82 @@ class View {
   }
 
   private init(): void {
-    this.findElements();
     this.eventEmitter = new EventEmitter();
     this.scaleView = new ScaleView(this.element);
-    this.runners = this.runnersElements.map((item) => new RunnerView(item));
-    this.bubbles = this.bubblesElements.map((item) => new BubbleView(item));
-    this.runners.forEach((item) => item.eventEmitter.attach(this));
     this.scaleView.eventEmitter.attach(this);
+    this.initFirstRunner();
     this.setParameters();
   }
 
-  private findElements(): void {
-    this.bubblesElements = Array.from(this.element.querySelectorAll('.js-slider__bubble'));
-    this.runnersElements = Array.from(this.element.querySelectorAll('.js-slider__runner'));
+  private initFirstRunner(): void {
+    this.firstRunnerElement = this.element.querySelector('.js-slider__runner');
+    this.firstRunner = new RunnerView(this.firstRunnerElement);
+    this.firstRunner.eventEmitter.attach(this);
+  }
+
+  private render(): void {
+    const { isSecondValueVisible, isBubbleVisible } = this.model.options;
+    if (isSecondValueVisible) {
+      this.createSecondRunner();
+    }
+    if (isBubbleVisible && isSecondValueVisible) {
+      this.createFirstBubble();
+      this.createSecondBubble();
+    }
+    if (isBubbleVisible && !isSecondValueVisible) {
+      this.createFirstBubble();
+      this.removeSecondBubble();
+    }
+    if (!isBubbleVisible) {
+      this.removeFirstBubble();
+      this.removeSecondBubble();
+    }
+    if (!isSecondValueVisible) {
+      this.removeSecondRunner();
+    }
+  }
+
+  private createSecondRunner(): void {
+    if (!this.secondRunnerElement) {
+      this.secondRunnerElement = document.createElement('div');
+      this.secondRunnerElement.classList.add('slider__runner');
+      this.element.append(this.secondRunnerElement);
+      this.secondRunner = new RunnerView(this.secondRunnerElement);
+      this.secondRunner.eventEmitter.attach(this);
+    }
+  }
+
+  private removeSecondRunner(): void {
+    if (this.secondRunnerElement) {
+      this.secondRunnerElement.remove();
+      this.secondRunnerElement = null;
+    }
+  }
+
+  private createFirstBubble(): void {
+    if (!this.firstBubble) {
+      this.firstBubble = new BubbleView(this.firstRunnerElement);
+    }
+  }
+
+  private removeFirstBubble(): void {
+    if (this.firstBubble) {
+      this.firstRunnerElement.innerHTML = '';
+      this.firstBubble = null;
+    }
+  }
+
+  private createSecondBubble(): void {
+    if (!this.secondBubble) {
+      this.secondBubble = new BubbleView(this.secondRunnerElement);
+    }
+  }
+
+  private removeSecondBubble(): void {
+    if (this.secondBubble) {
+      this.secondRunnerElement.innerHTML = '';
+      this.secondBubble = null;
+    }
   }
 
   private calculateRatio(coordinate: number): number {

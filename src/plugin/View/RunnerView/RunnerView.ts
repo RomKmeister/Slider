@@ -10,8 +10,6 @@ class RunnerView {
 
   isVertical: boolean;
 
-  isVisible: boolean;
-
   mousemove: boolean;
 
   eventEmitter: EventEmitter;
@@ -22,14 +20,12 @@ class RunnerView {
   }
 
   setParameters({
-    index, ratio, isVertical, isVisible,
+    index, ratio, isVertical,
   }: Parameters): void {
     this.index = index;
     this.ratio = ratio;
     this.isVertical = isVertical;
-    this.isVisible = isVisible;
     this.setPosition();
-    this.setVisibility();
     this.setDirection();
   }
 
@@ -67,18 +63,8 @@ class RunnerView {
     }
   }
 
-  private setVisibility(): void {
-    const runnerClassVisibility = 'slider__runner_hidden';
-    if (this.isVisible === false) {
-      this.element.classList.add(runnerClassVisibility);
-    } else {
-      this.element.classList.remove(runnerClassVisibility);
-    }
-  }
-
   private setDirection(): void {
     const runnerClassDirection = 'slider__runner_vertical';
-
     if (this.isVertical) {
       this.element.classList.add(runnerClassDirection);
       this.element.style.left = '';
