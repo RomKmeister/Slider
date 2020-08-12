@@ -48,8 +48,7 @@ class RunnerView {
     document.removeEventListener('mousemove', this.handleDocumentMouseMove);
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  private handleDocumentMouseMove = (event: MouseEvent) => {
+  private handleDocumentMouseMove = (event: MouseEvent): void => {
     const coordinate = this.isVertical ? event.clientY : event.clientX;
     const newCoordinate = { target: this.index, coordinate };
     this.eventEmitter.notify(newCoordinate, 'runnerMoved');
