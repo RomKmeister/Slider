@@ -17,7 +17,6 @@ describe('Runner View', () => {
       index: 0,
       ratio: 55,
       isVertical: false,
-      isVisible: true,
     });
     expect(testElement.style.left).to.equal('55%');
     expect(testElement.className).to.equal('js-slider__runner');
@@ -28,7 +27,6 @@ describe('Runner View', () => {
       index: 0,
       ratio: 55,
       isVertical: true,
-      isVisible: true,
     });
     expect(testElement.style.top).to.equal('55%');
     expect(testElement.className).to.equal('js-slider__runner slider__runner_vertical');
@@ -39,29 +37,8 @@ describe('Runner View', () => {
       index: 1,
       ratio: 70,
       isVertical: true,
-      isVisible: true,
     });
     expect(testElement.style.top).to.equal('70%');
-  });
-
-  it('Should show the handle', () => {
-    runnerView.setParameters({
-      index: 0,
-      ratio: 55,
-      isVertical: false,
-      isVisible: true,
-    });
-    expect(testElement.className).to.equal('js-slider__runner');
-  });
-
-  it('Should hide the handle', () => {
-    runnerView.setParameters({
-      index: 1,
-      ratio: 55,
-      isVertical: false,
-      isVisible: false,
-    });
-    expect(testElement.className).to.equal('js-slider__runner slider__runner_hidden');
   });
 
   it('Should send new options from the first handler to the observers', () => {
@@ -70,7 +47,6 @@ describe('Runner View', () => {
       index: 0,
       ratio: 55,
       isVertical: false,
-      isVisible: true,
     });
     testElement.dispatchEvent(new Event('mousedown'));
     document.dispatchEvent(new MouseEvent('mousemove', { clientX: 100 }));
