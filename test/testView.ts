@@ -36,8 +36,8 @@ describe('View', () => {
 
   it('Should set the parameters at the slider elements', () => {
     const spyScale = sinon.spy(view.scaleView, 'setParameters');
-    const spyRunner = sinon.spy(view.runners[0], 'setParameters');
-    const spyBubble = sinon.spy(view.bubbles[0], 'setParameters');
+    const spyRunner = sinon.spy(view.firstRunner, 'setParameters');
+    const spyBubble = sinon.spy(view.firstBubble, 'setParameters');
     view.setParameters();
     expect(spyScale.called).to.equal(true);
     expect(spyRunner.called).to.equal(true);
