@@ -70,17 +70,19 @@ class ScaleView {
   }
 
   private bindEventListeners(): void {
-    this.scale.addEventListener('mousedown', this.handleScaleMouseDown.bind(this));
-    window.addEventListener('resize', this.setSteps.bind(this));
+    this.scale.addEventListener('mousedown', this.handleScaleMouseDown);
+    window.addEventListener('resize', this.handleStepsResize);
   }
 
-  private handleScaleMouseDown(event: MouseEvent): void {
+  private handleScaleMouseDown = (event: MouseEvent): void => {
     this.updateCoordinate(event);
   }
 
   private handleStepMouseDown(event: MouseEvent): void {
     this.updateCoordinate(event);
   }
+
+  private handleStepsResize = (): void => this.setSteps();
 
   private updateCoordinate(event: MouseEvent): void {
     event.preventDefault();
