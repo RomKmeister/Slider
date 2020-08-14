@@ -48,6 +48,33 @@ describe('Model Corrections', () => {
     expect(testOptions.firstValue).to.equal(0);
   });
 
+  it('Should decrease the second and the first value to the max value', () => {
+    options = {
+      ...options, firstValue: 150, secondValue: 200, isSecondValueVisible: true,
+    };
+    testOptions = model.correctOptions(options);
+    expect(testOptions.firstValue).to.equal(99);
+    expect(testOptions.secondValue).to.equal(100);
+  });
+
+  it('Should decrease the second and the first value to the max value', () => {
+    options = {
+      ...options, firstValue: 150, secondValue: 200, isSecondValueVisible: true, step: 3,
+    };
+    testOptions = model.correctOptions(options);
+    expect(testOptions.firstValue).to.equal(99);
+    expect(testOptions.secondValue).to.equal(100);
+  });
+
+  it('Should increase the second value to the min value', () => {
+    options = {
+      ...options, firstValue: -20, secondValue: -15, isSecondValueVisible: true,
+    };
+    testOptions = model.correctOptions(options);
+    expect(testOptions.firstValue).to.equal(0);
+    expect(testOptions.secondValue).to.equal(1);
+  });
+
   it('Should set the first value and the step less the second value if it visible', () => {
     model.correctOptions(options);
     options = { ...options, firstValue: 70, isSecondValueVisible: true };
@@ -66,5 +93,23 @@ describe('Model Corrections', () => {
     options = { ...options, secondValue: 50 };
     testOptions = model.correctOptions(options);
     expect(testOptions.secondValue).to.equal(56);
+  });
+
+  it('Should set the second and the first value equal min and max', () => {
+    options = {
+      ...options, firstValue: 20, secondValue: 25, isSecondValueVisible: true, step: 100,
+    };
+    testOptions = model.correctOptions(options);
+    expect(testOptions.firstValue).to.equal(0);
+    expect(testOptions.secondValue).to.equal(100);
+  });
+
+  it('Should set the second and the first value equal to the step', () => {
+    options = {
+      ...options, firstValue: 20, secondValue: 25, isSecondValueVisible: true, step: 3,
+    };
+    testOptions = model.correctOptions(options);
+    expect(testOptions.firstValue).to.equal(21);
+    expect(testOptions.secondValue).to.equal(24);
   });
 });

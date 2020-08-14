@@ -7,7 +7,7 @@ describe('Scale View', () => {
   beforeEach(() => {
     const element = document.createElement('div');
     element.insertAdjacentHTML('afterbegin',
-      '<div class="js-slider__scale"></div><div class="js-slider__steps"><div class="slider__step"></div></div>');
+      '<div class="js-slider__scale"></div>');
     scaleView = new ScaleView(element);
   });
 
@@ -17,10 +17,24 @@ describe('Scale View', () => {
       maxValue: 10,
       step: 1,
       isVertical: false,
-      isScaleStepsVisible: false,
+      isScaleStepsVisible: true,
       range: 100,
     });
     expect(scaleView.scale.className).to.equal('js-slider__scale');
+    expect(scaleView.steps.className).to.equal('slider__steps');
+  });
+
+  it('Should set the vertical direction of scale', () => {
+    scaleView.setParameters({
+      minValue: -100,
+      maxValue: 50,
+      step: 3,
+      isVertical: true,
+      isScaleStepsVisible: true,
+      range: 100,
+    });
+    expect(scaleView.scale.className).to.equal('js-slider__scale slider__scale_vertical');
+    expect(scaleView.steps.className).to.equal('slider__steps slider__steps_vertical');
   });
 
   it('Should set the vertical direction of scale', () => {
@@ -32,7 +46,7 @@ describe('Scale View', () => {
       isScaleStepsVisible: false,
       range: 100,
     });
-    expect(scaleView.scale.className).to.equal('js-slider__scale slider__scale_vertical');
+    expect(scaleView.steps).to.equal(undefined);
   });
 
   it('Should send new options from the scale to the observers', () => {
