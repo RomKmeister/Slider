@@ -1,9 +1,9 @@
-import { BaseOptions, ExtendOptions } from '../interfaces';
+import { BaseOptions, ExtendedOptions } from '../interfaces';
 
 class ModelCorrection {
-  options: BaseOptions | ExtendOptions;
+  options: BaseOptions | ExtendedOptions;
 
-  correctOptions(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
+  correctOptions(options: BaseOptions | ExtendedOptions): BaseOptions | ExtendedOptions {
     const correctStep = this.correctStep(options);
     const correctScale = this.correctRange(correctStep);
     const correctMove = this.options ? this.correctMove(correctScale) : correctScale;
@@ -13,19 +13,19 @@ class ModelCorrection {
     return this.options;
   }
 
-  private correctStep(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
+  private correctStep(options: BaseOptions | ExtendedOptions): BaseOptions | ExtendedOptions {
     const { step } = options;
     const correctedStep = step < 1 ? 1 : step;
     return { ...options, step: correctedStep };
   }
 
-  private correctRange(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
+  private correctRange(options: BaseOptions | ExtendedOptions): BaseOptions | ExtendedOptions {
     const { step, minValue, maxValue } = options;
     const correctedMaxValue = maxValue < minValue ? (minValue + step) : maxValue;
     return { ...options, maxValue: correctedMaxValue };
   }
 
-  private correctMove(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
+  private correctMove(options: BaseOptions | ExtendedOptions): BaseOptions | ExtendedOptions {
     const {
       minValue, maxValue, firstValue, secondValue, step,
     } = options;
@@ -55,7 +55,7 @@ class ModelCorrection {
     return { ...options, firstValue: correctedFirstValue, secondValue: correctedSecondValue };
   }
 
-  private correctDisorderedValues(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
+  private correctDisorderedValues(options: BaseOptions | ExtendedOptions): BaseOptions | ExtendedOptions {
     const {
       firstValue, secondValue, isSecondValueVisible, step,
     } = options;
@@ -74,7 +74,7 @@ class ModelCorrection {
     return { ...options, firstValue: correctedFirstValue, secondValue: correctedSecondValue };
   }
 
-  private correctMinMax(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
+  private correctMinMax(options: BaseOptions | ExtendedOptions): BaseOptions | ExtendedOptions {
     const {
       minValue, maxValue, firstValue, secondValue, isSecondValueVisible, step,
     } = options;
@@ -112,7 +112,7 @@ class ModelCorrection {
     return { ...options, firstValue: correctedFirstValue, secondValue: correctedSecondValue };
   }
 
-  private correctStepPosition(options: BaseOptions | ExtendOptions): BaseOptions | ExtendOptions {
+  private correctStepPosition(options: BaseOptions | ExtendedOptions): BaseOptions | ExtendedOptions {
     const {
       minValue, maxValue, firstValue, secondValue, step,
     } = options;

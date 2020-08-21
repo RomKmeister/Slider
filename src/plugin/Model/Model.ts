@@ -1,29 +1,29 @@
-import { BaseOptions, ExtendOptions, NewRatio } from '../interfaces';
+import { BaseOptions, ExtendedOptions, NewRatio } from '../interfaces';
 import EventEmitter from '../EventEmitter/EventEmitter';
 import ModelCorrection from './ModelCorrection';
 
 class Model {
-  options: ExtendOptions;
+  options: ExtendedOptions;
 
   eventEmitter = new EventEmitter();
 
   correctOptions = new ModelCorrection();
 
   constructor(options: BaseOptions) {
-    this.getExtendOptions(options);
+    this.getExtendedOptions(options);
   }
 
-  update(options: ExtendOptions | NewRatio): void {
+  update(options: ExtendedOptions | NewRatio): void {
     const newOptions = this.isValuesChanged(options);
-    this.getExtendOptions(newOptions);
+    this.getExtendedOptions(newOptions);
     this.eventEmitter.notify(this.options, 'modelUpdated');
   }
 
-  getOptions(): ExtendOptions {
+  getOptions(): ExtendedOptions {
     return this.options;
   }
 
-  private isValuesChanged(options: ExtendOptions | NewRatio): ExtendOptions {
+  private isValuesChanged(options: ExtendedOptions | NewRatio): ExtendedOptions {
     const isFirstRatioChanged = Object.keys(options).length === 1 && options.firstValueRatio;
     const isSecondRatioChanged = Object.keys(options).length === 1 && options.secondValueRatio;
     if (isFirstRatioChanged) {
@@ -41,12 +41,12 @@ class Model {
     return (newValue * this.options.range) / 100 + this.options.minValue;
   }
 
-  private getExtendOptions(options: BaseOptions | ExtendOptions): void {
+  private getExtendedOptions(options: BaseOptions | ExtendedOptions): void {
     const correctOptions = this.correctOptions.correctOptions(options);
     this.options = this.calculateRatios(correctOptions);
   }
 
-  private calculateRatios(options: BaseOptions | ExtendOptions): ExtendOptions {
+  private calculateRatios(options: BaseOptions | ExtendedOptions): ExtendedOptions {
     const {
       minValue, maxValue, firstValue, secondValue,
     } = options;

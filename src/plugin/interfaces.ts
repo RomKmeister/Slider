@@ -10,7 +10,7 @@ export interface BaseOptions {
   isScaleStepsVisible: boolean;
 }
 
-export interface ExtendOptions extends BaseOptions {
+export interface ExtendedOptions extends BaseOptions {
   range: number;
   firstValueRatio: number;
   secondValueRatio: number;
