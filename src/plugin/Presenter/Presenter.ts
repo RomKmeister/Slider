@@ -1,7 +1,7 @@
 import Model from '../Model/Model';
 import View from '../View/View';
 import EventEmitter from '../EventEmitter/EventEmitter';
-import { ExtendedOptions, ExternalOption, NewRatio } from '../interfaces';
+import { ExtendedOptions } from '../interfaces';
 
 class Presenter {
   private model: Model;
@@ -16,7 +16,7 @@ class Presenter {
     this.init();
   }
 
-  update(data: ExtendedOptions | NewRatio, event: string): void {
+  update(data: Partial<ExtendedOptions>, event: string): void {
     const needModelUpdate = event === 'newOptions' || event === 'viewUpdated';
     if (event === 'modelUpdated') {
       this.view.setParameters();
@@ -31,7 +31,7 @@ class Presenter {
     return this.model.options;
   }
 
-  setOptions(options: ExternalOption): void {
+  setOptions(options: Partial<ExtendedOptions>): void {
     const newOptions = { ...this.model.getOptions(), ...options };
     this.update(newOptions, 'newOptions');
   }

@@ -1,6 +1,4 @@
-import {
-  NewCoordinate, NewRatio, ExtendedOptions, ExternalOption,
-} from '../interfaces';
+import { NewCoordinate, ExtendedOptions } from '../interfaces';
 
 import { Observer } from './EventEmitterInterfaces';
 
@@ -15,7 +13,7 @@ class EventEmitter implements EventEmitter {
     this.observers = this.observers.filter((item) => item !== observer);
   }
 
-  notify(data?: ExtendedOptions | NewCoordinate | ExternalOption | NewRatio, event?: string): void {
+  notify(data?: ExtendedOptions | NewCoordinate | Partial<ExtendedOptions>, event?: string): void {
     this.observers.forEach((item) => item.update(data, event));
   }
 }

@@ -21,11 +21,3 @@ export interface NewCoordinate {
   target: string | number;
   coordinate: number;
 }
-
-export interface NewRatio {
-  [key: string]: number;
-}
-
-export interface ExternalOption {
-  [key: string]: number | boolean;
-}

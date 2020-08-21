@@ -6,12 +6,12 @@
 import Presenter from './Presenter/Presenter';
 import Model from './Model/Model';
 import View from './View/View';
-import { BaseOptions, ExternalOption } from './interfaces';
+import { BaseOptions, ExtendedOptions } from './interfaces';
 import defaultOptions from './defaultOptions';
 
 declare global {
   interface JQuery {
-    sliderPlugin(options?: BaseOptions | ExternalOption | string, args?: ExternalOption): JQuery;
+    sliderPlugin(options?: BaseOptions | Partial<ExtendedOptions> | string, args?: Partial<ExtendedOptions>): JQuery;
   }
 }
 

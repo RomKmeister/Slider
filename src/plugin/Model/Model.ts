@@ -1,4 +1,4 @@
-import { BaseOptions, ExtendedOptions, NewRatio } from '../interfaces';
+import { BaseOptions, ExtendedOptions } from '../interfaces';
 import EventEmitter from '../EventEmitter/EventEmitter';
 import ModelCorrection from './ModelCorrection';
 
@@ -13,7 +13,7 @@ class Model {
     this.getExtendedOptions(options);
   }
 
-  update(options: ExtendedOptions | NewRatio): void {
+  update(options: Partial<ExtendedOptions>): void {
     const newOptions = this.isValuesChanged(options);
     this.getExtendedOptions(newOptions);
     this.eventEmitter.notify(this.options, 'modelUpdated');
@@ -23,7 +23,7 @@ class Model {
     return this.options;
   }
 
-  private isValuesChanged(options: ExtendedOptions | NewRatio): ExtendedOptions {
+  private isValuesChanged(options: Partial<ExtendedOptions>): ExtendedOptions {
     const isFirstRatioChanged = Object.keys(options).length === 1 && options.firstValueRatio;
     const isSecondRatioChanged = Object.keys(options).length === 1 && options.secondValueRatio;
     if (isFirstRatioChanged) {

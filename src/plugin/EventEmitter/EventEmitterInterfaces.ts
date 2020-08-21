@@ -1,13 +1,11 @@
-import {
-  NewCoordinate, ExtendedOptions, ExternalOption,
-} from '../interfaces';
+import { NewCoordinate, ExtendedOptions } from '../interfaces';
 
 export interface EventEmitter {
   attach(observer: Observer): void;
   detach(observer: Observer): void;
-  notify(data?: ExtendedOptions | NewCoordinate | ExternalOption, event?: string): void;
+  notify(data?: ExtendedOptions | NewCoordinate | Partial<ExtendedOptions>, event?: string): void;
 }
 
 export interface Observer {
-  update(data: ExtendedOptions | NewCoordinate | ExternalOption, event: string): void;
+  update(data: ExtendedOptions | NewCoordinate | Partial<ExtendedOptions>, event: string): void;
 }
