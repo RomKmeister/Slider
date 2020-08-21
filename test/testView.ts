@@ -3,8 +3,6 @@ import * as sinon from 'sinon';
 import View from '../src/plugin/View/View';
 import Model from '../src/plugin/Model/Model';
 import { BaseOptions } from '../src/plugin/interfaces';
-import RunnerView from '../src/plugin/View/RunnerView/RunnerView';
-import BubbleView from '../src/plugin/View/BubbleView/BubbleView';
 
 describe('View', () => {
   let options: BaseOptions;
