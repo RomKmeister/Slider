@@ -28,7 +28,7 @@ class SliderBlock {
 
   private setPanelParameters(): void {
     const options: { [key: string]: any } = this.$slider.sliderPlugin('getOptions');
-    this.$inputs.each((index, item: HTMLInputElement) => {
+    this.$inputs.each((_, item: HTMLInputElement) => {
       const input = item;
       const newValue = options[item.name];
       if (input.type === 'checkbox') {
