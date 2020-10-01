@@ -30,7 +30,7 @@ declare global {
       const $finalOptions = $.extend({}, defaultOptions, this.data('options'), options);
       const [elements] = this;
       const model = new Model($finalOptions);
-      const view = new View(elements, model);
+      const view = new View(elements);
       const presenter = new Presenter(model, view);
       presenter.eventEmitter.attach(plugin);
       $this.data('presenter', presenter);

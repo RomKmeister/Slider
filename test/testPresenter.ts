@@ -30,7 +30,7 @@ describe('Presenter', () => {
     };
 
     model = new Model(options);
-    view = new View(element, model);
+    view = new View(element);
     presenter = new Presenter(model, view);
   });
 

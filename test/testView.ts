@@ -1,13 +1,11 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 import View from '../src/plugin/View/View';
-import Model from '../src/plugin/Model/Model';
-import { BaseOptions } from '../src/plugin/interfaces';
+import { ExtendedOptions } from '../src/plugin/interfaces';
 
 describe('View', () => {
-  let options: BaseOptions;
+  let options: ExtendedOptions;
   let view: View;
-  let model: Model;
   beforeEach(() => {
     const element = document.createElement('div');
     element.classList.add('js-slider-block');
@@ -28,10 +26,12 @@ describe('View', () => {
       isVertical: false,
       isBubbleVisible: true,
       isScaleStepsVisible: true,
+      range: 100,
+      firstValueRatio: 55,
+      secondValueRatio: 70,
+      firstValueArea:62.5,
     };
-
-    model = new Model(options);
-    view = new View(element, model);
+    view = new View(element);
     sinon.stub(view, 'getScaleSizes' as any).callsFake(() => {
       view.scaleLength = 1200;
       view.scalePosition = 0;
@@ -39,35 +39,37 @@ describe('View', () => {
   });
 
   it('Should create the second runner and the bubbles ', () => {
-    view.model.options.isSecondValueVisible = true;
-    view.model.options.isBubbleVisible = true;
-    view.setParameters();
+    options.isSecondValueVisible = true;
+    options.isBubbleVisible = true;
+    view.setParameters(options);
     expect(view.secondRunnerElement).to.not.equal(null);
     expect(view.firstBubble).to.not.equal(null);
     expect(view.secondBubble).to.not.equal(null);
   });
 
-  it('Should remove the second runner and the bubbles', () => {
-    view.model.options.isSecondValueVisible = false;
-    view.model.options.isBubbleVisible = false;
-    view.setParameters();
-    expect(view.secondRunnerElement).to.equal(null);
-    expect(view.firstBubble).to.equal(null);
-    expect(view.secondBubble).to.equal(null);
-  });
-
   it('Should create the first bubble', () => {
-    view.model.options.isSecondValueVisible = false;
-    view.model.options.isBubbleVisible = true;
-    view.setParameters();
+    options.isSecondValueVisible = false;
+    options.isBubbleVisible = true;
+    view.setParameters(options);
     expect(view.firstBubble).to.not.equal(null);
   });
 
+  it('Should remove the second runner and the bubbles', () => {
+    options.isSecondValueVisible = false;
+    options.isBubbleVisible = false;
+    view.setParameters(options);
+    expect(view.secondRunnerElement).to.be.undefined;
+    expect(view.firstBubble).to.be.undefined;
+    expect(view.secondBubble).to.be.undefined;
+  });
+
   it('Should set the parameters at the slider elements', () => {
+    options.isBubbleVisible = true;
+    view.setParameters(options);
     const spyScale = sinon.spy(view.scaleView, 'setParameters');
     const spyRunner = sinon.spy(view.firstRunner, 'setParameters');
     const spyBubble = sinon.spy(view.firstBubble, 'setParameters');
-    view.setParameters();
+    view.setParameters(options);
     expect(spyScale.called).to.equal(true);
     expect(spyRunner.called).to.equal(true);
     expect(spyBubble.called).to.equal(true);
@@ -76,6 +78,7 @@ describe('View', () => {
   it('Should calculate new ratio and choose target for update', () => {
     const spy = sinon.spy(view.eventEmitter, 'notify');
     const newOption = { firstValueRatio: 10 };
+    view.setParameters(options);
     view.update({ target: 0, coordinate: 120 }, 'runnerMoved');
     view.update({ target: 'scale', coordinate: 120 }, 'scaleClicked');
     expect(spy.getCall(0).args[0]).to.deep.equal(newOption);

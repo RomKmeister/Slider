@@ -19,7 +19,7 @@ class Presenter {
   update(data: Partial<ExtendedOptions>, event: string): void {
     const needModelUpdate = event === 'newOptions' || event === 'viewUpdated';
     if (event === 'modelUpdated') {
-      this.view.setParameters();
+      this.view.setParameters(this.model.options);
     }
     if (needModelUpdate) {
       this.model.update(data);
@@ -39,6 +39,7 @@ class Presenter {
   private init(): void {
     this.model.eventEmitter.attach(this);
     this.view.eventEmitter.attach(this);
+    this.view.setParameters(this.model.options);
   }
 }
 

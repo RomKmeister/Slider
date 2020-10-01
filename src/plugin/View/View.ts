@@ -1,6 +1,5 @@
-import Model from '../Model/Model';
 import EventEmitter from '../EventEmitter/EventEmitter';
-import { NewCoordinate } from '../interfaces';
+import { NewCoordinate, ExtendedOptions } from '../interfaces';
 import ScaleView from './ScaleView/ScaleView';
 import BubbleView from './BubbleView/BubbleView';
 import RunnerView from './RunnerView/RunnerView';
@@ -8,7 +7,7 @@ import RunnerView from './RunnerView/RunnerView';
 class View {
   element: HTMLElement;
 
-  model: Model;
+  options: ExtendedOptions;
 
   firstRunnerElement: HTMLElement;
 
@@ -30,13 +29,13 @@ class View {
 
   eventEmitter: EventEmitter;
 
-  constructor(element: HTMLElement, model: Model) {
+  constructor(element: HTMLElement) {
     this.element = element;
-    this.model = model;
     this.init();
   }
 
-  setParameters(): void {
+  setParameters(options: ExtendedOptions): void {
+    this.options = options;
     const {
       minValue,
       maxValue,
@@ -50,7 +49,7 @@ class View {
       firstValueRatio,
       secondValueRatio,
       range,
-    } = this.model.options;
+    } = this.options;
     this.render();
     this.scaleView.setParameters({
       minValue, maxValue, step, isVertical, isScaleStepsVisible, range,
@@ -95,7 +94,6 @@ class View {
     this.scaleView = new ScaleView(this.element);
     this.scaleView.eventEmitter.attach(this);
     this.initFirstRunner();
-    this.setParameters();
   }
 
   private initFirstRunner(): void {
@@ -105,7 +103,7 @@ class View {
   }
 
   private render(): void {
-    const { isSecondValueVisible, isBubbleVisible } = this.model.options;
+    const { isSecondValueVisible, isBubbleVisible } = this.options;
     if (isSecondValueVisible) {
       this.createSecondRunner();
     }
@@ -177,16 +175,16 @@ class View {
 
   private getScaleSizes(): void {
     const scale = this.element.querySelector('.js-slider__scale');
-    this.scaleLength = this.model.options.isVertical
+    this.scaleLength = this.options.isVertical
       ? scale.clientHeight
       : scale.clientWidth;
-    this.scalePosition = this.model.options.isVertical
+    this.scalePosition = this.options.isVertical
       ? scale.getBoundingClientRect().top
       : scale.getBoundingClientRect().left;
   }
 
   private chooseRatioForUpdate(newRatio: number): string {
-    const { isSecondValueVisible, firstValueArea } = this.model.options;
+    const { isSecondValueVisible, firstValueArea } = this.options;
     const needFirstValueRatio = (isSecondValueVisible && firstValueArea >= newRatio) || isSecondValueVisible === false;
     if (needFirstValueRatio) {
       return 'firstValueRatio';
